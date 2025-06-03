@@ -326,18 +326,18 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="flex justify-end mb-4">
-        <ModeToggle />
-      </div>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <RotateCcwKey className="h-8 w-8" />
-            <h1 className="text-3xl font-bold">OpenPass</h1>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-6 max-w-6xl">
+        {/* Header with Mode Toggle */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <RotateCcwKey className="h-8 w-8 text-primary" />
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">OpenPass</h1>
+              <p className="text-muted-foreground">Secure Local Password Generator</p>
+            </div>
           </div>
-          <p className="">Secure Local Password Generator</p>
+          <ModeToggle />
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
@@ -345,12 +345,15 @@ export default function App() {
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle>Password Generator</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <RefreshCw className="h-5 w-5" />
+                  Password Generator
+                </CardTitle>
                 <CardDescription>Generate secure passwords, passphrases, and custom formats</CardDescription>
               </CardHeader>
               <CardContent>
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-3 mb-6">
                     <TabsTrigger value="password">Password</TabsTrigger>
                     <TabsTrigger value="passphrase">Passphrase</TabsTrigger>
                     <TabsTrigger value="format">Format</TabsTrigger>
@@ -418,7 +421,7 @@ export default function App() {
                       </div>
 
                       <div>
-                        <Label htmlFor="custom">Custom Characters</Label>
+                        <Label htmlFor="custom" className="mb-1">Custom Characters</Label>
                         <Input
                           id="custom"
                           value={passwordSettings.customCharacters}
@@ -441,22 +444,26 @@ export default function App() {
                       </div>
                     </div>
 
-                    <Button onClick={generatePassword} className="w-full" variant="outline">
+                    <Button onClick={generatePassword} className="w-full" size="lg">
                       <RefreshCw className="h-4 w-4 mr-2" />
                       Generate Password
                     </Button>
 
                     {generatedPassword && (
-                      <div className="flex items-center gap-2">
-                        <Input
-                          value={generatedPassword}
-                          readOnly
-                          disabled
-                          className="font-mono"
-                        />
-                        <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatedPassword)}>
-                          <Copy className="h-4 w-4" />
-                        </Button>
+                      <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                        <Label className="text-sm font-medium text-muted-foreground mb-2 block">
+                          Generated Password
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            value={generatedPassword}
+                            readOnly
+                            className="font-mono text-sm"
+                          />
+                          <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatedPassword)}>
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     )}
                   </TabsContent>
@@ -520,22 +527,26 @@ export default function App() {
                       </div>
                     </div>
 
-                    <Button onClick={generatePassphrase} className="w-full" variant="outline">
+                    <Button onClick={generatePassphrase} className="w-full" size="lg">
                       <RefreshCw className="h-4 w-4 mr-2" />
                       Generate Passphrase
                     </Button>
 
                     {generatedPassphrase && (
-                      <div className="flex items-center gap-2">
-                        <Input
-                          value={generatedPassphrase}
-                          readOnly
-                          disabled
-                          className="font-mono"
-                        />
-                        <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatedPassphrase)}>
-                          <Copy className="h-4 w-4" />
-                        </Button>
+                      <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                        <Label className="text-sm font-medium text-muted-foreground mb-2 block">
+                          Generated Passphrase
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            value={generatedPassphrase}
+                            readOnly
+                            className="font-mono text-sm"
+                          />
+                          <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatedPassphrase)}>
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     )}
                   </TabsContent>
@@ -551,54 +562,56 @@ export default function App() {
                           onChange={(e) => setFormatSettings({ ...formatSettings, format: e.target.value })}
                           placeholder="e.g., 1u4l1{#$%}4d"
                         />
-                        <div className="text-sm mt-2">
-                          <p>
-                            <strong>Format Guide:</strong>
-                          </p>
+                        <div className="text-sm text-muted-foreground mt-2 space-y-1">
+                          <p className="font-medium mb-2">Format Guide:</p>
                           <ul className="list-disc list-inside space-y-1">
                             <li>
-                              <code>Nu</code> - N uppercase letters
+                              <code className="bg-muted px-1 rounded">Nu</code> - N uppercase letters
                             </li>
                             <li>
-                              <code>Nl</code> - N lowercase letters
+                              <code className="bg-muted px-1 rounded">Nl</code> - N lowercase letters
                             </li>
                             <li>
-                              <code>Nd</code> - N digits
+                              <code className="bg-muted px-1 rounded">Nd</code> - N digits
                             </li>
                             <li>
-                              <code>
+                              <code className="bg-muted px-1 rounded">
                                 N{String.fromCharCode(123)}chars{String.fromCharCode(125)}
                               </code>{" "}
                               - N characters from custom set
                             </li>
                           </ul>
                           <p className="mt-2">
-                            <strong>Example:</strong>{" "}
-                            <code>
+                            <span className="font-medium">Example:</span>{" "}
+                            <code className="bg-muted px-1 rounded">
                               1u4l1{String.fromCharCode(123)}#$%{String.fromCharCode(125)}4d
                             </code>{" "}
-                            → <code>Gylwm$8158</code>
+                            → <code className="bg-muted px-1 rounded">Gylwm$8158</code>
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    <Button onClick={generateFormatPassword} className="w-full" variant="outline">
+                    <Button onClick={generateFormatPassword} className="w-full" size="lg">
                       <RefreshCw className="h-4 w-4 mr-2" />
                       Generate Format Password
                     </Button>
 
                     {generatedFormat && (
-                      <div className="flex items-center gap-2">
-                        <Input
-                          value={generatedFormat}
-                          readOnly
-                          disabled
-                          className="font-mono"
-                        />
-                        <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatedFormat)}>
-                          <Copy className="h-4 w-4" />
-                        </Button>
+                      <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                        <Label className="text-sm font-medium text-muted-foreground mb-2 block">
+                          Generated Format Password
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            value={generatedFormat}
+                            readOnly
+                            className="font-mono text-sm"
+                          />
+                          <Button variant="outline" size="sm" onClick={() => copyToClipboard(generatedFormat)}>
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     )}
                   </TabsContent>
@@ -621,7 +634,7 @@ export default function App() {
                   value={profileName}
                   onChange={(e) => setProfileName(e.target.value)}
                 />
-                <Button onClick={saveProfile} className="w-full" variant="outline">
+                <Button onClick={saveProfile} className="w-full">
                   <Save className="h-4 w-4 mr-2" />
                   Save Profile
                 </Button>
@@ -636,18 +649,18 @@ export default function App() {
               </CardHeader>
               <CardContent>
                 {profiles.length === 0 ? (
-                  <p className="text-center py-4">No saved profiles</p>
+                  <p className="text-center py-8 text-muted-foreground">No saved profiles</p>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {profiles.map((profile) => (
-                      <div key={profile.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div key={profile.id} className="flex items-center justify-between p-3 border rounded-lg bg-card">
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{profile.name}</span>
                             <Badge variant="secondary">{profile.type}</Badge>
                           </div>
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-2">
                           <Button variant="outline" size="sm" onClick={() => loadProfile(profile)}>
                             Load
                           </Button>
