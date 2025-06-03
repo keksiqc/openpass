@@ -189,12 +189,12 @@ interface PasswordHistory {
   strength: { score: number; label: string };
 }
 
-interface GeneratedResult {
-  value: string;
-  strength: { score: number; label: string; color: string };
-  entropy: number;
-  timeToCrack: string;
-}
+// interface GeneratedResult {
+//   value: string;
+//   strength: { score: number; label: string; color: string };
+//   entropy: number;
+//   timeToCrack: string;
+// }
 
 export default function App() {
   // State for generated results
@@ -378,7 +378,7 @@ export default function App() {
 
       const entropy = calculateEntropy(password, charset);
       const strength = calculateStrength(password);
-      const _timeToCrack = estimateTimeToCrack(entropy);
+      // const _timeToCrack = estimateTimeToCrack(entropy);
 
       setGeneratedPassword(password);
 
