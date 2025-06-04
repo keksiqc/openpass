@@ -1,4 +1,4 @@
-import { AlertTriangle, Eye, EyeOff, Key, RefreshCw, Settings as SettingsIcon, Trash2 } from 'lucide-react';
+import { AlertTriangle, Eye, EyeOff, Save, RefreshCw, Settings as SettingsIcon, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import type { AppSettings } from '../types';
@@ -73,7 +73,7 @@ export function SettingsDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" className="gap-2">
           <SettingsIcon className="h-4 w-4" />
           Settings
         </Button>
@@ -92,7 +92,7 @@ export function SettingsDialog({
         <div className="space-y-6">
           {/* Privacy Settings */}
           <Card>
-            <CardHeader className="pb-3">
+            <CardHeader>
               <CardTitle className="text-base">Privacy Settings</CardTitle>
               <CardDescription className="text-sm">
                 Control what data is stored locally
@@ -127,7 +127,7 @@ export function SettingsDialog({
 
           {/* Security Settings */}
           <Card>
-            <CardHeader className="pb-3">
+            <CardHeader>
               <CardTitle className="text-base">Security Settings</CardTitle>
               <CardDescription className="text-sm">
                 Encrypt your locally stored data
@@ -213,7 +213,7 @@ export function SettingsDialog({
 
           {/* Danger Zone */}
           <Card className="border-destructive/20">
-            <CardHeader className="pb-3">
+            <CardHeader>
               <CardTitle className="text-base text-destructive flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4" />
                 Danger Zone
@@ -243,12 +243,12 @@ export function SettingsDialog({
         </div>
 
         {/* Dialog Actions */}
-        <div className="flex justify-end gap-3 pt-4">
+        <div className="flex justify-end gap-3">
           <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
           <Button onClick={handleSave} className="gap-2">
-            <Key className="h-4 w-4" />
+            <Save className="h-4 w-4" />
             Save Settings
           </Button>
         </div>
