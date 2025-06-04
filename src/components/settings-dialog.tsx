@@ -202,7 +202,9 @@ export function SettingsDialog({
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                          onClick={() => setShowEncryptionKey(!showEncryptionKey)}
+                          onClick={() =>
+                            setShowEncryptionKey(!showEncryptionKey)
+                          }
                         >
                           {showEncryptionKey ? (
                             <EyeOff className="h-4 w-4" />
@@ -296,8 +298,8 @@ export function SettingsDialog({
                   </Button>
                   {showClearDataConfirm && (
                     <p className="text-xs text-muted-foreground">
-                      Click again to permanently delete all profiles, history, and
-                      settings.
+                      Click again to permanently delete all profiles, history,
+                      and settings.
                     </p>
                   )}
                 </div>

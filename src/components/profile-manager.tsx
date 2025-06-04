@@ -1,3 +1,18 @@
+import {
+  BookOpen,
+  Clock,
+  FileText,
+  MoreVertical,
+  Plus,
+  Save,
+  Search,
+  Settings,
+  Sparkles,
+  Star,
+  User,
+  Zap,
+} from 'lucide-react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,21 +31,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  BookOpen,
-  Clock,
-  FileText,
-  MoreVertical,
-  Plus,
-  Save,
-  Search,
-  Settings,
-  Sparkles,
-  Star,
-  User,
-  Zap,
-} from 'lucide-react';
-import { useState } from 'react';
 import type {
   FormatSettings,
   PassphraseSettings,
@@ -64,7 +64,9 @@ export function ProfileManager({
   onDeleteProfile,
 }: ProfileManagerProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'password' | 'passphrase' | 'format'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<
+    'all' | 'password' | 'passphrase' | 'format'
+  >('all');
 
   // Get type icon with enhanced styling
   const getTypeIcon = (type: string) => {
@@ -83,8 +85,11 @@ export function ProfileManager({
   // Filter and search profiles
   const filteredProfiles = profiles
     .filter((profile) => {
-      const matchesSearch = profile.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesFilter = selectedFilter === 'all' || profile.type === selectedFilter;
+      const matchesSearch = profile.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesFilter =
+        selectedFilter === 'all' || profile.type === selectedFilter;
       return matchesSearch && matchesFilter;
     })
     .sort((a, b) => {
@@ -111,7 +116,8 @@ export function ProfileManager({
             Create New Profile
           </CardTitle>
           <CardDescription className="text-sm text-muted-foreground leading-relaxed">
-            Save your current generator settings as a reusable profile for quick access
+            Save your current generator settings as a reusable profile for quick
+            access
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
@@ -158,7 +164,10 @@ export function ProfileManager({
                   </CardDescription>
                 </div>
               </div>
-              <Badge variant="secondary" className="px-3 py-1.5 text-xs font-medium">
+              <Badge
+                variant="secondary"
+                className="px-3 py-1.5 text-xs font-medium"
+              >
                 {profiles.length}
               </Badge>
             </div>
@@ -178,17 +187,19 @@ export function ProfileManager({
 
             {/* Filter Controls */}
             <div className="flex flex-wrap gap-2">
-              {(['all', 'password', 'passphrase', 'format'] as const).map((filter) => (
-                <Button
-                  key={filter}
-                  variant={selectedFilter === filter ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedFilter(filter)}
-                  className="capitalize text-xs"
-                >
-                  {filter === 'all' ? 'All' : filter}
-                </Button>
-              ))}
+              {(['all', 'password', 'passphrase', 'format'] as const).map(
+                (filter) => (
+                  <Button
+                    key={filter}
+                    variant={selectedFilter === filter ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedFilter(filter)}
+                    className="capitalize text-xs"
+                  >
+                    {filter === 'all' ? 'All' : filter}
+                  </Button>
+                ),
+              )}
             </div>
 
             {/* Profiles List */}
@@ -238,27 +249,32 @@ export function ProfileManager({
                                     : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
                               }`}
                             >
-                              {profile.type.toString().charAt(0).toUpperCase() + profile.type.slice(1)}
+                              {profile.type.toString().charAt(0).toUpperCase() +
+                                profile.type.slice(1)}
                             </Badge>
                           </div>
                         </div>
-                        
+
                         {/* Date metadata in top right with icons only */}
                         <div className="flex flex-col items-center gap-3 text-xs text-muted-foreground">
-                          <div 
+                          <div
                             className="flex items-center gap-1"
                             title={`Created ${profile.createdAt.toLocaleDateString()}`}
                           >
                             <Plus className="h-3 w-3" />
-                            <span>{profile.createdAt.toLocaleDateString()}</span>
+                            <span>
+                              {profile.createdAt.toLocaleDateString()}
+                            </span>
                           </div>
                           {profile.lastUsed && (
-                            <div 
+                            <div
                               className="flex items-center gap-1"
                               title={`Last used ${profile.lastUsed.toLocaleDateString()}`}
                             >
                               <Clock className="h-3 w-3" />
-                              <span>{profile.lastUsed.toLocaleDateString()}</span>
+                              <span>
+                                {profile.lastUsed.toLocaleDateString()}
+                              </span>
                             </div>
                           )}
                         </div>
@@ -313,7 +329,9 @@ export function ProfileManager({
                               <DropdownMenuItem
                                 onClick={() => onToggleFavorite(profile.id)}
                               >
-                                {profile.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+                                {profile.isFavorite
+                                  ? 'Remove from Favorites'
+                                  : 'Add to Favorites'}
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
@@ -351,13 +369,17 @@ export function ProfileManager({
             <div className="p-4 rounded-full bg-gradient-to-br from-muted/40 to-muted/20 w-20 h-20 mx-auto mb-6 flex items-center justify-center border border-muted-foreground/10">
               <Sparkles className="h-8 w-8 text-muted-foreground/50" />
             </div>
-            <h3 className="font-semibold text-lg mb-2">No saved profiles yet</h3>
+            <h3 className="font-semibold text-lg mb-2">
+              No saved profiles yet
+            </h3>
             <p className="text-sm text-muted-foreground/80 mb-6 leading-relaxed max-w-sm mx-auto">
-              Create your first profile to save your current generator settings for quick access later
+              Create your first profile to save your current generator settings
+              for quick access later
             </p>
             <div className="text-xs text-muted-foreground bg-muted/30 p-4 rounded-lg border border-muted-foreground/10 max-w-md mx-auto">
-              <strong className="font-medium">💡 Pro Tip:</strong> Profiles let you quickly switch between
-              different password configurations for work, personal use, or specific requirements
+              <strong className="font-medium">💡 Pro Tip:</strong> Profiles let
+              you quickly switch between different password configurations for
+              work, personal use, or specific requirements
             </div>
           </CardContent>
         </Card>

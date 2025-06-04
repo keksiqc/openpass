@@ -1,13 +1,3 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import {
   BookOpen,
   Clock,
@@ -21,6 +11,16 @@ import {
   Zap,
 } from 'lucide-react';
 import { useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import type { PasswordHistory } from '../types';
 
 interface HistoryPanelProps {
@@ -85,7 +85,10 @@ export function HistoryPanel({
               </div>
               Password History
               {history.length > 0 && (
-                <Badge variant="secondary" className="px-2.5 py-1 text-xs font-medium">
+                <Badge
+                  variant="secondary"
+                  className="px-2.5 py-1 text-xs font-medium"
+                >
                   {history.length}
                 </Badge>
               )}
