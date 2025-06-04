@@ -1,8 +1,5 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
-import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import {
   Card,
   CardContent,
@@ -12,20 +9,28 @@ import {
 } from '@/components/ui/card';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { FormatGenerator } from './components/format-generator';
 import { HistoryPanel } from './components/history-panel';
 import { ModeToggle } from './components/mode-toggle';
 import { PassphraseGenerator } from './components/passphrase-generator';
 import { PasswordGenerator } from './components/password-generator';
 import { ProfileManager } from './components/profile-manager';
+import { SettingsDialog } from './components/settings-dialog';
 import { Badge } from './components/ui/badge';
 import {
+  clearAllData,
   loadHistory,
   loadProfiles,
+  loadSettings,
   saveHistory,
   saveProfiles,
+  saveSettings,
 } from './services/storage';
 import type {
+  AppSettings,
   FormatSettings,
   PassphraseSettings,
   PasswordHistory,
@@ -73,9 +78,16 @@ export default function App() {
   const [profiles, setProfiles] = useState<PasswordProfile[]>([]);
   const [profileName, setProfileName] = useState('');
   const [passwordHistory, setPasswordHistory] = useState<PasswordHistory[]>([]);
+  const [appSettings, setAppSettings] = useState<AppSettings>({
+    historyEnabled: true,
+    encryptionEnabled: false,
+    encryptionKey: '',
+  });
 
   // Load data from localStorage on mount
   useEffect(() => {
+    const settings = loadSettings();
+    setAppSettings(settings);
     setProfiles(loadProfiles());
     setPasswordHistory(loadHistory());
   }, []);
@@ -114,6 +126,9 @@ export default function App() {
 
   // Add to history
   const addToHistory = (_password: string, historyEntry: PasswordHistory) => {
+    if (!appSettings.historyEnabled) {
+      return;
+    }
     const newHistory = [historyEntry, ...passwordHistory].slice(0, 50); // Keep last 50
     saveHistoryToStorage(newHistory);
   };
@@ -214,6 +229,38 @@ export default function App() {
     toast.success('History cleared!');
   };
 
+  // Settings management
+  const handleSettingsChange = (newSettings: AppSettings) => {
+    setAppSettings(newSettings);
+    saveSettings(newSettings);
+    
+    // If history was disabled, clear it
+    if (!newSettings.historyEnabled) {
+      setPasswordHistory([]);
+      saveHistoryToStorage([]);
+    } else {
+      // Reload history if it was re-enabled
+      setPasswordHistory(loadHistory());
+    }
+  };
+
+  // Clear all data
+  const handleClearAllData = () => {
+    clearAllData();
+    setProfiles([]);
+    setPasswordHistory([]);
+    setAppSettings({
+      historyEnabled: true,
+      encryptionEnabled: false,
+      encryptionKey: '',
+    });
+    saveSettings({
+      historyEnabled: true,
+      encryptionEnabled: false,
+      encryptionKey: '',
+    });
+  };
+
   // Export/Import functions
   const exportProfiles = () => {
     const dataStr = JSON.stringify({ profiles, passwordHistory }, null, 2);
@@ -284,6 +331,11 @@ export default function App() {
                   <kbd className="font-mono">Ctrl+G</kbd> to generate
                 </div>
               </div>
+              <SettingsDialog
+                settings={appSettings}
+                onSettingsChange={handleSettingsChange}
+                onClearAllData={handleClearAllData}
+              />
               <ModeToggle />
             </nav>
           </div>
@@ -385,11 +437,13 @@ export default function App() {
                 onImportData={importProfiles}
               />
 
-              <HistoryPanel
-                history={passwordHistory}
-                onCopyToClipboard={copyToClipboard}
-                onClearHistory={clearHistory}
-              />
+              {appSettings.historyEnabled && (
+                <HistoryPanel
+                  history={passwordHistory}
+                  onCopyToClipboard={copyToClipboard}
+                  onClearHistory={clearHistory}
+                />
+              )}
             </div>
           </div>
         </div>

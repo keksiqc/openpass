@@ -47,3 +47,9 @@ export interface PasswordStrength {
   label: string;
   color: string;
 }
+
+export interface AppSettings {
+  historyEnabled: boolean;
+  encryptionEnabled: boolean;
+  encryptionKey: string;
+}
