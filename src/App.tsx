@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RefreshCw, RotateCcwKey } from 'lucide-react';
+import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { FormatGenerator } from './components/format-generator';
@@ -18,6 +18,7 @@ import { ModeToggle } from './components/mode-toggle';
 import { PassphraseGenerator } from './components/passphrase-generator';
 import { PasswordGenerator } from './components/password-generator';
 import { ProfileManager } from './components/profile-manager';
+import { Badge } from './components/ui/badge';
 import { loadHistory, loadProfiles, saveHistory, saveProfiles } from './services/storage';
 import type {
   FormatSettings,
@@ -46,7 +47,6 @@ export default function App() {
     useState<PassphraseSettings>({
       wordCount: 4,
       separator: '-',
-      capitalize: false,
       includeNumbers: false,
       customWords: [],
       wordCase: 'lowercase',
@@ -73,6 +73,24 @@ export default function App() {
   useEffect(() => {
     setProfiles(loadProfiles());
     setPasswordHistory(loadHistory());
+  }, []);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl/Cmd + G to generate password
+      if ((event.ctrlKey || event.metaKey) && event.key === 'g') {
+        event.preventDefault();
+        // Trigger generation based on active tab
+        const generateButton = document.querySelector('[data-generate-button]') as HTMLButtonElement;
+        if (generateButton) {
+          generateButton.click();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Save profiles to localStorage
@@ -226,40 +244,78 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-6 max-w-6xl">
-        {/* Header with Mode Toggle */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <RotateCcwKey className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">OpenPass</h1>
-              <p className="text-muted-foreground">
-                Secure Local Password Generator
-              </p>
+      {/* Header */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="flex h-16 items-center justify-between">
+            {/* Logo and Brand */}
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary text-primary-foreground">
+                <RotateCcwKey className="h-5 w-5" />
+              </div>
+              <div className="flex flex-col">
+                <h1 className="text-xl font-bold tracking-tight">
+                  OpenPass
+                </h1>
+                <span className="text-xs text-muted-foreground hidden sm:block">
+                  Secure Password Generator
+                </span>
+              </div>
             </div>
-          </div>
-          <ModeToggle />
-        </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+            {/* Navigation and Features */}
+            <nav className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-4">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span>100% Local & Secure</span>
+                  </Badge>
+                </div>
+                <div className="text-xs text-muted-foreground border rounded px-2 py-1">
+                  <kbd className="font-mono">Ctrl+G</kbd> to generate
+                </div>
+              </div>
+              <ModeToggle />
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8 max-w-7xl">
+
+        {/* Main Grid Layout */}
+        <div className="grid xl:grid-cols-3 gap-6">
           {/* Main Generator */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <RefreshCw className="h-5 w-5" />
+          <div className="xl:col-span-2">
+            <Card className="border shadow-sm">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <div className="p-1.5 rounded-lg bg-primary/10">
+                    <RefreshCw className="h-5 w-5 text-primary" />
+                  </div>
                   Password Generator
                 </CardTitle>
-                <CardDescription>
-                  Generate secure passwords, passphrases, and custom formats
+                <CardDescription className="text-sm">
+                  Choose your preferred method to generate secure passwords
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <CardContent className="space-y-6">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-3 mb-6">
-                    <TabsTrigger value="password">Password</TabsTrigger>
-                    <TabsTrigger value="passphrase">Passphrase</TabsTrigger>
-                    <TabsTrigger value="format">Format</TabsTrigger>
+                    <TabsTrigger value="password" className="text-sm data-[state=active]:text-blue-600 data-[state=active]:border-blue-200">
+                      <Zap className="h-4 w-4 mr-1.5" />
+                      Password
+                    </TabsTrigger>
+                    <TabsTrigger value="passphrase" className="text-sm data-[state=active]:text-green-600 data-[state=active]:border-green-200">
+                      <BookOpen className="h-4 w-4 mr-1.5" />
+                      Passphrase
+                    </TabsTrigger>
+                    <TabsTrigger value="format" className="text-sm data-[state=active]:text-purple-600 data-[state=active]:border-purple-200">
+                      <Settings className="h-4 w-4 mr-1.5" />
+                      Format
+                    </TabsTrigger>
                   </TabsList>
 
                   <PasswordGenerator
@@ -290,32 +346,34 @@ export default function App() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
-            <ProfileManager
-              profiles={profiles}
-              profileName={profileName}
-              onProfileNameChange={setProfileName}
-              activeTab={activeTab}
-              passwordSettings={passwordSettings}
-              passphraseSettings={passphraseSettings}
-              formatSettings={formatSettings}
-              passwordHistory={passwordHistory}
-              onSaveProfile={saveProfile}
-              onLoadProfile={loadProfile}
-              onToggleFavorite={toggleFavorite}
-              onDeleteProfile={deleteProfile}
-              onExportData={exportProfiles}
-              onImportData={importProfiles}
-            />
+          <div className="xl:col-span-1 space-y-6">
+            <div className="sticky top-6 space-y-6">
+              <ProfileManager
+                profiles={profiles}
+                profileName={profileName}
+                onProfileNameChange={setProfileName}
+                activeTab={activeTab}
+                passwordSettings={passwordSettings}
+                passphraseSettings={passphraseSettings}
+                formatSettings={formatSettings}
+                passwordHistory={passwordHistory}
+                onSaveProfile={saveProfile}
+                onLoadProfile={loadProfile}
+                onToggleFavorite={toggleFavorite}
+                onDeleteProfile={deleteProfile}
+                onExportData={exportProfiles}
+                onImportData={importProfiles}
+              />
 
-            <HistoryPanel
-              history={passwordHistory}
-              onCopyToClipboard={copyToClipboard}
-              onClearHistory={clearHistory}
-            />
+              <HistoryPanel
+                history={passwordHistory}
+                onCopyToClipboard={copyToClipboard}
+                onClearHistory={clearHistory}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </main>
       <Toaster />
     </div>
   );

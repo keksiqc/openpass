@@ -25,7 +25,6 @@ export interface PasswordSettings {
 export interface PassphraseSettings {
   wordCount: number;
   separator: string;
-  capitalize: boolean;
   includeNumbers: boolean;
   customWords?: string[];
   wordCase: 'lowercase' | 'uppercase' | 'capitalize' | 'mixed';
