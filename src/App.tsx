@@ -347,9 +347,9 @@ export default function App() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Main Grid Layout */}
-        <div className="grid lg:grid-cols-4 gap-8">
+        <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Generator */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="lg:col-span-2 space-y-8">
             <Card className="border">
               <CardHeader>
                 <CardTitle className="flex items-center gap-3 text-2xl">

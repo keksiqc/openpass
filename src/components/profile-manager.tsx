@@ -7,17 +7,30 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
+  BookOpen,
   Clock,
+  FileText,
+  MoreVertical,
+  Plus,
   Save,
+  Search,
   Settings,
   Sparkles,
   Star,
-  Trash2,
   User,
+  Zap,
 } from 'lucide-react';
+import { useState } from 'react';
 import type {
   FormatSettings,
   PassphraseSettings,
@@ -50,22 +63,58 @@ export function ProfileManager({
   onToggleFavorite,
   onDeleteProfile,
 }: ProfileManagerProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'password' | 'passphrase' | 'format'>('all');
+
+  // Get type icon with enhanced styling
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'password':
+        return <Zap className="h-4 w-4" />;
+      case 'passphrase':
+        return <BookOpen className="h-4 w-4" />;
+      case 'format':
+        return <FileText className="h-4 w-4" />;
+      default:
+        return <Settings className="h-4 w-4" />;
+    }
+  };
+
+  // Filter and search profiles
+  const filteredProfiles = profiles
+    .filter((profile) => {
+      const matchesSearch = profile.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesFilter = selectedFilter === 'all' || profile.type === selectedFilter;
+      return matchesSearch && matchesFilter;
+    })
+    .sort((a, b) => {
+      // Favorites first, then by last used, then by creation date
+      if (a.isFavorite && !b.isFavorite) return -1;
+      if (!a.isFavorite && b.isFavorite) return 1;
+      if (a.lastUsed && b.lastUsed) {
+        return b.lastUsed.getTime() - a.lastUsed.getTime();
+      }
+      if (a.lastUsed && !b.lastUsed) return -1;
+      if (!a.lastUsed && b.lastUsed) return 1;
+      return b.createdAt.getTime() - a.createdAt.getTime();
+    });
+
   return (
     <div className="space-y-6">
       {/* Save Profile Section */}
-      <Card className="border-2 border-dashed border-primary/20 hover:border-primary/30 transition-colors">
+      <Card className="border-2 border-dashed border-primary/20 hover:border-primary/30 transition-all duration-300 hover:shadow-sm">
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-lg">
-            <div className="p-1.5 rounded-lg bg-primary/10">
-              <Save className="h-4 w-4 text-primary" />
+            <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+              <Plus className="h-4 w-4 text-primary" />
             </div>
-            Save Profile
+            Create New Profile
           </CardTitle>
           <CardDescription className="text-sm text-muted-foreground leading-relaxed">
-            Save your current settings as a reusable profile for quick access
+            Save your current generator settings as a reusable profile for quick access
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-5">
           <div className="space-y-3">
             <Label
               htmlFor="profile-name"
@@ -79,169 +128,236 @@ export function ProfileManager({
               value={profileName}
               onChange={(e) => onProfileNameChange(e.target.value)}
               placeholder="e.g., Work Passwords, Personal Settings..."
-              className="h-10 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+              className="h-11 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 border-2"
             />
           </div>
           <Button
             onClick={onSaveProfile}
-            className="w-full h-10 font-medium text-sm"
+            className="w-full h-11 font-medium text-sm gap-2 transition-all duration-200 hover:shadow-md"
             disabled={!profileName.trim()}
           >
-            <Save className="h-4 w-4 mr-2" />
+            <Save className="h-4 w-4" />
             Save Current Settings
           </Button>
         </CardContent>
       </Card>
 
-      {/* Saved Profiles List or Empty State */}
+      {/* Saved Profiles Section */}
       {profiles.length > 0 ? (
         <Card className="border">
           <CardHeader>
-            <CardTitle className="flex items-center gap-3 text-lg">
-              <div className="p-1.5 rounded-lg bg-primary/10">
-                <Sparkles className="h-4 w-4 text-primary" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Saved Profiles</CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground">
+                    {filteredProfiles.length} of {profiles.length} profiles
+                  </CardDescription>
+                </div>
               </div>
-              Saved Profiles
-              <Badge variant="secondary" className="ml-auto px-2.5 py-1 text-xs font-medium">
+              <Badge variant="secondary" className="px-3 py-1.5 text-xs font-medium">
                 {profiles.length}
               </Badge>
-            </CardTitle>
-            <CardDescription className="text-sm text-muted-foreground leading-relaxed">
-              Quick access to your frequently used settings
-            </CardDescription>
+            </div>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="max-h-80 overflow-y-auto">
-              {profiles
-                .sort((a, b) => {
-                  if (a.isFavorite && !b.isFavorite) return -1;
-                  if (!a.isFavorite && b.isFavorite) return 1;
-                  return b.createdAt.getTime() - a.createdAt.getTime();
-                })
-                .map((profile, index) => (
+
+          <CardContent className="space-y-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search profiles..."
+                className="pl-10 h-10"
+              />
+            </div>
+
+            {/* Filter Controls */}
+            <div className="flex flex-wrap gap-2">
+              {(['all', 'password', 'passphrase', 'format'] as const).map((filter) => (
+                <Button
+                  key={filter}
+                  variant={selectedFilter === filter ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedFilter(filter)}
+                  className="capitalize text-xs"
+                >
+                  {filter === 'all' ? 'All' : filter}
+                </Button>
+              ))}
+            </div>
+
+            {/* Profiles List */}
+            {filteredProfiles.length > 0 ? (
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {filteredProfiles.map((profile) => (
                   <div
                     key={profile.id}
-                    className={`p-4 border-b border-border/50 hover:bg-muted/30 transition-all duration-200 group ${
-                      index === profiles.length - 1 ? 'border-b-0' : ''
-                    }`}
+                    className="group relative p-4 rounded-lg border border-border/50 hover:border-border hover:bg-muted/30 transition-all duration-200 hover:shadow-sm"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0 space-y-2">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-2 min-w-0 flex-1">
-                            <div
-                              className={`p-1.5 rounded-md transition-colors ${
-                                profile.type === 'password'
-                                  ? 'bg-blue-100 dark:bg-blue-900/30'
-                                  : profile.type === 'passphrase'
-                                    ? 'bg-green-100 dark:bg-green-900/30'
-                                    : 'bg-purple-100 dark:bg-purple-900/30'
-                              }`}
-                            >
-                              <Settings
-                                className={`h-3.5 w-3.5 ${
-                                  profile.type === 'password'
-                                    ? 'text-blue-600 dark:text-blue-400'
-                                    : profile.type === 'passphrase'
-                                      ? 'text-green-600 dark:text-green-400'
-                                      : 'text-purple-600 dark:text-purple-400'
-                                }`}
-                              />
-                            </div>
-                            <span className="font-medium text-sm truncate">
-                              {profile.name}
-                            </span>
-                            {profile.isFavorite && (
-                              <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400 flex-shrink-0" />
-                            )}
-                          </div>
-                          <Badge
-                            variant="outline"
-                            className={`text-xs font-medium px-2 py-0.5 ${
+                    <div className="space-y-3">
+                      {/* Header */}
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div
+                            className={`p-2 rounded-md transition-colors ${
                               profile.type === 'password'
-                                ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
+                                ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
                                 : profile.type === 'passphrase'
-                                  ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
-                                  : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
+                                  ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                                  : 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
                             }`}
                           >
-                            {profile.type}
-                          </Badge>
+                            <div
+                              className={`${
+                                profile.type === 'password'
+                                  ? 'text-blue-600 dark:text-blue-400'
+                                  : profile.type === 'passphrase'
+                                    ? 'text-green-600 dark:text-green-400'
+                                    : 'text-purple-600 dark:text-purple-400'
+                              }`}
+                            >
+                              {getTypeIcon(profile.type)}
+                            </div>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-semibold text-base truncate">
+                              {profile.name}
+                            </h3>
+                            <Badge
+                              variant="outline"
+                              className={`text-xs font-medium ${
+                                profile.type === 'password'
+                                  ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
+                                  : profile.type === 'passphrase'
+                                    ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
+                                    : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
+                              }`}
+                            >
+                              {profile.type.toString().charAt(0).toUpperCase() + profile.type.slice(1)}
+                            </Badge>
+                          </div>
                         </div>
-
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          <div className="flex items-center gap-1.5">
-                            <Clock className="h-3 w-3" />
-                            {profile.createdAt.toLocaleDateString()}
+                        
+                        {/* Date metadata in top right with icons only */}
+                        <div className="flex flex-col items-center gap-3 text-xs text-muted-foreground">
+                          <div 
+                            className="flex items-center gap-1"
+                            title={`Created ${profile.createdAt.toLocaleDateString()}`}
+                          >
+                            <Plus className="h-3 w-3" />
+                            <span>{profile.createdAt.toLocaleDateString()}</span>
                           </div>
                           {profile.lastUsed && (
-                            <div className="flex items-center gap-1.5">
-                              <span>•</span>
-                              <span>
-                                Used {profile.lastUsed.toLocaleDateString()}
-                              </span>
+                            <div 
+                              className="flex items-center gap-1"
+                              title={`Last used ${profile.lastUsed.toLocaleDateString()}`}
+                            >
+                              <Clock className="h-3 w-3" />
+                              <span>{profile.lastUsed.toLocaleDateString()}</span>
                             </div>
                           )}
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5 ml-4">
+                      {/* Actions */}
+                      <div className="flex items-center justify-between pt-2">
                         <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onToggleFavorite(profile.id)}
-                          className="h-8 w-8 p-0"
-                          title={
-                            profile.isFavorite
-                              ? 'Remove from favorites'
-                              : 'Add to favorites'
-                          }
-                        >
-                          <Star
-                            className={`h-3.5 w-3.5 transition-colors ${
-                              profile.isFavorite
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-muted-foreground hover:text-yellow-400'
-                            }`}
-                          />
-                        </Button>
-                        <Button
-                          variant="outline"
+                          variant="default"
                           size="sm"
                           onClick={() => onLoadProfile(profile)}
-                          className="h-8 px-3 text-xs font-medium"
+                          className="flex-1 mr-2 h-9 font-medium"
                         >
-                          Load
+                          Load Profile
                         </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onDeleteProfile(profile.id)}
-                          className="h-8 w-8 p-0 hover:border-destructive hover:text-destructive"
-                          title="Delete profile"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onToggleFavorite(profile.id)}
+                            className="h-9 w-9 p-0"
+                            title={
+                              profile.isFavorite
+                                ? 'Remove from favorites'
+                                : 'Add to favorites'
+                            }
+                          >
+                            <Star
+                              className={`h-4 w-4 transition-colors ${
+                                profile.isFavorite
+                                  ? 'fill-yellow-400 text-yellow-400'
+                                  : 'text-muted-foreground hover:text-yellow-400'
+                              }`}
+                            />
+                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-9 w-9 p-0"
+                              >
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() => onLoadProfile(profile)}
+                              >
+                                Load Profile
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => onToggleFavorite(profile.id)}
+                              >
+                                {profile.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => onDeleteProfile(profile.id)}
+                                variant="destructive"
+                              >
+                                Delete Profile
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
                       </div>
                     </div>
                   </div>
                 ))}
-            </div>
+              </div>
+            ) : (
+              /* No results found */
+              <div className="text-center py-8 px-6">
+                <div className="p-3 rounded-full bg-muted/30 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                  <Search className="h-5 w-5 text-muted-foreground/50" />
+                </div>
+                <p className="text-sm font-medium mb-1">No profiles found</p>
+                <p className="text-xs text-muted-foreground">
+                  Try adjusting your search or filter
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       ) : (
-        <Card className="border-2 border-dashed border-muted-foreground/20">
-          <CardContent className="text-center py-10 px-6">
-            <div className="p-4 rounded-full bg-muted/30 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Sparkles className="h-7 w-7 text-muted-foreground/50" />
+        /* Empty State */
+        <Card className="border-2 border-dashed border-muted-foreground/20 hover:border-muted-foreground/30 transition-colors">
+          <CardContent className="text-center py-12 px-6">
+            <div className="p-4 rounded-full bg-gradient-to-br from-muted/40 to-muted/20 w-20 h-20 mx-auto mb-6 flex items-center justify-center border border-muted-foreground/10">
+              <Sparkles className="h-8 w-8 text-muted-foreground/50" />
             </div>
-            <h3 className="font-semibold text-base mb-2">No saved profiles yet</h3>
-            <p className="text-sm text-muted-foreground/80 mb-6 leading-relaxed">
-              Save your current settings as a profile for quick access later
+            <h3 className="font-semibold text-lg mb-2">No saved profiles yet</h3>
+            <p className="text-sm text-muted-foreground/80 mb-6 leading-relaxed max-w-sm mx-auto">
+              Create your first profile to save your current generator settings for quick access later
             </p>
-            <div className="text-xs text-muted-foreground bg-muted/30 p-4 rounded-lg border border-muted-foreground/10">
-              <strong className="font-medium">Tip:</strong> Profiles help you quickly switch between
-              different password configurations
+            <div className="text-xs text-muted-foreground bg-muted/30 p-4 rounded-lg border border-muted-foreground/10 max-w-md mx-auto">
+              <strong className="font-medium">💡 Pro Tip:</strong> Profiles let you quickly switch between
+              different password configurations for work, personal use, or specific requirements
             </div>
           </CardContent>
         </Card>
