@@ -1,21 +1,40 @@
+import {
+  AlertTriangle,
+  ChevronDown,
+  Copy,
+  Eye,
+  EyeOff,
+  RefreshCw,
+  Shield,
+  Zap,
+} from 'lucide-react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { TabsContent } from '@/components/ui/tabs';
-import { AlertTriangle, ChevronDown, Copy, Eye, EyeOff, RefreshCw, Shield, Zap } from 'lucide-react';
-import { useState } from 'react';
 import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 import type { PasswordHistory, PasswordSettings } from '../types';
-import { calculateEntropy, estimateTimeToCrack } from '../utils/password-strength';
+import {
+  calculateEntropy,
+  estimateTimeToCrack,
+} from '../utils/password-strength';
 
 interface PasswordGeneratorProps {
   settings: PasswordSettings;
   onSettingsChange: (settings: PasswordSettings) => void;
-  onPasswordGenerated: (password: string, historyEntry: PasswordHistory) => void;
+  onPasswordGenerated: (
+    password: string,
+    historyEntry: PasswordHistory,
+  ) => void;
   onCopyToClipboard: (text: string) => void;
   isGenerating: boolean;
   onGeneratingChange: (generating: boolean) => void;
@@ -45,19 +64,34 @@ export function PasswordGenerator({
   const getStrengthBadge = (password: string) => {
     const strength = calculateEntropy(password, getCharacterSet(settings));
     if (strength < 40) {
-      return <Badge variant="destructive" className="text-xs flex items-center gap-1">
-        <AlertTriangle className="h-3 w-3" />
-        Weak
-      </Badge>;
+      return (
+        <Badge
+          variant="destructive"
+          className="text-xs flex items-center gap-1"
+        >
+          <AlertTriangle className="h-3 w-3" />
+          Weak
+        </Badge>
+      );
     } else if (strength < 60) {
-      return <Badge variant="secondary" className="text-xs">Fair</Badge>;
+      return (
+        <Badge variant="secondary" className="text-xs">
+          Fair
+        </Badge>
+      );
     } else if (strength < 80) {
-      return <Badge variant="outline" className="text-xs">Good</Badge>;
+      return (
+        <Badge variant="outline" className="text-xs">
+          Good
+        </Badge>
+      );
     } else {
-      return <Badge variant="default" className="text-xs flex items-center gap-1">
-        <Shield className="h-3 w-3" />
-        Strong
-      </Badge>;
+      return (
+        <Badge variant="default" className="text-xs flex items-center gap-1">
+          <Shield className="h-3 w-3" />
+          Strong
+        </Badge>
+      );
     }
   };
 
@@ -158,7 +192,9 @@ export function PasswordGenerator({
             />
             <Label htmlFor="symbols" className="flex-1 cursor-pointer">
               <div className="font-medium">Symbols</div>
-              <div className="text-xs text-muted-foreground font-mono">!@#$%</div>
+              <div className="text-xs text-muted-foreground font-mono">
+                !@#$%
+              </div>
             </Label>
           </div>
         </div>
@@ -172,7 +208,9 @@ export function PasswordGenerator({
         </CollapsibleTrigger>
         <CollapsibleContent className="space-y-3 p-4 bg-muted/20 rounded-lg border mt-2">
           <div>
-            <Label htmlFor="custom" className="text-xs text-muted-foreground">Custom Characters</Label>
+            <Label htmlFor="custom" className="text-xs text-muted-foreground">
+              Custom Characters
+            </Label>
             <Input
               id="custom"
               value={settings.customCharacters}
@@ -199,7 +237,10 @@ export function PasswordGenerator({
                   })
                 }
               />
-              <Label htmlFor="exclude-similar" className="text-xs cursor-pointer">
+              <Label
+                htmlFor="exclude-similar"
+                className="text-xs cursor-pointer"
+              >
                 Exclude similar (0,O,1,l,I)
               </Label>
             </div>
@@ -215,7 +256,10 @@ export function PasswordGenerator({
                   })
                 }
               />
-              <Label htmlFor="exclude-ambiguous" className="text-xs cursor-pointer">
+              <Label
+                htmlFor="exclude-ambiguous"
+                className="text-xs cursor-pointer"
+              >
                 Exclude ambiguous symbols
               </Label>
             </div>
@@ -305,12 +349,10 @@ export function PasswordGenerator({
       {generatedPassword && (
         <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
           <div className="flex items-center justify-between">
-            <Label className="text-sm font-medium">
-              Generated Password
-            </Label>
+            <Label className="text-sm font-medium">Generated Password</Label>
             {getStrengthBadge(generatedPassword)}
           </div>
-          
+
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">
               <Input
@@ -341,15 +383,18 @@ export function PasswordGenerator({
               <Copy className="h-4 w-4" />
             </Button>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
             <div>
-              <strong>Entropy:</strong> {Math.round(
+              <strong>Entropy:</strong>{' '}
+              {Math.round(
                 calculateEntropy(generatedPassword, getCharacterSet(settings)),
-              )} bits
+              )}{' '}
+              bits
             </div>
             <div>
-              <strong>Time to crack:</strong> {estimateTimeToCrack(
+              <strong>Time to crack:</strong>{' '}
+              {estimateTimeToCrack(
                 calculateEntropy(generatedPassword, getCharacterSet(settings)),
               )}
             </div>

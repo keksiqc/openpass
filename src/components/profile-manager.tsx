@@ -1,4 +1,15 @@
-
+import {
+  Clock,
+  Download,
+  Lightbulb,
+  Save,
+  Settings,
+  Sparkles,
+  Star,
+  Trash2,
+  Upload,
+  User,
+} from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,8 +21,13 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Clock, Download, Lightbulb, Save, Settings, Sparkles, Star, Trash2, Upload, User } from 'lucide-react';
-import type { FormatSettings, PassphraseSettings, PasswordHistory, PasswordProfile, PasswordSettings } from '../types';
+import type {
+  FormatSettings,
+  PassphraseSettings,
+  PasswordHistory,
+  PasswordProfile,
+  PasswordSettings,
+} from '../types';
 
 interface ProfileManagerProps {
   profiles: PasswordProfile[];
@@ -58,7 +74,10 @@ export function ProfileManager({
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="profile-name" className="text-sm font-medium flex items-center gap-2">
+            <Label
+              htmlFor="profile-name"
+              className="text-sm font-medium flex items-center gap-2"
+            >
               <User className="h-3 w-3" />
               Profile Name
             </Label>
@@ -70,8 +89,8 @@ export function ProfileManager({
               className="text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          <Button 
-            onClick={onSaveProfile} 
+          <Button
+            onClick={onSaveProfile}
             className="w-full h-11 font-medium"
             disabled={!profileName.trim()}
           >
@@ -117,20 +136,24 @@ export function ProfileManager({
                       <div className="flex-1 min-w-0 space-y-2">
                         <div className="flex items-center gap-2">
                           <div className="flex items-center gap-2 min-w-0 flex-1">
-                            <div className={`p-1.5 rounded-md transition-colors ${
-                              profile.type === 'password' 
-                                ? 'bg-blue-100 dark:bg-blue-900/30' 
-                                : profile.type === 'passphrase'
-                                ? 'bg-green-100 dark:bg-green-900/30'
-                                : 'bg-purple-100 dark:bg-purple-900/30'
-                            }`}>
-                              <Settings className={`h-3 w-3 ${
-                                profile.type === 'password' 
-                                  ? 'text-blue-600 dark:text-blue-400' 
+                            <div
+                              className={`p-1.5 rounded-md transition-colors ${
+                                profile.type === 'password'
+                                  ? 'bg-blue-100 dark:bg-blue-900/30'
                                   : profile.type === 'passphrase'
-                                  ? 'text-green-600 dark:text-green-400'
-                                  : 'text-purple-600 dark:text-purple-400'
-                              }`} />
+                                    ? 'bg-green-100 dark:bg-green-900/30'
+                                    : 'bg-purple-100 dark:bg-purple-900/30'
+                              }`}
+                            >
+                              <Settings
+                                className={`h-3 w-3 ${
+                                  profile.type === 'password'
+                                    ? 'text-blue-600 dark:text-blue-400'
+                                    : profile.type === 'passphrase'
+                                      ? 'text-green-600 dark:text-green-400'
+                                      : 'text-purple-600 dark:text-purple-400'
+                                }`}
+                              />
                             </div>
                             <span className="font-medium text-sm truncate">
                               {profile.name}
@@ -139,20 +162,20 @@ export function ProfileManager({
                               <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 flex-shrink-0" />
                             )}
                           </div>
-                          <Badge 
-                            variant="outline" 
+                          <Badge
+                            variant="outline"
                             className={`text-xs font-medium ${
-                              profile.type === 'password' 
-                                ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800' 
+                              profile.type === 'password'
+                                ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
                                 : profile.type === 'passphrase'
-                                ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
-                                : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
+                                  ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
+                                  : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
                             }`}
                           >
                             {profile.type}
                           </Badge>
                         </div>
-                        
+
                         <div className="flex items-center gap-3 text-xs text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
@@ -161,19 +184,25 @@ export function ProfileManager({
                           {profile.lastUsed && (
                             <div className="flex items-center gap-1">
                               <span>•</span>
-                              <span>Used {profile.lastUsed.toLocaleDateString()}</span>
+                              <span>
+                                Used {profile.lastUsed.toLocaleDateString()}
+                              </span>
                             </div>
                           )}
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-1 ml-3">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => onToggleFavorite(profile.id)}
                           className="h-8 w-8 p-0"
-                          title={profile.isFavorite ? "Remove from favorites" : "Add to favorites"}
+                          title={
+                            profile.isFavorite
+                              ? 'Remove from favorites'
+                              : 'Add to favorites'
+                          }
                         >
                           <Star
                             className={`h-4 w-4 transition-colors ${
@@ -218,7 +247,8 @@ export function ProfileManager({
               Save your current settings as a profile for quick access later
             </p>
             <div className="text-xs text-muted-foreground bg-muted/30 p-3 rounded-lg">
-              <strong>Tip:</strong> Profiles help you quickly switch between different password configurations
+              <strong>Tip:</strong> Profiles help you quickly switch between
+              different password configurations
             </div>
           </CardContent>
         </Card>
@@ -238,17 +268,17 @@ export function ProfileManager({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <Button 
-            onClick={onExportData} 
-            variant="outline" 
+          <Button
+            onClick={onExportData}
+            variant="outline"
             className="w-full h-10 font-medium hover:bg-amber-50 hover:border-amber-200 dark:hover:bg-amber-900/20"
           >
             <Download className="h-4 w-4 mr-2" />
             Export All Data
           </Button>
           <div className="relative">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full h-10 font-medium hover:bg-blue-50 hover:border-blue-200 dark:hover:bg-blue-900/20 cursor-pointer"
             >
               <Upload className="h-4 w-4 mr-2" />

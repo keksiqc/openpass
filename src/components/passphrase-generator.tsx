@@ -1,8 +1,13 @@
-
+import { BookOpen, ChevronDown, Copy, Eye, EyeOff, Shield } from 'lucide-react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -14,15 +19,16 @@ import {
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { TabsContent } from '@/components/ui/tabs';
-import { BookOpen, ChevronDown, Copy, Eye, EyeOff, Shield } from 'lucide-react';
-import { useState } from 'react';
 import { usePassphraseGenerator } from '../hooks/usePassphraseGenerator';
 import type { PassphraseSettings, PasswordHistory } from '../types';
 
 interface PassphraseGeneratorProps {
   settings: PassphraseSettings;
   onSettingsChange: (settings: PassphraseSettings) => void;
-  onPassphraseGenerated: (passphrase: string, historyEntry: PasswordHistory) => void;
+  onPassphraseGenerated: (
+    passphrase: string,
+    historyEntry: PasswordHistory,
+  ) => void;
   onCopyToClipboard: (text: string) => void;
 }
 
@@ -48,18 +54,32 @@ export function PassphraseGenerator({
     const wordCount = settings.wordCount;
     const hasNumbers = settings.includeNumbers;
     const entropy = wordCount * 12.9 + (hasNumbers ? 6.6 : 0); // Rough estimation
-    
+
     if (entropy < 50) {
-      return <Badge variant="destructive" className="text-xs">Weak</Badge>;
+      return (
+        <Badge variant="destructive" className="text-xs">
+          Weak
+        </Badge>
+      );
     } else if (entropy < 70) {
-      return <Badge variant="secondary" className="text-xs">Fair</Badge>;
+      return (
+        <Badge variant="secondary" className="text-xs">
+          Fair
+        </Badge>
+      );
     } else if (entropy < 90) {
-      return <Badge variant="outline" className="text-xs">Good</Badge>;
+      return (
+        <Badge variant="outline" className="text-xs">
+          Good
+        </Badge>
+      );
     } else {
-      return <Badge variant="default" className="text-xs flex items-center gap-1">
-        <Shield className="h-3 w-3" />
-        Strong
-      </Badge>;
+      return (
+        <Badge variant="default" className="text-xs flex items-center gap-1">
+          <Shield className="h-3 w-3" />
+          Strong
+        </Badge>
+      );
     }
   };
 
@@ -70,10 +90,13 @@ export function PassphraseGenerator({
         <div className="flex items-start gap-2">
           <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
           <div className="text-sm">
-            <p className="font-medium text-blue-900 dark:text-blue-100">Why use passphrases?</p>
+            <p className="font-medium text-blue-900 dark:text-blue-100">
+              Why use passphrases?
+            </p>
             <p className="text-blue-700 dark:text-blue-300 mt-1">
-              Passphrases like "correct-horse-battery-staple" are easier to remember than complex passwords 
-              while providing excellent security through length and entropy.
+              Passphrases like "correct-horse-battery-staple" are easier to
+              remember than complex passwords while providing excellent security
+              through length and entropy.
             </p>
           </div>
         </div>
@@ -109,7 +132,9 @@ export function PassphraseGenerator({
       {/* Separator and Case Options */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="separator" className="text-base font-medium">Separator</Label>
+          <Label htmlFor="separator" className="text-base font-medium">
+            Separator
+          </Label>
           <Select
             value={settings.separator}
             onValueChange={(value) =>
@@ -133,7 +158,9 @@ export function PassphraseGenerator({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="word-case" className="text-base font-medium">Word Case</Label>
+          <Label htmlFor="word-case" className="text-base font-medium">
+            Word Case
+          </Label>
           <Select
             value={settings.wordCase}
             onValueChange={(value) =>
@@ -176,16 +203,18 @@ export function PassphraseGenerator({
             />
             <Label htmlFor="include-numbers" className="flex-1 cursor-pointer">
               <div className="font-medium">Add Numbers</div>
-              <div className="text-xs text-muted-foreground">Append random digits to the passphrase</div>
+              <div className="text-xs text-muted-foreground">
+                Append random digits to the passphrase
+              </div>
             </Label>
           </div>
         </CollapsibleContent>
       </Collapsible>
 
       {/* Generate Button */}
-      <Button 
-        onClick={handleGenerate} 
-        className="w-full" 
+      <Button
+        onClick={handleGenerate}
+        className="w-full"
         size="lg"
         data-generate-button
       >
@@ -197,12 +226,10 @@ export function PassphraseGenerator({
       {generatedPassphrase && (
         <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
           <div className="flex items-center justify-between">
-            <Label className="text-sm font-medium">
-              Generated Passphrase
-            </Label>
+            <Label className="text-sm font-medium">Generated Passphrase</Label>
             {getStrengthBadge(generatedPassphrase)}
           </div>
-          
+
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">
               <Input
@@ -233,9 +260,10 @@ export function PassphraseGenerator({
               <Copy className="h-4 w-4" />
             </Button>
           </div>
-          
+
           <div className="text-xs text-muted-foreground">
-            <strong>Tip:</strong> Passphrases are easier to remember while maintaining high security
+            <strong>Tip:</strong> Passphrases are easier to remember while
+            maintaining high security
           </div>
         </div>
       )}

@@ -1,5 +1,8 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
+import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import {
   Card,
   CardContent,
@@ -9,9 +12,6 @@ import {
 } from '@/components/ui/card';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import { FormatGenerator } from './components/format-generator';
 import { HistoryPanel } from './components/history-panel';
 import { ModeToggle } from './components/mode-toggle';
@@ -19,7 +19,12 @@ import { PassphraseGenerator } from './components/passphrase-generator';
 import { PasswordGenerator } from './components/password-generator';
 import { ProfileManager } from './components/profile-manager';
 import { Badge } from './components/ui/badge';
-import { loadHistory, loadProfiles, saveHistory, saveProfiles } from './services/storage';
+import {
+  loadHistory,
+  loadProfiles,
+  saveHistory,
+  saveProfiles,
+} from './services/storage';
 import type {
   FormatSettings,
   PassphraseSettings,
@@ -82,7 +87,9 @@ export default function App() {
       if ((event.ctrlKey || event.metaKey) && event.key === 'g') {
         event.preventDefault();
         // Trigger generation based on active tab
-        const generateButton = document.querySelector('[data-generate-button]') as HTMLButtonElement;
+        const generateButton = document.querySelector(
+          '[data-generate-button]',
+        ) as HTMLButtonElement;
         if (generateButton) {
           generateButton.click();
         }
@@ -254,9 +261,7 @@ export default function App() {
                 <RotateCcwKey className="h-5 w-5" />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-bold tracking-tight">
-                  OpenPass
-                </h1>
+                <h1 className="text-xl font-bold tracking-tight">OpenPass</h1>
                 <span className="text-xs text-muted-foreground hidden sm:block">
                   Secure Password Generator
                 </span>
@@ -267,7 +272,10 @@ export default function App() {
             <nav className="flex items-center gap-4">
               <div className="hidden md:flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Badge variant="secondary" className="flex items-center gap-1">
+                  <Badge
+                    variant="secondary"
+                    className="flex items-center gap-1"
+                  >
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span>100% Local & Secure</span>
                   </Badge>
@@ -284,7 +292,6 @@ export default function App() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-7xl">
-
         {/* Main Grid Layout */}
         <div className="grid xl:grid-cols-3 gap-6">
           {/* Main Generator */}
@@ -302,17 +309,30 @@ export default function App() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <Tabs
+                  value={activeTab}
+                  onValueChange={setActiveTab}
+                  className="w-full"
+                >
                   <TabsList className="grid w-full grid-cols-3 mb-6">
-                    <TabsTrigger value="password" className="text-sm data-[state=active]:text-blue-600 data-[state=active]:border-blue-200">
+                    <TabsTrigger
+                      value="password"
+                      className="text-sm data-[state=active]:text-blue-600 data-[state=active]:border-blue-200"
+                    >
                       <Zap className="h-4 w-4 mr-1.5" />
                       Password
                     </TabsTrigger>
-                    <TabsTrigger value="passphrase" className="text-sm data-[state=active]:text-green-600 data-[state=active]:border-green-200">
+                    <TabsTrigger
+                      value="passphrase"
+                      className="text-sm data-[state=active]:text-green-600 data-[state=active]:border-green-200"
+                    >
                       <BookOpen className="h-4 w-4 mr-1.5" />
                       Passphrase
                     </TabsTrigger>
-                    <TabsTrigger value="format" className="text-sm data-[state=active]:text-purple-600 data-[state=active]:border-purple-200">
+                    <TabsTrigger
+                      value="format"
+                      className="text-sm data-[state=active]:text-purple-600 data-[state=active]:border-purple-200"
+                    >
                       <Settings className="h-4 w-4 mr-1.5" />
                       Format
                     </TabsTrigger>

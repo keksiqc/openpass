@@ -1,16 +1,26 @@
-
+import {
+  BookOpen,
+  Clock,
+  Copy,
+  Eye,
+  EyeOff,
+  History,
+  Settings,
+  Shield,
+  Trash2,
+  Zap,
+} from 'lucide-react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { BookOpen, Clock, Copy, Eye, EyeOff, History, Settings, Shield, Trash2, Zap } from 'lucide-react';
-import { useState } from 'react';
 import type { PasswordHistory } from '../types';
 
 interface HistoryPanelProps {
@@ -24,12 +34,14 @@ export function HistoryPanel({
   onCopyToClipboard,
   onClearHistory,
 }: HistoryPanelProps) {
-  const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
+  const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>(
+    {},
+  );
 
   const togglePasswordVisibility = (entryId: string) => {
-    setShowPasswords(prev => ({
+    setShowPasswords((prev) => ({
       ...prev,
-      [entryId]: !prev[entryId]
+      [entryId]: !prev[entryId],
     }));
   };
 
@@ -45,8 +57,6 @@ export function HistoryPanel({
         return <Shield className="h-3 w-3" />;
     }
   };
-
-
 
   const getStrengthColor = (strength: string) => {
     switch (strength.toLowerCase()) {
@@ -103,7 +113,9 @@ export function HistoryPanel({
             <div className="p-4 rounded-full bg-muted/30 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
               <Shield className="h-8 w-8 opacity-50" />
             </div>
-            <p className="text-sm font-medium mb-2">No passwords generated yet</p>
+            <p className="text-sm font-medium mb-2">
+              No passwords generated yet
+            </p>
             <p className="text-xs text-muted-foreground/80">
               Your generation history will appear here for easy access
             </p>
@@ -119,55 +131,66 @@ export function HistoryPanel({
                   {/* Header with badges and timestamp */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className={`p-1.5 rounded-md ${
-                        entry.type === 'password' 
-                          ? 'bg-blue-100 dark:bg-blue-900/30' 
-                          : entry.type === 'passphrase'
-                          ? 'bg-green-100 dark:bg-green-900/30'
-                          : 'bg-purple-100 dark:bg-purple-900/30'
-                      }`}>
-                        <div className={`${
-                          entry.type === 'password' 
-                            ? 'text-blue-600 dark:text-blue-400' 
+                      <div
+                        className={`p-1.5 rounded-md ${
+                          entry.type === 'password'
+                            ? 'bg-blue-100 dark:bg-blue-900/30'
                             : entry.type === 'passphrase'
-                            ? 'text-green-600 dark:text-green-400'
-                            : 'text-purple-600 dark:text-purple-400'
-                        }`}>
+                              ? 'bg-green-100 dark:bg-green-900/30'
+                              : 'bg-purple-100 dark:bg-purple-900/30'
+                        }`}
+                      >
+                        <div
+                          className={`${
+                            entry.type === 'password'
+                              ? 'text-blue-600 dark:text-blue-400'
+                              : entry.type === 'passphrase'
+                                ? 'text-green-600 dark:text-green-400'
+                                : 'text-purple-600 dark:text-purple-400'
+                          }`}
+                        >
                           {getTypeIcon(entry.type)}
                         </div>
                       </div>
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         className={`text-xs font-medium ${
-                          entry.type === 'password' 
-                            ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800' 
+                          entry.type === 'password'
+                            ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
                             : entry.type === 'passphrase'
-                            ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
-                            : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
+                              ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
+                              : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
                         }`}
                       >
                         {entry.type}
                       </Badge>
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         className={`text-xs font-medium ${getStrengthColor(entry.strength.label)}`}
                       >
                         {entry.strength.label}
                       </Badge>
                       {index === 0 && (
-                        <Badge variant="default" className="text-xs font-medium">
+                        <Badge
+                          variant="default"
+                          className="text-xs font-medium"
+                        >
                           Latest
                         </Badge>
                       )}
                     </div>
-                    
+
                     <div className="flex items-center gap-1">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => togglePasswordVisibility(entry.id)}
                         className="h-8 w-8 p-0"
-                        title={showPasswords[entry.id] ? "Hide password" : "Show password"}
+                        title={
+                          showPasswords[entry.id]
+                            ? 'Hide password'
+                            : 'Show password'
+                        }
                       >
                         {showPasswords[entry.id] ? (
                           <EyeOff className="h-4 w-4" />
@@ -186,17 +209,18 @@ export function HistoryPanel({
                       </Button>
                     </div>
                   </div>
-                  
+
                   {/* Password display */}
                   <Input
-                    value={showPasswords[entry.id] 
-                      ? entry.password 
-                      : '•'.repeat(Math.min(entry.password.length, 20))
+                    value={
+                      showPasswords[entry.id]
+                        ? entry.password
+                        : '•'.repeat(Math.min(entry.password.length, 20))
                     }
                     readOnly
                     className="font-mono text-xs bg-muted/30"
                   />
-                  
+
                   {/* Timestamp */}
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Clock className="h-3 w-3" />
@@ -204,7 +228,7 @@ export function HistoryPanel({
                       month: 'short',
                       day: 'numeric',
                       hour: '2-digit',
-                      minute: '2-digit'
+                      minute: '2-digit',
                     }).format(entry.createdAt)}
                   </div>
                 </div>

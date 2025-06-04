@@ -1,4 +1,3 @@
-
 export const COMMON_WORDS = [
   'ancient',
   'bridge',

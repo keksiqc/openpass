@@ -1,4 +1,3 @@
-
 import type { PasswordStrength } from '../types';
 
 // Password strength calculator
@@ -25,7 +24,12 @@ export const calculateStrength = (password: string): PasswordStrength => {
   // Pattern detection penalties
   if (/(.)\1{2,}/.test(password)) score -= 1; // Repeated characters
   if (/012|123|234|345|456|567|678|789|890/.test(password)) score -= 1; // Sequential numbers
-  if (/abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz/i.test(password)) score -= 1; // Sequential letters
+  if (
+    /abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz/i.test(
+      password,
+    )
+  )
+    score -= 1; // Sequential letters
 
   // Ensure minimum score of 0
   score = Math.max(0, score);

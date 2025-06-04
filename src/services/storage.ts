@@ -1,4 +1,3 @@
-
 import type { PasswordHistory, PasswordProfile } from '../types';
 
 const PROFILES_KEY = 'openpass-profiles';
