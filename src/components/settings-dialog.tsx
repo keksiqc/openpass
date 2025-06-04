@@ -1,11 +1,13 @@
 import {
   AlertTriangle,
+  Download,
   Eye,
   EyeOff,
   RefreshCw,
   Save,
   Settings as SettingsIcon,
   Trash2,
+  Upload,
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -35,12 +37,16 @@ interface SettingsDialogProps {
   settings: AppSettings;
   onSettingsChange: (settings: AppSettings) => void;
   onClearAllData: () => void;
+  onExportData: () => void;
+  onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function SettingsDialog({
   settings,
   onSettingsChange,
   onClearAllData,
+  onExportData,
+  onImportData,
 }: SettingsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [localSettings, setLocalSettings] = useState<AppSettings>(settings);
@@ -86,7 +92,7 @@ export function SettingsDialog({
           Settings
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[525px]">
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <SettingsIcon className="h-5 w-5" />
@@ -97,167 +103,211 @@ export function SettingsDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Privacy Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Privacy Settings</CardTitle>
-              <CardDescription className="text-sm">
-                Control what data is stored locally
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <Checkbox
-                  id="historyEnabled"
-                  checked={localSettings.historyEnabled}
-                  onCheckedChange={(checked) =>
-                    setLocalSettings((prev) => ({
-                      ...prev,
-                      historyEnabled: checked as boolean,
-                    }))
-                  }
-                />
-                <div className="grid gap-1.5 leading-none">
-                  <Label
-                    htmlFor="historyEnabled"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Enable Password History
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Store generated passwords in local history for easy access
-                  </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Column */}
+          <div className="space-y-6">
+            {/* Privacy Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Privacy Settings</CardTitle>
+                <CardDescription className="text-sm">
+                  Control what data is stored locally
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="historyEnabled"
+                    checked={localSettings.historyEnabled}
+                    onCheckedChange={(checked) =>
+                      setLocalSettings((prev) => ({
+                        ...prev,
+                        historyEnabled: checked as boolean,
+                      }))
+                    }
+                  />
+                  <div className="grid gap-1.5 leading-none">
+                    <Label
+                      htmlFor="historyEnabled"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Enable Password History
+                    </Label>
+                    <p className="text-xs text-muted-foreground">
+                      Store generated passwords in local history for easy access
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          {/* Security Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Security Settings</CardTitle>
-              <CardDescription className="text-sm">
-                Encrypt your locally stored data
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <Checkbox
-                  id="encryptionEnabled"
-                  checked={localSettings.encryptionEnabled}
-                  onCheckedChange={(checked) =>
-                    setLocalSettings((prev) => ({
-                      ...prev,
-                      encryptionEnabled: checked as boolean,
-                    }))
-                  }
-                />
-                <div className="grid gap-1.5 leading-none">
-                  <Label
-                    htmlFor="encryptionEnabled"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Enable Local Data Encryption
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Encrypt profiles and history with a custom key
-                  </p>
+            {/* Security Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Security Settings</CardTitle>
+                <CardDescription className="text-sm">
+                  Encrypt your locally stored data
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="encryptionEnabled"
+                    checked={localSettings.encryptionEnabled}
+                    onCheckedChange={(checked) =>
+                      setLocalSettings((prev) => ({
+                        ...prev,
+                        encryptionEnabled: checked as boolean,
+                      }))
+                    }
+                  />
+                  <div className="grid gap-1.5 leading-none">
+                    <Label
+                      htmlFor="encryptionEnabled"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Enable Local Data Encryption
+                    </Label>
+                    <p className="text-xs text-muted-foreground">
+                      Encrypt profiles and history with a custom key
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              {localSettings.encryptionEnabled && (
-                <div className="space-y-3 pl-6">
-                  <Label
-                    htmlFor="encryptionKey"
-                    className="text-sm font-medium"
-                  >
-                    Encryption Key
-                  </Label>
-                  <div className="flex gap-2">
-                    <div className="relative flex-1">
-                      <Input
-                        id="encryptionKey"
-                        type={showEncryptionKey ? 'text' : 'password'}
-                        value={localSettings.encryptionKey}
-                        onChange={(e) =>
-                          setLocalSettings((prev) => ({
-                            ...prev,
-                            encryptionKey: e.target.value,
-                          }))
-                        }
-                        placeholder="Enter encryption key..."
-                        className="pr-10"
-                      />
+                {localSettings.encryptionEnabled && (
+                  <div className="space-y-3 pl-6">
+                    <Label
+                      htmlFor="encryptionKey"
+                      className="text-sm font-medium"
+                    >
+                      Encryption Key
+                    </Label>
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <Input
+                          id="encryptionKey"
+                          type={showEncryptionKey ? 'text' : 'password'}
+                          value={localSettings.encryptionKey}
+                          onChange={(e) =>
+                            setLocalSettings((prev) => ({
+                              ...prev,
+                              encryptionKey: e.target.value,
+                            }))
+                          }
+                          placeholder="Enter encryption key..."
+                          className="pr-10"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                          onClick={() => setShowEncryptionKey(!showEncryptionKey)}
+                        >
+                          {showEncryptionKey ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="outline"
                         size="sm"
-                        className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                        onClick={() => setShowEncryptionKey(!showEncryptionKey)}
+                        onClick={generateNewKey}
+                        className="gap-2"
                       >
-                        {showEncryptionKey ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
+                        <RefreshCw className="h-4 w-4" />
+                        Generate
                       </Button>
                     </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={generateNewKey}
-                      className="gap-2"
-                    >
-                      <RefreshCw className="h-4 w-4" />
-                      Generate
-                    </Button>
+                    <p className="text-xs text-muted-foreground">
+                      Keep this key safe! You'll need it to decrypt your data.
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Keep this key safe! You'll need it to decrypt your data.
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Danger Zone */}
-          <Card className="border-destructive/20">
-            <CardHeader>
-              <CardTitle className="text-base text-destructive flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4" />
-                Danger Zone
-              </CardTitle>
-              <CardDescription className="text-sm">
-                Permanently delete all stored data
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <Button
-                  variant={showClearDataConfirm ? 'destructive' : 'outline'}
-                  onClick={handleClearAllData}
-                  className="gap-2"
-                >
-                  <Trash2 className="h-4 w-4" />
-                  {showClearDataConfirm
-                    ? 'Confirm: Clear All Data'
-                    : 'Clear All Data'}
-                </Button>
-                {showClearDataConfirm && (
-                  <p className="text-xs text-muted-foreground">
-                    Click again to permanently delete all profiles, history, and
-                    settings.
-                  </p>
                 )}
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-6">
+            {/* Data Management */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  Data Management
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Export and import your profiles and history
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button
+                  onClick={onExportData}
+                  variant="outline"
+                  className="w-full gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Export All Data
+                </Button>
+                <div className="relative">
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2 cursor-pointer"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Import From Backup
+                  </Button>
+                  <Input
+                    type="file"
+                    accept=".json"
+                    onChange={onImportData}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Danger Zone */}
+            <Card className="border-destructive/20">
+              <CardHeader>
+                <CardTitle className="text-base text-destructive flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4" />
+                  Danger Zone
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Permanently delete all stored data
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <Button
+                    variant={showClearDataConfirm ? 'destructive' : 'outline'}
+                    onClick={handleClearAllData}
+                    className="gap-2"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    {showClearDataConfirm
+                      ? 'Confirm: Clear All Data'
+                      : 'Clear All Data'}
+                  </Button>
+                  {showClearDataConfirm && (
+                    <p className="text-xs text-muted-foreground">
+                      Click again to permanently delete all profiles, history, and
+                      settings.
+                    </p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Dialog Actions */}
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-end gap-3 pt-4 border-t">
           <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>

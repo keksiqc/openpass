@@ -1,15 +1,3 @@
-import {
-  Clock,
-  Download,
-  Lightbulb,
-  Save,
-  Settings,
-  Sparkles,
-  Star,
-  Trash2,
-  Upload,
-  User,
-} from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +9,15 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Clock,
+  Save,
+  Settings,
+  Sparkles,
+  Star,
+  Trash2,
+  User,
+} from 'lucide-react';
 import type {
   FormatSettings,
   PassphraseSettings,
@@ -42,8 +39,6 @@ interface ProfileManagerProps {
   onLoadProfile: (profile: PasswordProfile) => void;
   onToggleFavorite: (profileId: string) => void;
   onDeleteProfile: (profileId: string) => void;
-  onExportData: () => void;
-  onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function ProfileManager({
@@ -54,31 +49,29 @@ export function ProfileManager({
   onLoadProfile,
   onToggleFavorite,
   onDeleteProfile,
-  onExportData,
-  onImportData,
 }: ProfileManagerProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Save Profile Section */}
-      <Card className="border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors">
+      <Card className="border-2 border-dashed border-primary/20 hover:border-primary/30 transition-colors">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
+          <CardTitle className="flex items-center gap-3 text-lg">
             <div className="p-1.5 rounded-lg bg-primary/10">
               <Save className="h-4 w-4 text-primary" />
             </div>
             Save Profile
           </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground">
+          <CardDescription className="text-sm text-muted-foreground leading-relaxed">
             Save your current settings as a reusable profile for quick access
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Label
               htmlFor="profile-name"
               className="text-sm font-medium flex items-center gap-2"
             >
-              <User className="h-3 w-3" />
+              <User className="h-3.5 w-3.5" />
               Profile Name
             </Label>
             <Input
@@ -86,12 +79,12 @@ export function ProfileManager({
               value={profileName}
               onChange={(e) => onProfileNameChange(e.target.value)}
               placeholder="e.g., Work Passwords, Personal Settings..."
-              className="text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+              className="h-10 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <Button
             onClick={onSaveProfile}
-            className="w-full h-11 font-medium"
+            className="w-full h-10 font-medium text-sm"
             disabled={!profileName.trim()}
           >
             <Save className="h-4 w-4 mr-2" />
@@ -102,18 +95,18 @@ export function ProfileManager({
 
       {/* Saved Profiles List or Empty State */}
       {profiles.length > 0 ? (
-        <Card className="border overflow-hidden">
+        <Card className="border">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
+            <CardTitle className="flex items-center gap-3 text-lg">
               <div className="p-1.5 rounded-lg bg-primary/10">
                 <Sparkles className="h-4 w-4 text-primary" />
               </div>
               Saved Profiles
-              <Badge variant="secondary" className="ml-auto px-2 py-1">
+              <Badge variant="secondary" className="ml-auto px-2.5 py-1 text-xs font-medium">
                 {profiles.length}
               </Badge>
             </CardTitle>
-            <CardDescription className="text-sm text-muted-foreground">
+            <CardDescription className="text-sm text-muted-foreground leading-relaxed">
               Quick access to your frequently used settings
             </CardDescription>
           </CardHeader>
@@ -129,12 +122,12 @@ export function ProfileManager({
                   <div
                     key={profile.id}
                     className={`p-4 border-b border-border/50 hover:bg-muted/30 transition-all duration-200 group ${
-                      index === 0 ? '' : ''
+                      index === profiles.length - 1 ? 'border-b-0' : ''
                     }`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0 space-y-2">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                           <div className="flex items-center gap-2 min-w-0 flex-1">
                             <div
                               className={`p-1.5 rounded-md transition-colors ${
@@ -146,7 +139,7 @@ export function ProfileManager({
                               }`}
                             >
                               <Settings
-                                className={`h-3 w-3 ${
+                                className={`h-3.5 w-3.5 ${
                                   profile.type === 'password'
                                     ? 'text-blue-600 dark:text-blue-400'
                                     : profile.type === 'passphrase'
@@ -159,12 +152,12 @@ export function ProfileManager({
                               {profile.name}
                             </span>
                             {profile.isFavorite && (
-                              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 flex-shrink-0" />
+                              <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400 flex-shrink-0" />
                             )}
                           </div>
                           <Badge
                             variant="outline"
-                            className={`text-xs font-medium ${
+                            className={`text-xs font-medium px-2 py-0.5 ${
                               profile.type === 'password'
                                 ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
                                 : profile.type === 'passphrase'
@@ -176,13 +169,13 @@ export function ProfileManager({
                           </Badge>
                         </div>
 
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                          <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1.5">
                             <Clock className="h-3 w-3" />
                             {profile.createdAt.toLocaleDateString()}
                           </div>
                           {profile.lastUsed && (
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1.5">
                               <span>•</span>
                               <span>
                                 Used {profile.lastUsed.toLocaleDateString()}
@@ -192,7 +185,7 @@ export function ProfileManager({
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1 ml-3">
+                      <div className="flex items-center gap-1.5 ml-4">
                         <Button
                           variant="outline"
                           size="sm"
@@ -205,7 +198,7 @@ export function ProfileManager({
                           }
                         >
                           <Star
-                            className={`h-4 w-4 transition-colors ${
+                            className={`h-3.5 w-3.5 transition-colors ${
                               profile.isFavorite
                                 ? 'fill-yellow-400 text-yellow-400'
                                 : 'text-muted-foreground hover:text-yellow-400'
@@ -227,7 +220,7 @@ export function ProfileManager({
                           className="h-8 w-8 p-0 hover:border-destructive hover:text-destructive"
                           title="Delete profile"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
                     </div>
@@ -238,67 +231,21 @@ export function ProfileManager({
         </Card>
       ) : (
         <Card className="border-2 border-dashed border-muted-foreground/20">
-          <CardContent className="text-center py-12 px-6">
+          <CardContent className="text-center py-10 px-6">
             <div className="p-4 rounded-full bg-muted/30 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Sparkles className="h-8 w-8 text-muted-foreground/50" />
+              <Sparkles className="h-7 w-7 text-muted-foreground/50" />
             </div>
-            <h3 className="font-medium text-sm mb-2">No saved profiles yet</h3>
-            <p className="text-xs text-muted-foreground/80 mb-4">
+            <h3 className="font-semibold text-base mb-2">No saved profiles yet</h3>
+            <p className="text-sm text-muted-foreground/80 mb-6 leading-relaxed">
               Save your current settings as a profile for quick access later
             </p>
-            <div className="text-xs text-muted-foreground bg-muted/30 p-3 rounded-lg">
-              <strong>Tip:</strong> Profiles help you quickly switch between
+            <div className="text-xs text-muted-foreground bg-muted/30 p-4 rounded-lg border border-muted-foreground/10">
+              <strong className="font-medium">Tip:</strong> Profiles help you quickly switch between
               different password configurations
             </div>
           </CardContent>
         </Card>
       )}
-
-      {/* Backup & Restore */}
-      <Card className="border">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <div className="p-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/30">
-              <Download className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-            </div>
-            Backup & Restore
-          </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground">
-            Keep your profiles and history safe with backup and restore
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <Button
-            onClick={onExportData}
-            variant="outline"
-            className="w-full h-10 font-medium hover:bg-amber-50 hover:border-amber-200 dark:hover:bg-amber-900/20"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Export All Data
-          </Button>
-          <div className="relative">
-            <Button
-              variant="outline"
-              className="w-full h-10 font-medium hover:bg-blue-50 hover:border-blue-200 dark:hover:bg-blue-900/20 cursor-pointer"
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              Import From Backup
-            </Button>
-            <Input
-              type="file"
-              accept=".json"
-              onChange={onImportData}
-              className="absolute inset-0 opacity-0 cursor-pointer"
-            />
-          </div>
-          <div className="flex items-center gap-2 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
-            <Lightbulb className="h-4 w-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
-            <div className="text-xs text-amber-700 dark:text-amber-300">
-              <strong>Tip:</strong> Regular backups help keep your profiles safe
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

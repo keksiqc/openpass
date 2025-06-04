@@ -1,26 +1,26 @@
-import {
-  BookOpen,
-  Clock,
-  Copy,
-  Eye,
-  EyeOff,
-  History,
-  Settings,
-  Shield,
-  Trash2,
-  Zap,
-} from 'lucide-react';
-import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import {
+    BookOpen,
+    Clock,
+    Copy,
+    Eye,
+    EyeOff,
+    History,
+    Settings,
+    Shield,
+    Trash2,
+    Zap,
+} from 'lucide-react';
+import { useState } from 'react';
 import type { PasswordHistory } from '../types';
 
 interface HistoryPanelProps {
@@ -75,22 +75,22 @@ export function HistoryPanel({
   };
 
   return (
-    <Card className="border overflow-hidden">
+    <Card className="border">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center gap-2 text-lg">
+            <CardTitle className="flex items-center gap-3 text-lg">
               <div className="p-1.5 rounded-lg bg-primary/10">
                 <History className="h-4 w-4 text-primary" />
               </div>
               Password History
               {history.length > 0 && (
-                <Badge variant="secondary" className="px-2 py-1">
+                <Badge variant="secondary" className="px-2.5 py-1 text-xs font-medium">
                   {history.length}
                 </Badge>
               )}
             </CardTitle>
-            <CardDescription className="text-sm text-muted-foreground">
+            <CardDescription className="text-sm text-muted-foreground leading-relaxed">
               Your recently generated passwords and passphrases
             </CardDescription>
           </div>
@@ -101,7 +101,7 @@ export function HistoryPanel({
               onClick={onClearHistory}
               className="text-xs hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
             >
-              <Trash2 className="h-4 w-4 mr-1" />
+              <Trash2 className="h-4 w-4 mr-1.5" />
               Clear All
             </Button>
           )}
@@ -109,14 +109,14 @@ export function HistoryPanel({
       </CardHeader>
       <CardContent className="p-0">
         {history.length === 0 ? (
-          <div className="text-center py-12 px-6 text-muted-foreground">
+          <div className="text-center py-10 px-6 text-muted-foreground">
             <div className="p-4 rounded-full bg-muted/30 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Shield className="h-8 w-8 opacity-50" />
+              <Shield className="h-7 w-7 opacity-50" />
             </div>
-            <p className="text-sm font-medium mb-2">
+            <p className="text-base font-medium mb-2">
               No passwords generated yet
             </p>
-            <p className="text-xs text-muted-foreground/80">
+            <p className="text-sm text-muted-foreground/80 leading-relaxed">
               Your generation history will appear here for easy access
             </p>
           </div>
@@ -125,7 +125,9 @@ export function HistoryPanel({
             {history.map((entry, index) => (
               <div
                 key={entry.id}
-                className="p-4 border-b border-border/50 hover:bg-muted/20 transition-colors group"
+                className={`p-4 border-b border-border/50 hover:bg-muted/20 transition-colors group ${
+                  index === history.length - 1 ? 'border-b-0' : ''
+                }`}
               >
                 <div className="space-y-3">
                   {/* Header with badges and timestamp */}

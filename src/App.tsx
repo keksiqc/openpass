@@ -1,8 +1,5 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
-import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import {
   Card,
   CardContent,
@@ -12,6 +9,9 @@ import {
 } from '@/components/ui/card';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { FormatGenerator } from './components/format-generator';
 import { HistoryPanel } from './components/history-panel';
 import { ModeToggle } from './components/mode-toggle';
@@ -303,13 +303,13 @@ export default function App() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex h-16 items-center justify-between">
             {/* Logo and Brand */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="p-2 rounded-lg bg-primary text-primary-foreground">
                 <RotateCcwKey className="h-5 w-5" />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-bold tracking-tight">OpenPass</h1>
-                <span className="text-xs text-muted-foreground hidden sm:block">
+                <h1 className="text-2xl font-bold tracking-tight">OpenPass</h1>
+                <span className="text-sm text-muted-foreground hidden sm:block leading-tight">
                   Secure Password Generator
                 </span>
               </div>
@@ -317,24 +317,26 @@ export default function App() {
 
             {/* Navigation and Features */}
             <nav className="flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="hidden md:flex items-center gap-6">
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <Badge
                     variant="secondary"
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1.5 px-3 py-1"
                   >
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span>100% Local & Secure</span>
+                    <span className="font-medium">100% Local & Secure</span>
                   </Badge>
                 </div>
-                <div className="text-xs text-muted-foreground border rounded px-2 py-1">
-                  <kbd className="font-mono">Ctrl+G</kbd> to generate
+                <div className="text-xs text-muted-foreground border rounded-md px-3 py-1.5 bg-muted/30">
+                  <kbd className="font-mono text-xs">Ctrl+G</kbd> to generate
                 </div>
               </div>
               <SettingsDialog
                 settings={appSettings}
                 onSettingsChange={handleSettingsChange}
                 onClearAllData={handleClearAllData}
+                onExportData={exportProfiles}
+                onImportData={importProfiles}
               />
               <ModeToggle />
             </nav>
@@ -345,47 +347,47 @@ export default function App() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Main Grid Layout */}
-        <div className="grid xl:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-4 gap-8">
           {/* Main Generator */}
-          <div className="xl:col-span-2">
-            <Card className="border shadow-sm">
+          <div className="lg:col-span-3 space-y-8">
+            <Card className="border">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl">
-                  <div className="p-1.5 rounded-lg bg-primary/10">
+                <CardTitle className="flex items-center gap-3 text-2xl">
+                  <div className="p-2 rounded-lg bg-primary/10">
                     <RefreshCw className="h-5 w-5 text-primary" />
                   </div>
                   Password Generator
                 </CardTitle>
-                <CardDescription className="text-sm">
+                <CardDescription className="text-base leading-relaxed text-muted-foreground">
                   Choose your preferred method to generate secure passwords
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-8">
                 <Tabs
                   value={activeTab}
                   onValueChange={setActiveTab}
                   className="w-full"
                 >
-                  <TabsList className="grid w-full grid-cols-3 mb-6">
+                  <TabsList className="grid w-full grid-cols-3 mb-8 h-12">
                     <TabsTrigger
                       value="password"
-                      className="text-sm data-[state=active]:text-blue-600 data-[state=active]:border-blue-200"
+                      className="text-sm font-medium data-[state=active]:text-blue-600 data-[state=active]:border-blue-200 h-full"
                     >
-                      <Zap className="h-4 w-4 mr-1.5" />
+                      <Zap className="h-4 w-4 mr-2" />
                       Password
                     </TabsTrigger>
                     <TabsTrigger
                       value="passphrase"
-                      className="text-sm data-[state=active]:text-green-600 data-[state=active]:border-green-200"
+                      className="text-sm font-medium data-[state=active]:text-green-600 data-[state=active]:border-green-200 h-full"
                     >
-                      <BookOpen className="h-4 w-4 mr-1.5" />
+                      <BookOpen className="h-4 w-4 mr-2" />
                       Passphrase
                     </TabsTrigger>
                     <TabsTrigger
                       value="format"
-                      className="text-sm data-[state=active]:text-purple-600 data-[state=active]:border-purple-200"
+                      className="text-sm font-medium data-[state=active]:text-purple-600 data-[state=active]:border-purple-200 h-full"
                     >
-                      <Settings className="h-4 w-4 mr-1.5" />
+                      <Settings className="h-4 w-4 mr-2" />
                       Format
                     </TabsTrigger>
                   </TabsList>
@@ -415,11 +417,20 @@ export default function App() {
                 </Tabs>
               </CardContent>
             </Card>
+
+            {/* History Section - Moved under generator */}
+            {appSettings.historyEnabled && (
+              <HistoryPanel
+                history={passwordHistory}
+                onCopyToClipboard={copyToClipboard}
+                onClearHistory={clearHistory}
+              />
+            )}
           </div>
 
           {/* Sidebar */}
-          <div className="xl:col-span-1 space-y-6">
-            <div className="sticky top-6 space-y-6">
+          <div className="lg:col-span-1">
+            <div className="sticky top-24">
               <ProfileManager
                 profiles={profiles}
                 profileName={profileName}
@@ -433,17 +444,7 @@ export default function App() {
                 onLoadProfile={loadProfile}
                 onToggleFavorite={toggleFavorite}
                 onDeleteProfile={deleteProfile}
-                onExportData={exportProfiles}
-                onImportData={importProfiles}
               />
-
-              {appSettings.historyEnabled && (
-                <HistoryPanel
-                  history={passwordHistory}
-                  onCopyToClipboard={copyToClipboard}
-                  onClearHistory={clearHistory}
-                />
-              )}
             </div>
           </div>
         </div>
