@@ -377,7 +377,7 @@ export function ProfileManager({
               for quick access later
             </p>
             <div className="text-xs text-muted-foreground bg-muted/30 p-4 rounded-lg border border-muted-foreground/10 max-w-md mx-auto">
-              <strong className="font-medium">💡 Pro Tip:</strong> Profiles let
+              <strong className="font-medium">Tip:</strong> Profiles let
               you quickly switch between different password configurations for
               work, personal use, or specific requirements
             </div>
