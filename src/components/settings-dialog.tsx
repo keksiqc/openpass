@@ -1,24 +1,32 @@
-import { AlertTriangle, Eye, EyeOff, Save, RefreshCw, Settings as SettingsIcon, Trash2 } from 'lucide-react';
+import {
+  AlertTriangle,
+  Eye,
+  EyeOff,
+  RefreshCw,
+  Save,
+  Settings as SettingsIcon,
+  Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import type { AppSettings } from '../types';
 import { SimpleEncryption } from '../utils/encryption';
 import { Button } from './ui/button';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from './ui/card';
 import { Checkbox } from './ui/checkbox';
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from './ui/dialog';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -52,7 +60,7 @@ export function SettingsDialog({
 
   const generateNewKey = () => {
     const newKey = SimpleEncryption.generateKey();
-    setLocalSettings(prev => ({
+    setLocalSettings((prev) => ({
       ...prev,
       encryptionKey: newKey,
     }));
@@ -104,7 +112,7 @@ export function SettingsDialog({
                   id="historyEnabled"
                   checked={localSettings.historyEnabled}
                   onCheckedChange={(checked) =>
-                    setLocalSettings(prev => ({
+                    setLocalSettings((prev) => ({
                       ...prev,
                       historyEnabled: checked as boolean,
                     }))
@@ -139,7 +147,7 @@ export function SettingsDialog({
                   id="encryptionEnabled"
                   checked={localSettings.encryptionEnabled}
                   onCheckedChange={(checked) =>
-                    setLocalSettings(prev => ({
+                    setLocalSettings((prev) => ({
                       ...prev,
                       encryptionEnabled: checked as boolean,
                     }))
@@ -160,7 +168,10 @@ export function SettingsDialog({
 
               {localSettings.encryptionEnabled && (
                 <div className="space-y-3 pl-6">
-                  <Label htmlFor="encryptionKey" className="text-sm font-medium">
+                  <Label
+                    htmlFor="encryptionKey"
+                    className="text-sm font-medium"
+                  >
                     Encryption Key
                   </Label>
                   <div className="flex gap-2">
@@ -170,7 +181,7 @@ export function SettingsDialog({
                         type={showEncryptionKey ? 'text' : 'password'}
                         value={localSettings.encryptionKey}
                         onChange={(e) =>
-                          setLocalSettings(prev => ({
+                          setLocalSettings((prev) => ({
                             ...prev,
                             encryptionKey: e.target.value,
                           }))
@@ -230,11 +241,14 @@ export function SettingsDialog({
                   className="gap-2"
                 >
                   <Trash2 className="h-4 w-4" />
-                  {showClearDataConfirm ? 'Confirm: Clear All Data' : 'Clear All Data'}
+                  {showClearDataConfirm
+                    ? 'Confirm: Clear All Data'
+                    : 'Clear All Data'}
                 </Button>
                 {showClearDataConfirm && (
                   <p className="text-xs text-muted-foreground">
-                    Click again to permanently delete all profiles, history, and settings.
+                    Click again to permanently delete all profiles, history, and
+                    settings.
                   </p>
                 )}
               </div>

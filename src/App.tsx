@@ -1,5 +1,8 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
+import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import {
   Card,
   CardContent,
@@ -9,9 +12,6 @@ import {
 } from '@/components/ui/card';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import { FormatGenerator } from './components/format-generator';
 import { HistoryPanel } from './components/history-panel';
 import { ModeToggle } from './components/mode-toggle';
@@ -233,7 +233,7 @@ export default function App() {
   const handleSettingsChange = (newSettings: AppSettings) => {
     setAppSettings(newSettings);
     saveSettings(newSettings);
-    
+
     // If history was disabled, clear it
     if (!newSettings.historyEnabled) {
       setPasswordHistory([]);
@@ -349,7 +349,7 @@ export default function App() {
           {/* Main Generator */}
           <div className="xl:col-span-2">
             <Card className="border shadow-sm">
-              <CardHeader >
+              <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <div className="p-1.5 rounded-lg bg-primary/10">
                     <RefreshCw className="h-5 w-5 text-primary" />

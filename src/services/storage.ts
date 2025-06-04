@@ -80,7 +80,7 @@ export const loadHistory = (): PasswordHistory[] => {
   if (!currentSettings.historyEnabled) {
     return [];
   }
-  
+
   const saved = localStorage.getItem(HISTORY_KEY);
   if (!saved) return [];
 
@@ -101,7 +101,7 @@ export const saveHistory = (history: PasswordHistory[]): void => {
   if (!currentSettings.historyEnabled) {
     return;
   }
-  
+
   const data = JSON.stringify(history);
   const encrypted = encryptData(data);
   localStorage.setItem(HISTORY_KEY, encrypted);

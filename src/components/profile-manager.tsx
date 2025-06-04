@@ -1,14 +1,3 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Clock,
   Download,
@@ -21,6 +10,17 @@ import {
   Upload,
   User,
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import type {
   FormatSettings,
   PassphraseSettings,
@@ -61,7 +61,7 @@ export function ProfileManager({
     <div className="space-y-4">
       {/* Save Profile Section */}
       <Card className="border-2 border-dashed border-primary/20 hover:border-primary/40 transition-colors">
-        <CardHeader >
+        <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <div className="p-1.5 rounded-lg bg-primary/10">
               <Save className="h-4 w-4 text-primary" />
@@ -103,7 +103,7 @@ export function ProfileManager({
       {/* Saved Profiles List or Empty State */}
       {profiles.length > 0 ? (
         <Card className="border overflow-hidden">
-          <CardHeader >
+          <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <div className="p-1.5 rounded-lg bg-primary/10">
                 <Sparkles className="h-4 w-4 text-primary" />
@@ -256,7 +256,7 @@ export function ProfileManager({
 
       {/* Backup & Restore */}
       <Card className="border">
-        <CardHeader >
+        <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <div className="p-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/30">
               <Download className="h-4 w-4 text-amber-600 dark:text-amber-400" />
