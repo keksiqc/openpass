@@ -397,7 +397,7 @@ export default function App() {
       toast.success(
         `${strength.label} password generated! (${Math.round(entropy)} bits entropy)`,
       );
-    } catch (_error) {
+    } catch {
       toast.error('Failed to generate password');
     } finally {
       setIsGenerating(false);
