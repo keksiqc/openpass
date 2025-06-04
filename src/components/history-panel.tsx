@@ -1,24 +1,24 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
-    BookOpen,
-    Clock,
-    Copy,
-    Eye,
-    EyeOff,
-    History,
-    Settings,
-    Shield,
-    Trash2,
-    Zap,
+  BookOpen,
+  Clock,
+  Copy,
+  Eye,
+  EyeOff,
+  History,
+  Settings,
+  Shield,
+  Trash2,
+  Zap,
 } from 'lucide-react';
 import { useState } from 'react';
 import type { PasswordHistory } from '../types';
@@ -164,7 +164,8 @@ export function HistoryPanel({
                               : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
                         }`}
                       >
-                        {entry.type}
+                        {entry.type.toString().charAt(0).toUpperCase() +
+                          entry.type.slice(1)}
                       </Badge>
                       <Badge
                         variant="outline"
