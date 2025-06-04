@@ -1,26 +1,26 @@
-import {
-  BookOpen,
-  Clock,
-  Copy,
-  Eye,
-  EyeOff,
-  History,
-  Settings,
-  Shield,
-  Trash2,
-  Zap,
-} from 'lucide-react';
-import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import {
+    BookOpen,
+    Clock,
+    Copy,
+    Eye,
+    EyeOff,
+    History,
+    Settings,
+    Shield,
+    Trash2,
+    Zap,
+} from 'lucide-react';
+import { useState } from 'react';
 import type { PasswordHistory } from '../types';
 
 interface HistoryPanelProps {
@@ -76,7 +76,7 @@ export function HistoryPanel({
 
   return (
     <Card className="border overflow-hidden">
-      <CardHeader className="pb-2">
+      <CardHeader >
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2 text-lg">

@@ -349,7 +349,7 @@ export default function App() {
           {/* Main Generator */}
           <div className="xl:col-span-2">
             <Card className="border shadow-sm">
-              <CardHeader className="pb-4">
+              <CardHeader >
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <div className="p-1.5 rounded-lg bg-primary/10">
                     <RefreshCw className="h-5 w-5 text-primary" />
