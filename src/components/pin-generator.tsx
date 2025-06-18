@@ -27,7 +27,7 @@ export function PinGenerator() {
           PIN Generator
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-8">
+      <CardContent className="space-y-6"> {/* Changed from space-y-8 to space-y-6 */}
         <div className="space-y-3">
           <Label htmlFor="pin-length" className="text-base font-medium">
             PIN Length: {length}

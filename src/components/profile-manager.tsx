@@ -131,7 +131,7 @@ export function ProfileManager({
             access
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-5">
+        <CardContent className="space-y-4"> {/* Changed from space-y-5 to space-y-4 */}
           <div className="space-y-3">
             <Label
               htmlFor="profile-name"

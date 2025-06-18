@@ -478,7 +478,7 @@ export default function App() {
               onValueChange={(value: string) => setActiveTab(value as ProfileType)}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-3 mb-8 h-12 rounded-xl">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 h-12 rounded-xl"> {/* Updated grid-cols */}
                 <TabsTrigger
                   value="password"
                   className="text-sm font-medium data-[state=active]:text-blue-600 data-[state=active]:border-blue-200 h-full"
@@ -510,7 +510,7 @@ export default function App() {
               </TabsList>
 
               <TabsContent value="password">
-                <Card className="border">
+                <Card> {/* Removed className="border" */}
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-2xl">
                       <div className="p-2 rounded-lg bg-primary/10">
@@ -518,7 +518,7 @@ export default function App() {
                       </div>
                       Password Generator
                     </CardTitle>
-                    <CardDescription className="text-base leading-relaxed text-muted-foreground">
+                    <CardDescription className="text-sm leading-relaxed text-muted-foreground"> {/* Changed to text-sm */}
                       Generate strong, unique passwords with customizable options.
                     </CardDescription>
                   </CardHeader>
@@ -536,7 +536,7 @@ export default function App() {
               </TabsContent>
 
               <TabsContent value="passphrase">
-                <Card className="border">
+                <Card> {/* Removed className="border" */}
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-2xl">
                       <div className="p-2 rounded-lg bg-primary/10">
@@ -544,7 +544,7 @@ export default function App() {
                       </div>
                       Passphrase Generator
                     </CardTitle>
-                    <CardDescription className="text-base leading-relaxed text-muted-foreground">
+                    <CardDescription className="text-sm leading-relaxed text-muted-foreground"> {/* Changed to text-sm */}
                       Create memorable and secure passphrases from random words.
                     </CardDescription>
                   </CardHeader>
@@ -560,7 +560,7 @@ export default function App() {
               </TabsContent>
 
               <TabsContent value="custom">
-                <Card className="border">
+                <Card> {/* Removed className="border" */}
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-2xl">
                       <div className="p-2 rounded-lg bg-primary/10">
@@ -568,7 +568,7 @@ export default function App() {
                       </div>
                       Custom Generator
                     </CardTitle>
-                    <CardDescription className="text-base leading-relaxed text-muted-foreground">
+                    <CardDescription className="text-sm leading-relaxed text-muted-foreground"> {/* Changed to text-sm */}
                       Define custom password formats using a flexible pattern system.
                     </CardDescription>
                   </CardHeader>
@@ -584,7 +584,7 @@ export default function App() {
               </TabsContent>
 
               <TabsContent value="pin">
-                <Card className="border">
+                <Card> {/* Removed className="border" */}
                   {/* The PinGenerator component includes its own CardHeader and CardContent */}
                   <PinGenerator />
                 </Card>

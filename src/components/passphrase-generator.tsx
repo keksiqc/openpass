@@ -209,7 +209,12 @@ export function PassphraseGenerator({
           <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
         </CollapsibleTrigger>
         <CollapsibleContent className="space-y-3 p-4 bg-muted/20 rounded-lg border mt-2">
-          <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
+          {/* Add Numbers Option - New Structure */}
+          <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+            <Label htmlFor="include-numbers" className="flex flex-col pr-2">
+              <span className="font-medium">Add Numbers</span>
+              <span className="text-xs text-muted-foreground">Include numbers in the passphrase</span>
+            </Label>
             <Switch
               id="include-numbers"
               checked={settings.includeNumbers}
@@ -220,15 +225,14 @@ export function PassphraseGenerator({
                 })
               }
             />
-            <Label htmlFor="include-numbers" className="flex-1 cursor-pointer">
-              <div className="font-medium">Add Numbers</div>
-              <div className="text-xs text-muted-foreground">
-                Include numbers in the passphrase
-              </div>
-            </Label>
           </div>
           {settings.includeNumbers && ( // Only show if "Add Numbers" is checked
-            <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors ml-6 mt-2"> {/* Indent slightly */}
+            // Insert Numbers Randomly Option - New Structure (with slight indent if desired, or remove ml-6 for same level)
+            <div className="flex items-center justify-between rounded-md border p-3 shadow-sm ml-0 mt-2"> {/* Adjusted indent and margin top */}
+              <Label htmlFor="insert-numbers-randomly" className="flex flex-col pr-2">
+                <span className="font-medium">Insert numbers randomly</span>
+                <span className="text-xs text-muted-foreground">Distribute numbers within the passphrase</span>
+              </Label>
               <Switch
                 id="insert-numbers-randomly"
                 checked={settings.insertNumbersRandomly}
@@ -239,12 +243,6 @@ export function PassphraseGenerator({
                   })
                 }
               />
-              <Label htmlFor="insert-numbers-randomly" className="flex-1 cursor-pointer">
-                <div className="font-medium">Insert numbers randomly</div>
-                <div className="text-xs text-muted-foreground">
-                  Distribute numbers within the passphrase instead of appending
-                </div>
-              </Label>
             </div>
           )}
         </CollapsibleContent>

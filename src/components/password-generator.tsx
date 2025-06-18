@@ -110,7 +110,12 @@ export function PasswordGenerator({
       <div className="space-y-3">
         <Label className="text-base font-medium">Character Types</Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
+          {/* Uppercase Option - New Structure */}
+          <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+            <Label htmlFor="uppercase" className="flex flex-col pr-2">
+              <span className="font-medium">Uppercase</span>
+              <span className="text-xs text-muted-foreground font-mono">A-Z</span>
+            </Label>
             <Switch
               id="uppercase"
               checked={settings.includeUppercase}
@@ -121,13 +126,14 @@ export function PasswordGenerator({
                 })
               }
             />
-            <Label htmlFor="uppercase" className="flex-1 cursor-pointer">
-              <div className="font-medium">Uppercase</div>
-              <div className="text-xs text-muted-foreground font-mono">A-Z</div>
-            </Label>
           </div>
 
-          <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
+          {/* Lowercase Option - New Structure */}
+          <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+            <Label htmlFor="lowercase" className="flex flex-col pr-2">
+              <span className="font-medium">Lowercase</span>
+              <span className="text-xs text-muted-foreground font-mono">a-z</span>
+            </Label>
             <Switch
               id="lowercase"
               checked={settings.includeLowercase}
@@ -138,13 +144,14 @@ export function PasswordGenerator({
                 })
               }
             />
-            <Label htmlFor="lowercase" className="flex-1 cursor-pointer">
-              <div className="font-medium">Lowercase</div>
-              <div className="text-xs text-muted-foreground font-mono">a-z</div>
-            </Label>
           </div>
 
-          <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
+          {/* Numbers Option - New Structure */}
+          <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+            <Label htmlFor="numbers" className="flex flex-col pr-2">
+              <span className="font-medium">Numbers</span>
+              <span className="text-xs text-muted-foreground font-mono">0-9</span>
+            </Label>
             <Switch
               id="numbers"
               checked={settings.includeNumbers}
@@ -155,13 +162,14 @@ export function PasswordGenerator({
                 })
               }
             />
-            <Label htmlFor="numbers" className="flex-1 cursor-pointer">
-              <div className="font-medium">Numbers</div>
-              <div className="text-xs text-muted-foreground font-mono">0-9</div>
-            </Label>
           </div>
 
-          <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
+          {/* Symbols Option - New Structure */}
+          <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+            <Label htmlFor="symbols" className="flex flex-col pr-2">
+              <span className="font-medium">Symbols</span>
+              <span className="text-xs text-muted-foreground font-mono">!@#$%</span>
+            </Label>
             <Switch
               id="symbols"
               checked={settings.includeSymbols}
@@ -172,12 +180,6 @@ export function PasswordGenerator({
                 })
               }
             />
-            <Label htmlFor="symbols" className="flex-1 cursor-pointer">
-              <div className="font-medium">Symbols</div>
-              <div className="text-xs text-muted-foreground font-mono">
-                !@#$%
-              </div>
-            </Label>
           </div>
         </div>
       </div>
