@@ -7,11 +7,11 @@ import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CustomGenerator } from './components/custom-generator';
 import { HistoryPanel } from './components/history-panel';
+import { NavBar } from './components/nav-bar';
 import { PassphraseGenerator } from './components/passphrase-generator';
 import { PasswordGenerator } from './components/password-generator';
 import { PinGenerator } from './components/pin-generator'; // Import PinGenerator
 import { ProfileManager } from './components/profile-manager';
-import { NavBar } from './components/nav-bar';
 import {
   clearAllData,
   loadHistory,
@@ -436,27 +436,19 @@ export default function App() {
               className="w-full"
             >
               <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-4 h-12 rounded-xl">
-                <TabsTrigger
-                  value="password"
-                >
+                <TabsTrigger value="password">
                   <Key className="h-4 w-4 mr-2" />
                   Password
                 </TabsTrigger>
-                <TabsTrigger
-                  value="passphrase"
-                >
+                <TabsTrigger value="passphrase">
                   <BookOpen className="h-4 w-4 mr-2" />
                   Passphrase
                 </TabsTrigger>
-                <TabsTrigger
-                  value="format"
-                >
+                <TabsTrigger value="format">
                   <Settings className="h-4 w-4 mr-2" />
                   Format
                 </TabsTrigger>
-                <TabsTrigger
-                  value="pin"
-                >
+                <TabsTrigger value="pin">
                   <Hash className="h-4 w-4 mr-2" />
                   PIN
                 </TabsTrigger>

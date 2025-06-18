@@ -21,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { Switch } from './ui/switch';
 import {
   Dialog,
   DialogContent,
@@ -32,6 +31,7 @@ import {
 } from './ui/dialog';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { Switch } from './ui/switch';
 
 interface SettingsDialogProps {
   settings: AppSettings;
@@ -133,7 +133,10 @@ export function SettingsDialog({
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="historyEnabled" className="text-sm font-medium">
+                    <Label
+                      htmlFor="historyEnabled"
+                      className="text-sm font-medium"
+                    >
                       Enable Password History
                     </Label>
                     <p className="text-xs text-muted-foreground mt-1 max-w-xs">
@@ -165,7 +168,10 @@ export function SettingsDialog({
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="encryptionEnabled" className="text-sm font-medium">
+                    <Label
+                      htmlFor="encryptionEnabled"
+                      className="text-sm font-medium"
+                    >
                       Enable Local Data Encryption
                     </Label>
                     <p className="text-xs text-muted-foreground mt-1 max-w-xs">
@@ -185,7 +191,10 @@ export function SettingsDialog({
                 </div>
                 {localSettings.encryptionEnabled && (
                   <div className="space-y-3 pl-2">
-                    <Label htmlFor="encryptionKey" className="text-sm font-medium">
+                    <Label
+                      htmlFor="encryptionKey"
+                      className="text-sm font-medium"
+                    >
                       Encryption Key
                     </Label>
                     <div className="flex gap-2">
@@ -208,7 +217,9 @@ export function SettingsDialog({
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                          onClick={() => setShowEncryptionKey(!showEncryptionKey)}
+                          onClick={() =>
+                            setShowEncryptionKey(!showEncryptionKey)
+                          }
                         >
                           {showEncryptionKey ? (
                             <EyeOff className="h-4 w-4" />

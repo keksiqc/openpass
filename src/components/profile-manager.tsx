@@ -8,15 +8,14 @@ import {
   Search,
   Settings,
   Shield,
-  Users,
-  User,
-  Zap,
   Star,
+  User,
+  Users,
+  Zap,
 } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Card,
   CardContent,
@@ -33,6 +32,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
   SelectContent,
@@ -184,13 +184,15 @@ export function ProfileManager({
               <Badge
                 variant="secondary"
                 className="px-3 py-1.5 text-xs font-medium"
-                >
+              >
                 {profiles.length} profiles
               </Badge>
               <Select
                 value={selectedFilter}
-                onValueChange={(value: ProfileType | 'all') => setSelectedFilter(value)}
-                >
+                onValueChange={(value: ProfileType | 'all') =>
+                  setSelectedFilter(value)
+                }
+              >
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Filter by type" />
                 </SelectTrigger>
@@ -210,166 +212,160 @@ export function ProfileManager({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search profiles..."
                 className="pl-10 h-10"
-                />
+              />
             </div>
             <ScrollArea className="h-96">
-            {filteredProfiles.length > 0 ? (
-              <div className="space-y-3">
-                {filteredProfiles.map((profile) => (
-                  <div
-                    key={profile.id}
-                    className={`p-4 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors group flex flex-col gap-3 ${
-                      profile.isFavorite ? 'border-2 border-primary/40' : ''
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                        <div
-                          className={`p-2 rounded-md transition-colors ${
-                            profile.type === 'password'
-                              ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
-                              : profile.type === 'passphrase'
-                              ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                              : profile.type === 'format'
-                              ? 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
-                              : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
-                          }`}
-                        >
+              {filteredProfiles.length > 0 ? (
+                <div className="space-y-3">
+                  {filteredProfiles.map((profile) => (
+                    <div
+                      key={profile.id}
+                      className={`p-4 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors group flex flex-col gap-3 ${
+                        profile.isFavorite ? 'border-2 border-primary/40' : ''
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
                           <div
-                            className={`$\{profile.type === 'password' ? 'text-blue-600 dark:text-blue-400' : profile.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : profile.type === 'format' ? 'text-purple-600 dark:text-purple-400' : 'text-red-600 dark:text-red-400'}`}
+                            className={`p-2 rounded-md transition-colors ${
+                              profile.type === 'password'
+                                ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
+                                : profile.type === 'passphrase'
+                                  ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                                  : profile.type === 'format'
+                                    ? 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
+                                    : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+                            }`}
                           >
-                            {getTypeIcon(profile.type)}
+                            <div
+                              className={`$\{profile.type === 'password' ? 'text-blue-600 dark:text-blue-400' : profile.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : profile.type === 'format' ? 'text-purple-600 dark:text-purple-400' : 'text-red-600 dark:text-red-400'}`}
+                            >
+                              {getTypeIcon(profile.type)}
+                            </div>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-semibold text-base truncate">
+                              {profile.name}
+                            </h3>
+                            <Badge
+                              variant="outline"
+                              className={`text-xs font-medium ${
+                                profile.type === 'password'
+                                  ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
+                                  : profile.type === 'passphrase'
+                                    ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
+                                    : profile.type === 'format'
+                                      ? 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
+                                      : 'text-red-600 border-red-200 dark:text-red-400 dark:border-red-800'
+                              }`}
+                            >
+                              {profile.type.toString().charAt(0).toUpperCase() +
+                                profile.type.slice(1)}
+                            </Badge>
                           </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <h3 className="font-semibold text-base truncate">
-                            {profile.name}
-                          </h3>
-                          <Badge
+                        <div className="flex items-center gap-1">
+                          <Button
                             variant="outline"
-                            className={`text-xs font-medium ${
-                              profile.type === 'password'
-                                ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
-                                : profile.type === 'passphrase'
-                                ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
-                                : profile.type === 'format'
-                                ? 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
-                                : 'text-red-600 border-red-200 dark:text-red-400 dark:border-red-800'
-                            }`}
+                            size="sm"
+                            onClick={() => onToggleFavorite(profile.id)}
+                            className="h-9 w-9 p-0"
+                            title={
+                              profile.isFavorite
+                                ? 'Remove from favorites'
+                                : 'Add to favorites'
+                            }
                           >
-                            {profile.type
-                              .toString()
-                              .charAt(0)
-                              .toUpperCase() + profile.type.slice(1)}
-                          </Badge>
+                            <Star
+                              className={`h-4 w-4 transition-colors ${
+                                profile.isFavorite
+                                  ? 'fill-yellow-400 text-yellow-400'
+                                  : 'text-muted-foreground hover:text-yellow-400'
+                              }`}
+                            />
+                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-9 w-9 p-0"
+                              >
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() => onLoadProfile(profile)}
+                              >
+                                Load Profile
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => onEditProfile(profile)}
+                              >
+                                Edit Profile
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => onToggleFavorite(profile.id)}
+                              >
+                                {profile.isFavorite
+                                  ? 'Remove from Favorites'
+                                  : 'Add to Favorites'}
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => onDeleteProfile(profile.id)}
+                                variant="destructive"
+                              >
+                                Delete Profile
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onToggleFavorite(profile.id)}
-                          className="h-9 w-9 p-0"
-                          title={
-                            profile.isFavorite
-                              ? 'Remove from favorites'
-                              : 'Add to favorites'
-                          }
-                        >
-                          <Star
-                            className={`h-4 w-4 transition-colors ${
-                              profile.isFavorite
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-muted-foreground hover:text-yellow-400'
-                            }`}
-                          />
-                        </Button>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-9 w-9 p-0"
-                            >
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => onLoadProfile(profile)}
-                            >
-                              Load Profile
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => onEditProfile(profile)}
-                            >
-                              Edit Profile
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => onToggleFavorite(profile.id)}
-                            >
-                              {profile.isFavorite
-                                ? 'Remove from Favorites'
-                                : 'Add to Favorites'}
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={() => onDeleteProfile(profile.id)}
-                              variant="destructive"
-                            >
-                              Delete Profile
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-start gap-2 text-xs text-muted-foreground">
-                      <div
-                        className="flex items-center gap-1"
-                        title={`Created ${profile.createdAt.toLocaleDateString()}`}
-                      >
-                        <Plus className="h-3 w-3" />
-                        <span>
-                          {profile.createdAt.toLocaleDateString()}
-                        </span>
-                      </div>
-                      {profile.lastUsed && (
+                      <div className="flex flex-col items-start gap-2 text-xs text-muted-foreground">
                         <div
                           className="flex items-center gap-1"
-                          title={`Last used ${profile.lastUsed.toLocaleDateString()}`}
+                          title={`Created ${profile.createdAt.toLocaleDateString()}`}
                         >
-                          <Clock className="h-3 w-3" />
-                          <span>
-                            {profile.lastUsed.toLocaleDateString()}
-                          </span>
+                          <Plus className="h-3 w-3" />
+                          <span>{profile.createdAt.toLocaleDateString()}</span>
                         </div>
-                      )}
+                        {profile.lastUsed && (
+                          <div
+                            className="flex items-center gap-1"
+                            title={`Last used ${profile.lastUsed.toLocaleDateString()}`}
+                          >
+                            <Clock className="h-3 w-3" />
+                            <span>{profile.lastUsed.toLocaleDateString()}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between pt-2">
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() => onLoadProfile(profile)}
+                          className="flex-1 mr-2 h-9 font-medium"
+                        >
+                          Load Profile
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between pt-2">
-                      <Button
-                        variant="default"
-                        size="sm"
-                        onClick={() => onLoadProfile(profile)}
-                        className="flex-1 mr-2 h-9 font-medium"
-                      >
-                        Load Profile
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 px-6">
-                <div className="p-3 rounded-full bg-muted/30 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
-                  <Search className="h-5 w-5 text-muted-foreground/50" />
+                  ))}
                 </div>
-                <p className="text-sm font-medium mb-1">No profiles found</p>
-                <p className="text-xs text-muted-foreground">
-                  Try adjusting your search or filter
-                </p>
-              </div>
-            )}
-          </ScrollArea>
+              ) : (
+                <div className="text-center py-8 px-6">
+                  <div className="p-3 rounded-full bg-muted/30 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                    <Search className="h-5 w-5 text-muted-foreground/50" />
+                  </div>
+                  <p className="text-sm font-medium mb-1">No profiles found</p>
+                  <p className="text-xs text-muted-foreground">
+                    Try adjusting your search or filter
+                  </p>
+                </div>
+              )}
+            </ScrollArea>
           </div>
         ) : (
           <div className="text-center py-12 px-6">

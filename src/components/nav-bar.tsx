@@ -1,7 +1,7 @@
 import { RotateCcwKey } from 'lucide-react';
-import { SettingsDialog } from './settings-dialog';
+import type React from 'react';
 import { ModeToggle } from './mode-toggle';
-import React from 'react';
+import { SettingsDialog } from './settings-dialog';
 
 interface NavBarProps {
   appSettings: any;
