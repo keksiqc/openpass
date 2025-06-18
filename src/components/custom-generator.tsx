@@ -21,7 +21,7 @@ import { useCustomGenerator } from '../hooks/useCustomGenerator';
 import type { FormatSettings, PasswordHistory } from '../types';
 import { calculateEntropy, estimateTimeToCrack } from '../utils/password-strength';
 
-interface FormatGeneratorProps {
+interface CustomGeneratorProps { // Renamed interface to match component
   settings: FormatSettings;
   onSettingsChange: (settings: FormatSettings) => void;
   onFormatGenerated: (format: string, historyEntry: PasswordHistory) => void;
@@ -33,7 +33,7 @@ export function CustomGenerator({
   onSettingsChange,
   onFormatGenerated,
   onCopyToClipboard,
-}: FormatGeneratorProps) {
+}: CustomGeneratorProps) { // Renamed interface to match component
   const [generatedFormat, setGeneratedFormat] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const { generateFormatPassword, getCharacterSetFromFormat } = useCustomGenerator();
@@ -80,7 +80,7 @@ export function CustomGenerator({
   };
 
   return (
-    <TabsContent value="format" className="space-y-6">
+    <div className="space-y-6"> {/* Changed from TabsContent to div, removed value prop */}
       {/* Format Pattern Input */}
       <div className="space-y-3">
         <Label htmlFor="format" className="text-base font-medium">
@@ -289,6 +289,6 @@ export function CustomGenerator({
           </div>
         </div>
       )}
-    </TabsContent>
+    </div>
   );
 }
