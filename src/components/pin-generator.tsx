@@ -1,4 +1,4 @@
-import { Copy, Settings } from 'lucide-react';
+import { Copy, Settings, Shield } from 'lucide-react'; // Added Shield
 import { Button } from '@/components/ui/button';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -23,7 +23,7 @@ export function PinGenerator() {
     <>
       <CardHeader>
         <CardTitle className="flex items-center gap-3 text-2xl">
-          <Settings className="h-5 w-5 text-primary" />
+          <Shield className="h-5 w-5 text-primary" /> {/* Changed from Settings */}
           PIN Generator
         </CardTitle>
       </CardHeader>
@@ -48,7 +48,7 @@ export function PinGenerator() {
           size="lg"
           data-generate-button
         >
-          <Settings className="h-4 w-4 mr-2" />
+          <Shield className="h-4 w-4 mr-2" /> {/* Changed from Settings */}
           Generate PIN
         </Button>
 
