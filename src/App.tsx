@@ -1,18 +1,17 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
-import { BookOpen, Hash, Key, RotateCcwKey, Settings } from 'lucide-react'; // Added Shield
+import { BookOpen, Hash, Key, Settings } from 'lucide-react'; // Removed RotateCcwKey, ModeToggle, Settings
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CustomGenerator } from './components/custom-generator';
 import { HistoryPanel } from './components/history-panel';
-import { ModeToggle } from './components/mode-toggle';
 import { PassphraseGenerator } from './components/passphrase-generator';
 import { PasswordGenerator } from './components/password-generator';
 import { PinGenerator } from './components/pin-generator'; // Import PinGenerator
 import { ProfileManager } from './components/profile-manager';
-import { SettingsDialog } from './components/settings-dialog';
+import { NavBar } from './components/nav-bar';
 import {
   clearAllData,
   loadHistory,
@@ -415,44 +414,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex h-16 items-center justify-between">
-            {/* Logo and Brand */}
-            <div className="flex items-center gap-4">
-              <div className="p-2 rounded-lg bg-primary text-primary-foreground">
-                <RotateCcwKey className="h-5 w-5" />
-              </div>
-              <div className="flex flex-col">
-                <h1 className="text-2xl font-bold tracking-tight">OpenPass</h1>
-                <span className="text-sm text-muted-foreground hidden sm:block leading-tight">
-                  Secure Password Generator
-                </span>
-              </div>
-            </div>
-
-            {/* Navigation and Features */}
-            <nav className="flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-6">
-                <div className="text-xs text-muted-foreground border rounded-md px-3 py-1.5 bg-muted/30">
-                  <kbd className="font-mono text-xs">Ctrl+G</kbd> to generate
-                </div>
-              </div>
-              <SettingsDialog
-                settings={appSettings}
-                onSettingsChange={handleSettingsChange}
-                onClearAllData={handleClearAllData}
-                onExportData={exportProfiles}
-                onImportData={importProfiles}
-                onResetToDefaults={handleResetToDefaults} // Pass new prop
-              />
-              <ModeToggle />
-            </nav>
-          </div>
-        </div>
-      </header>
-
+      <NavBar
+        appSettings={appSettings}
+        handleSettingsChange={handleSettingsChange}
+        handleClearAllData={handleClearAllData}
+        exportProfiles={exportProfiles}
+        importProfiles={importProfiles}
+        handleResetToDefaults={handleResetToDefaults}
+      />
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Main Grid Layout */}
@@ -466,33 +435,27 @@ export default function App() {
               }
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 h-12 rounded-xl">
-                {' '}
-                {/* Updated grid-cols */}
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-4 h-12 rounded-xl">
                 <TabsTrigger
                   value="password"
-                  className="text-sm font-medium data-[state=active]:text-blue-600 data-[state=active]:border-blue-200 h-full"
                 >
                   <Key className="h-4 w-4 mr-2" />
                   Password
                 </TabsTrigger>
                 <TabsTrigger
                   value="passphrase"
-                  className="text-sm font-medium data-[state=active]:text-green-600 data-[state=active]:border-green-200 h-full"
                 >
                   <BookOpen className="h-4 w-4 mr-2" />
                   Passphrase
                 </TabsTrigger>
                 <TabsTrigger
                   value="custom"
-                  className="text-sm font-medium data-[state=active]:text-purple-600 data-[state=active]:border-purple-200 h-full"
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Custom
                 </TabsTrigger>
                 <TabsTrigger
                   value="pin"
-                  className="text-sm font-medium data-[state=active]:text-red-600 data-[state=active]:border-red-200 h-full"
                 >
                   <Hash className="h-4 w-4 mr-2" />
                   PIN
