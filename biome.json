@@ -18,12 +18,13 @@
       "recommended": true
     },
     "domains": {
-      "react": "recommended"
+      "react": "recommended",
+      "next": "recommended"
     }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single"
+      "quoteStyle": "double"
     }
   },
   "assist": {
