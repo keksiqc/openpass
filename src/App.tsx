@@ -1,6 +1,6 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
-import { BookOpen, Key, RotateCcwKey, Settings, Hash } from 'lucide-react'; // Added Shield
+import { BookOpen, Hash, Key, RotateCcwKey, Settings } from 'lucide-react'; // Added Shield
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
@@ -29,11 +29,11 @@ import type {
   PassphraseSettings,
   // PassphraseProfileSettings, // Removed
   PasswordHistory,
-  Profile, // Updated umbrella Profile type
-  ProfileType, // For activeTab state
   PasswordSettings,
   // PasswordProfileSettings, // Removed
   PinSettings, // For Pin generator state
+  Profile, // Updated umbrella Profile type
+  ProfileType, // For activeTab state
   // PinProfileSettings, // Removed
 } from './types';
 
@@ -119,7 +119,8 @@ export default function App() {
   }, []);
 
   // Save profiles to localStorage
-  const saveProfilesToStorage = (newProfiles: Profile[]) => { // Changed to Profile[]
+  const saveProfilesToStorage = (newProfiles: Profile[]) => {
+    // Changed to Profile[]
     saveProfiles(newProfiles);
     setProfiles(newProfiles);
   };
@@ -232,7 +233,7 @@ export default function App() {
 
       if (!newProfile) {
         // This case should ideally not be reached if activeTab is always a valid ProfileType
-        toast.error("Invalid profile type selected. Cannot save profile.");
+        toast.error('Invalid profile type selected. Cannot save profile.');
         return;
       }
 
@@ -244,7 +245,8 @@ export default function App() {
   };
 
   // Load profile
-  const loadProfile = (profileToLoad: Profile) => { // Parameter type is Profile
+  const loadProfile = (profileToLoad: Profile) => {
+    // Parameter type is Profile
     setActiveTab(profileToLoad.type);
 
     switch (profileToLoad.type) {
@@ -273,7 +275,8 @@ export default function App() {
   };
 
   // Edit profile
-  const handleEditProfile = (profileToEdit: Profile) => { // Parameter type is Profile
+  const handleEditProfile = (profileToEdit: Profile) => {
+    // Parameter type is Profile
     setEditingProfileId(profileToEdit.id);
     setProfileName(profileToEdit.name);
     setActiveTab(profileToEdit.type);
@@ -458,10 +461,14 @@ export default function App() {
           <div className="lg:col-span-2 space-y-8">
             <Tabs
               value={activeTab}
-              onValueChange={(value: string) => setActiveTab(value as ProfileType)}
+              onValueChange={(value: string) =>
+                setActiveTab(value as ProfileType)
+              }
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 h-12 rounded-xl"> {/* Updated grid-cols */}
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-8 h-12 rounded-xl">
+                {' '}
+                {/* Updated grid-cols */}
                 <TabsTrigger
                   value="password"
                   className="text-sm font-medium data-[state=active]:text-blue-600 data-[state=active]:border-blue-200 h-full"
@@ -522,7 +529,7 @@ export default function App() {
               </TabsContent>
 
               <TabsContent value="pin">
-                  <PinGenerator />
+                <PinGenerator />
               </TabsContent>
             </Tabs>
 

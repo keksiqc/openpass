@@ -1,15 +1,14 @@
-import {
-  ChevronDown,
-  Copy,
-  Eye,
-  EyeOff,
-  RefreshCw,
-  Key
-} from 'lucide-react';
+import { ChevronDown, Copy, Eye, EyeOff, Key, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch'; // Import Switch
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,15 +17,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch'; // Import Switch
 import { TabsContent } from '@/components/ui/tabs';
 import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
 import type { PasswordHistory, PasswordSettings } from '../types';
 import {
   calculateEntropy,
-  estimateTimeToCrack,
   calculateStrength,
+  estimateTimeToCrack,
 } from '../utils/password-strength';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 
 interface PasswordGeneratorProps {
   settings: PasswordSettings;
@@ -128,7 +127,9 @@ export function PasswordGenerator({
               <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
                 <Label htmlFor="uppercase" className="flex flex-col pr-2">
                   <span className="font-medium">Uppercase</span>
-                  <span className="text-xs text-muted-foreground font-mono">A-Z</span>
+                  <span className="text-xs text-muted-foreground font-mono">
+                    A-Z
+                  </span>
                 </Label>
                 <Switch
                   id="uppercase"
@@ -146,7 +147,9 @@ export function PasswordGenerator({
               <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
                 <Label htmlFor="lowercase" className="flex flex-col pr-2">
                   <span className="font-medium">Lowercase</span>
-                  <span className="text-xs text-muted-foreground font-mono">a-z</span>
+                  <span className="text-xs text-muted-foreground font-mono">
+                    a-z
+                  </span>
                 </Label>
                 <Switch
                   id="lowercase"
@@ -164,7 +167,9 @@ export function PasswordGenerator({
               <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
                 <Label htmlFor="numbers" className="flex flex-col pr-2">
                   <span className="font-medium">Numbers</span>
-                  <span className="text-xs text-muted-foreground font-mono">0-9</span>
+                  <span className="text-xs text-muted-foreground font-mono">
+                    0-9
+                  </span>
                 </Label>
                 <Switch
                   id="numbers"
@@ -182,7 +187,9 @@ export function PasswordGenerator({
               <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
                 <Label htmlFor="symbols" className="flex flex-col pr-2">
                   <span className="font-medium">Symbols</span>
-                  <span className="text-xs text-muted-foreground font-mono">!@#$%</span>
+                  <span className="text-xs text-muted-foreground font-mono">
+                    !@#$%
+                  </span>
                 </Label>
                 <Switch
                   id="symbols"
@@ -206,7 +213,10 @@ export function PasswordGenerator({
             </CollapsibleTrigger>
             <CollapsibleContent className="space-y-3 p-4 bg-muted/20 rounded-lg border mt-2">
               <div>
-                <Label htmlFor="custom" className="text-xs text-muted-foreground">
+                <Label
+                  htmlFor="custom"
+                  className="text-xs text-muted-foreground"
+                >
                   Custom Characters
                 </Label>
                 <Input
@@ -278,7 +288,8 @@ export function PasswordGenerator({
                   htmlFor="require-each-type"
                   className="text-xs cursor-pointer"
                 >
-                  Enforce each selected character type (might increase generation time)
+                  Enforce each selected character type (might increase
+                  generation time)
                 </Label>
               </div>
 
@@ -366,11 +377,16 @@ export function PasswordGenerator({
           {generatedPassword && (
             <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">Generated Password</Label>
+                <Label className="text-sm font-medium">
+                  Generated Password
+                </Label>
                 {(() => {
                   const strength = calculateStrength(generatedPassword);
                   return (
-                    <Badge variant="outline" className={`text-xs ${strength.color}`}>
+                    <Badge
+                      variant="outline"
+                      className={`text-xs ${strength.color}`}
+                    >
                       {strength.label}
                     </Badge>
                   );
@@ -388,11 +404,15 @@ export function PasswordGenerator({
                     if (strength.label === 'Excellent') return 'bg-green-700';
                     return 'bg-gray-400';
                   })()}`}
-                  style={{ width: `${calculateStrength(generatedPassword).score * 10}%` }}
+                  style={{
+                    width: `${calculateStrength(generatedPassword).score * 10}%`,
+                  }}
                 ></div>
               </div>
               <p className="text-xs text-muted-foreground">
-                {getStrengthDescription(calculateStrength(generatedPassword).label)}
+                {getStrengthDescription(
+                  calculateStrength(generatedPassword).label,
+                )}
               </p>
 
               <div className="flex items-center gap-2">
@@ -430,14 +450,20 @@ export function PasswordGenerator({
                 <div>
                   <strong>Entropy:</strong>{' '}
                   {Math.round(
-                    calculateEntropy(generatedPassword, getCharacterSet(settings)),
+                    calculateEntropy(
+                      generatedPassword,
+                      getCharacterSet(settings),
+                    ),
                   )}{' '}
                   bits
                 </div>
                 <div>
                   <strong>Time to crack:</strong>{' '}
                   {estimateTimeToCrack(
-                    calculateEntropy(generatedPassword, getCharacterSet(settings)),
+                    calculateEntropy(
+                      generatedPassword,
+                      getCharacterSet(settings),
+                    ),
                   )}
                 </div>
               </div>

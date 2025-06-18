@@ -60,19 +60,39 @@ export const usePasswordGenerator = () => {
           } while (
             generationAttempts < maxAttempts &&
             ((settings.minNumbers &&
-              (password.match(/\d/g) || []).length < (settings.minNumbers || 0)) ||
+              (password.match(/\d/g) || []).length <
+                (settings.minNumbers || 0)) ||
               (settings.minSymbols &&
-                (password.match(new RegExp(`[${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`, 'g')) || []).length < (settings.minSymbols || 0)))
+                (
+                  password.match(
+                    new RegExp(
+                      `[${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`,
+                      'g',
+                    ),
+                  ) || []
+                ).length < (settings.minSymbols || 0)))
           );
 
           if (settings.requireEachCharacterType) {
             meetsCriteria = true;
-            if (settings.includeUppercase && !/[A-Z]/.test(password)) meetsCriteria = false;
-            if (settings.includeLowercase && !/[a-z]/.test(password)) meetsCriteria = false;
-            if (settings.includeNumbers && !/\d/.test(password)) meetsCriteria = false;
+            if (settings.includeUppercase && !/[A-Z]/.test(password))
+              meetsCriteria = false;
+            if (settings.includeLowercase && !/[a-z]/.test(password))
+              meetsCriteria = false;
+            if (settings.includeNumbers && !/\d/.test(password))
+              meetsCriteria = false;
             // Check for symbols from the actual symbol set used
-            const symbolCharset = `${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters || ''}`.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            if (settings.includeSymbols && !new RegExp(`[${symbolCharset}]`).test(password) && symbolCharset.length > 0) meetsCriteria = false;
+            const symbolCharset =
+              `${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters || ''}`.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                '\\$&',
+              );
+            if (
+              settings.includeSymbols &&
+              !new RegExp(`[${symbolCharset}]`).test(password) &&
+              symbolCharset.length > 0
+            )
+              meetsCriteria = false;
 
             enforcementRetries++;
             if (meetsCriteria) break; // Exit if criteria met
@@ -84,7 +104,7 @@ export const usePasswordGenerator = () => {
 
         if (settings.requireEachCharacterType && !meetsCriteria) {
           toast.warning(
-            "Could not enforce all character types. Try increasing length or reducing restrictions.",
+            'Could not enforce all character types. Try increasing length or reducing restrictions.',
             { duration: 5000 },
           );
           // Proceed with the last generated password even if not all types are enforced

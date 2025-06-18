@@ -1,11 +1,11 @@
 import { Copy, Hash, RefreshCw } from 'lucide-react'; // Added RefreshCw
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { usePinGenerator } from '../hooks/usePinGenerator';
-import { toast } from 'sonner';
 
 export function PinGenerator() {
   const { pin, length, setLength, generatePin } = usePinGenerator();
@@ -29,7 +29,9 @@ export function PinGenerator() {
           PIN Generator
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6"> {/* Changed from space-y-8 to space-y-6 */}
+      <CardContent className="space-y-6">
+        {' '}
+        {/* Changed from space-y-8 to space-y-6 */}
         <div className="space-y-3">
           <Label htmlFor="pin-length" className="text-base font-medium">
             PIN Length: {length}
@@ -43,7 +45,6 @@ export function PinGenerator() {
             className="w-full"
           />
         </div>
-
         <Button
           onClick={generatePin}
           className="w-full"
@@ -53,7 +54,6 @@ export function PinGenerator() {
           <RefreshCw className="h-4 w-4 mr-2" />
           Generate PIN
         </Button>
-
         {pin && (
           <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
             <Label className="text-sm font-medium">Generated PIN</Label>

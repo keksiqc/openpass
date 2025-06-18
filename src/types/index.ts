@@ -22,12 +22,14 @@ export interface PassphraseSettings {
   insertNumbersRandomly?: boolean;
 }
 
-export interface FormatSettings { // This is for "Custom" generator
+export interface FormatSettings {
+  // This is for "Custom" generator
   format: string;
   templates: Array<{ name: string; pattern: string }>;
 }
 
-export interface PinSettings { // For Pin Generator
+export interface PinSettings {
+  // For Pin Generator
   length: number;
 }
 
@@ -59,7 +61,8 @@ export interface PassphraseProfile extends BaseProfile {
   settings: PassphraseProfileSettings;
 }
 
-export interface CustomProfile extends BaseProfile { // Renamed from FormatProfile
+export interface CustomProfile extends BaseProfile {
+  // Renamed from FormatProfile
   type: 'custom';
   settings: FormatProfileSettings;
 }
@@ -69,7 +72,11 @@ export interface PinProfile extends BaseProfile {
   settings: PinProfileSettings;
 }
 
-export type Profile = PasswordProfile | PassphraseProfile | CustomProfile | PinProfile;
+export type Profile =
+  | PasswordProfile
+  | PassphraseProfile
+  | CustomProfile
+  | PinProfile;
 
 // PinSettings defined above with other base settings types
 

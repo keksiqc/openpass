@@ -10,9 +10,9 @@ export const useCustomGenerator = () => {
     let i = 0;
     while (i < format.length) {
       if (/\d/.test(format[i])) {
-        let numStr = '';
+        let _numStr = '';
         while (i < format.length && /\d/.test(format[i])) {
-          numStr += format[i];
+          _numStr += format[i];
           i++;
         }
         // const count = Number.parseInt(numStr); // Not needed for charset generation

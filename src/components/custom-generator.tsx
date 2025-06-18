@@ -1,7 +1,21 @@
-import { ChevronDown, Copy, Eye, EyeOff, RefreshCw } from 'lucide-react'; // RefreshCw hinzugefügt
+import {
+  ChevronDown,
+  Copy,
+  Eye,
+  EyeOff,
+  RefreshCw,
+  Settings,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,17 +32,13 @@ import {
 } from '@/components/ui/select';
 import { useCustomGenerator } from '../hooks/useCustomGenerator';
 import type { FormatSettings, PasswordHistory } from '../types';
-import { calculateEntropy, estimateTimeToCrack } from '../utils/password-strength';
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from '@/components/ui/card';
-import { Settings } from 'lucide-react';
+  calculateEntropy,
+  estimateTimeToCrack,
+} from '../utils/password-strength';
 
-interface CustomGeneratorProps { // Renamed interface to match component
+interface CustomGeneratorProps {
+  // Renamed interface to match component
   settings: FormatSettings;
   onSettingsChange: (settings: FormatSettings) => void;
   onFormatGenerated: (format: string, historyEntry: PasswordHistory) => void;
@@ -40,10 +50,12 @@ export function CustomGenerator({
   onSettingsChange,
   onFormatGenerated,
   onCopyToClipboard,
-}: CustomGeneratorProps) { // Renamed interface to match component
+}: CustomGeneratorProps) {
+  // Renamed interface to match component
   const [generatedFormat, setGeneratedFormat] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-  const { generateFormatPassword, getCharacterSetFromFormat } = useCustomGenerator();
+  const { generateFormatPassword, getCharacterSetFromFormat } =
+    useCustomGenerator();
 
   const handleGenerate = () => {
     generateFormatPassword(settings, (format, historyEntry) => {
@@ -100,7 +112,9 @@ export function CustomGenerator({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div className="space-y-6"> {/* Changed from TabsContent to div, removed value prop */}
+        <div className="space-y-6">
+          {' '}
+          {/* Changed from TabsContent to div, removed value prop */}
           {/* Format Pattern Input */}
           <div className="space-y-3">
             <Label htmlFor="format" className="text-base font-medium">
@@ -125,12 +139,14 @@ export function CustomGenerator({
               </p>
               <p>
                 <strong>Example:</strong>{' '}
-                <code className="font-mono bg-muted px-1 rounded">3u2l4d</code> →{' '}
-                <code className="font-mono bg-muted px-1 rounded">ABCde1234</code>
+                <code className="font-mono bg-muted px-1 rounded">3u2l4d</code>{' '}
+                →{' '}
+                <code className="font-mono bg-muted px-1 rounded">
+                  ABCde1234
+                </code>
               </p>
             </div>
           </div>
-
           {/* Quick Templates */}
           <div className="space-y-3">
             <Label className="text-base font-medium">Quick Templates</Label>
@@ -159,7 +175,6 @@ export function CustomGenerator({
               </SelectContent>
             </Select>
           </div>
-
           {/* Format Guide */}
           <Collapsible>
             <CollapsibleTrigger className="flex items-center justify-between w-full p-3 text-left bg-muted/30 hover:bg-muted/50 rounded-lg border transition-colors">
@@ -172,13 +187,17 @@ export function CustomGenerator({
                   <code className="px-2 py-1 bg-background rounded text-xs font-mono">
                     2u
                   </code>
-                  <span className="text-muted-foreground">2 uppercase letters</span>
+                  <span className="text-muted-foreground">
+                    2 uppercase letters
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <code className="px-2 py-1 bg-background rounded text-xs font-mono">
                     4l
                   </code>
-                  <span className="text-muted-foreground">4 lowercase letters</span>
+                  <span className="text-muted-foreground">
+                    4 lowercase letters
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <code className="px-2 py-1 bg-background rounded text-xs font-mono">
@@ -190,7 +209,9 @@ export function CustomGenerator({
                   <code className="px-2 py-1 bg-background rounded text-xs font-mono">
                     2{`{#$%}`}
                   </code>
-                  <span className="text-muted-foreground">2 from custom set</span>
+                  <span className="text-muted-foreground">
+                    2 from custom set
+                  </span>
                 </div>
               </div>
               <div className="mt-4 p-3 bg-background rounded-lg border">
@@ -199,22 +220,21 @@ export function CustomGenerator({
                 </div>
                 <div className="space-y-1 text-xs">
                   <div>
-                    <code className="font-mono">4u4l4d</code> → Strong alphanumeric
+                    <code className="font-mono">4u4l4d</code> → Strong
+                    alphanumeric (12 chars)
+                  </div>
+                  <div>
+                    <code className="font-mono">2u6l2d2{`{!@#}`}</code> →
+                    Complex mixed (12 chars)
+                  </div>
+                  <div>
+                    <code className="font-mono">8l4d</code> → Simple memorable
                     (12 chars)
-                  </div>
-                  <div>
-                    <code className="font-mono">2u6l2d2{`{!@#}`}</code> → Complex
-                    mixed (12 chars)
-                  </div>
-                  <div>
-                    <code className="font-mono">8l4d</code> → Simple memorable (12
-                    chars)
                   </div>
                 </div>
               </div>
             </CollapsibleContent>
           </Collapsible>
-
           {/* Generate Button */}
           <Button
             onClick={handleGenerate}
@@ -225,7 +245,6 @@ export function CustomGenerator({
             <RefreshCw className="h-4 w-4 mr-2" />
             Generate Format Password
           </Button>
-
           {/* Generated Format Password Display */}
           {generatedFormat && (
             <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
@@ -236,7 +255,10 @@ export function CustomGenerator({
                 {(() => {
                   const strength = getFormatStrength(generatedFormat);
                   return (
-                    <Badge variant="outline" className={`text-xs ${strength.color}`}>
+                    <Badge
+                      variant="outline"
+                      className={`text-xs ${strength.color}`}
+                    >
                       {strength.label}
                     </Badge>
                   );
@@ -254,11 +276,15 @@ export function CustomGenerator({
                     if (strength.label === 'Excellent') return 'bg-green-700';
                     return 'bg-gray-400';
                   })()}`}
-                  style={{ width: `${getFormatStrength(generatedFormat).score}%` }}
+                  style={{
+                    width: `${getFormatStrength(generatedFormat).score}%`,
+                  }}
                 ></div>
               </div>
               <p className="text-xs text-muted-foreground">
-                {getStrengthDescription(getFormatStrength(generatedFormat).label)}
+                {getStrengthDescription(
+                  getFormatStrength(generatedFormat).label,
+                )}
               </p>
 
               <div className="flex items-center gap-2">
@@ -296,14 +322,20 @@ export function CustomGenerator({
                 <div>
                   <strong>Entropy:</strong>{' '}
                   {Math.round(
-                    calculateEntropy(generatedFormat, getCharacterSetFromFormat(settings.format)),
+                    calculateEntropy(
+                      generatedFormat,
+                      getCharacterSetFromFormat(settings.format),
+                    ),
                   )}{' '}
                   bits
                 </div>
                 <div>
                   <strong>Time to crack:</strong>{' '}
                   {estimateTimeToCrack(
-                    calculateEntropy(generatedFormat, getCharacterSetFromFormat(settings.format)),
+                    calculateEntropy(
+                      generatedFormat,
+                      getCharacterSetFromFormat(settings.format),
+                    ),
                   )}
                 </div>
               </div>

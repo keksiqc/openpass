@@ -75,10 +75,13 @@ export function ProfileManager({
   onCancelEdit, // Destructure new prop
 }: ProfileManagerProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<ProfileType | 'all'>('all'); // Changed
+  const [selectedFilter, setSelectedFilter] = useState<ProfileType | 'all'>(
+    'all',
+  ); // Changed
 
   // Get type icon with enhanced styling
-  const getTypeIcon = (type: ProfileType) => { // Changed
+  const getTypeIcon = (type: ProfileType) => {
+    // Changed
     switch (type) {
       case 'password':
         return <Zap className="h-4 w-4" />;
@@ -131,7 +134,9 @@ export function ProfileManager({
             access
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4"> {/* Changed from space-y-5 to space-y-4 */}
+        <CardContent className="space-y-4">
+          {' '}
+          {/* Changed from space-y-5 to space-y-4 */}
           <div className="space-y-3">
             <Label
               htmlFor="profile-name"
@@ -209,7 +214,10 @@ export function ProfileManager({
 
             {/* Filter Controls */}
             <div className="flex flex-wrap gap-2">
-              {(['all', 'password', 'passphrase', 'custom', 'pin'] as const).map( // Added 'custom', 'pin'
+              {(
+                ['all', 'password', 'passphrase', 'custom', 'pin'] as const
+              ).map(
+                // Added 'custom', 'pin'
                 (filter) => (
                   <Button
                     key={filter}
@@ -410,9 +418,9 @@ export function ProfileManager({
               for quick access later
             </p>
             <div className="text-xs text-muted-foreground bg-muted/30 p-4 rounded-lg border border-muted-foreground/10 max-w-md mx-auto">
-              <strong className="font-medium">Tip:</strong> Profiles let
-              you quickly switch between different password configurations for
-              work, personal use, or specific requirements
+              <strong className="font-medium">Tip:</strong> Profiles let you
+              quickly switch between different password configurations for work,
+              personal use, or specific requirements
             </div>
           </CardContent>
         </Card>

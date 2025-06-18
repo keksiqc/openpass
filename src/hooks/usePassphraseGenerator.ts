@@ -48,11 +48,19 @@ export const usePassphraseGenerator = () => {
             const randomWordIndex = getSecureRandom(wordsWithNumbers.length);
             const randomNumber = getSecureRandom(10).toString();
             // Insert number at a random position within the word or append/prepend
-            if (wordsWithNumbers[randomWordIndex].length > 0 && Math.random() > 0.5) {
-                 const insertPos = getSecureRandom(wordsWithNumbers[randomWordIndex].length + 1);
-                 wordsWithNumbers[randomWordIndex] = wordsWithNumbers[randomWordIndex].slice(0, insertPos) + randomNumber + wordsWithNumbers[randomWordIndex].slice(insertPos);
+            if (
+              wordsWithNumbers[randomWordIndex].length > 0 &&
+              Math.random() > 0.5
+            ) {
+              const insertPos = getSecureRandom(
+                wordsWithNumbers[randomWordIndex].length + 1,
+              );
+              wordsWithNumbers[randomWordIndex] =
+                wordsWithNumbers[randomWordIndex].slice(0, insertPos) +
+                randomNumber +
+                wordsWithNumbers[randomWordIndex].slice(insertPos);
             } else {
-                 wordsWithNumbers[randomWordIndex] += randomNumber;
+              wordsWithNumbers[randomWordIndex] += randomNumber;
             }
           }
           passphrase = wordsWithNumbers.join(

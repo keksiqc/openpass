@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export const usePinGenerator = () => {
   const [length, setLength] = useState(4);

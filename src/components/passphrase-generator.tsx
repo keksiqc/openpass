@@ -1,8 +1,21 @@
-import { BookOpen, ChevronDown, Copy, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import {
+  BookOpen,
+  ChevronDown,
+  Copy,
+  Eye,
+  EyeOff,
+  RefreshCw,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch'; // Import Switch
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,11 +31,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch'; // Import Switch
 import { TabsContent } from '@/components/ui/tabs';
 import { usePassphraseGenerator } from '../hooks/usePassphraseGenerator';
 import type { PassphraseSettings, PasswordHistory } from '../types';
 import { estimateTimeToCrack } from '../utils/password-strength'; // Removed calculateEntropy
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 
 interface PassphraseGeneratorProps {
   settings: PassphraseSettings;
@@ -51,7 +64,8 @@ export function PassphraseGenerator({
     });
   };
 
-  const getPassphraseStrength = () => { // Removed unused 'passphrase' parameter
+  const getPassphraseStrength = () => {
+    // Removed unused 'passphrase' parameter
     const wordCount = settings.wordCount;
     const hasNumbers = settings.includeNumbers;
     // A more accurate entropy calculation for passphrases would involve the dictionary size
@@ -64,14 +78,15 @@ export function PassphraseGenerator({
       // Add a bit more entropy for numbers. This is a rough estimate.
       // If numbers are inserted randomly, entropy increases more significantly.
       // If appended, it's less, but still an increase.
-      entropy += settings.insertNumbersRandomly ? Math.log2(wordCount * 10) : Math.log2(10 * (settings.wordCount/2));
+      entropy += settings.insertNumbersRandomly
+        ? Math.log2(wordCount * 10)
+        : Math.log2(10 * (settings.wordCount / 2));
     }
 
     // Adjust score based on wordCase, if not purely lowercase
     if (settings.wordCase !== 'lowercase') {
-        entropy += wordCount * Math.log2(1.5); // Rough boost for case variation
+      entropy += wordCount * Math.log2(1.5); // Rough boost for case variation
     }
-
 
     if (entropy < 60) {
       return { label: 'Weak', color: 'text-red-600', score: 20 };
@@ -210,7 +225,9 @@ export function PassphraseGenerator({
               <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
                 <Label htmlFor="include-numbers" className="flex flex-col pr-2">
                   <span className="font-medium">Add Numbers</span>
-                  <span className="text-xs text-muted-foreground">Include numbers in the passphrase</span>
+                  <span className="text-xs text-muted-foreground">
+                    Include numbers in the passphrase
+                  </span>
                 </Label>
                 <Switch
                   id="include-numbers"
@@ -225,10 +242,17 @@ export function PassphraseGenerator({
               </div>
               {settings.includeNumbers && ( // Only show if "Add Numbers" is checked
                 // Insert Numbers Randomly Option - New Structure (with slight indent if desired, or remove ml-6 for same level)
-                <div className="flex items-center justify-between rounded-md border p-3 shadow-sm ml-0 mt-2"> {/* Adjusted indent and margin top */}
-                  <Label htmlFor="insert-numbers-randomly" className="flex flex-col pr-2">
+                <div className="flex items-center justify-between rounded-md border p-3 shadow-sm ml-0 mt-2">
+                  {' '}
+                  {/* Adjusted indent and margin top */}
+                  <Label
+                    htmlFor="insert-numbers-randomly"
+                    className="flex flex-col pr-2"
+                  >
                     <span className="font-medium">Insert numbers randomly</span>
-                    <span className="text-xs text-muted-foreground">Distribute numbers within the passphrase</span>
+                    <span className="text-xs text-muted-foreground">
+                      Distribute numbers within the passphrase
+                    </span>
                   </Label>
                   <Switch
                     id="insert-numbers-randomly"
@@ -260,11 +284,16 @@ export function PassphraseGenerator({
           {generatedPassphrase && (
             <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">Generated Passphrase</Label>
+                <Label className="text-sm font-medium">
+                  Generated Passphrase
+                </Label>
                 {(() => {
                   const strength = getPassphraseStrength(); // Called without parameter
                   return (
-                    <Badge variant="outline" className={`text-xs ${strength.color}`}>
+                    <Badge
+                      variant="outline"
+                      className={`text-xs ${strength.color}`}
+                    >
                       {strength.label}
                     </Badge>
                   );
@@ -286,7 +315,8 @@ export function PassphraseGenerator({
                 ></div>
               </div>
               <p className="text-xs text-muted-foreground">
-                {getStrengthDescription(getPassphraseStrength().label)} {/* Called without parameter */}
+                {getStrengthDescription(getPassphraseStrength().label)}{' '}
+                {/* Called without parameter */}
               </p>
 
               <div className="flex items-center gap-2">
@@ -323,12 +353,14 @@ export function PassphraseGenerator({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
                 <div>
                   <strong>Estimated Entropy:</strong>{' '}
-                  {Math.round(getPassphraseStrength().score * 1.2)}{' '} {/* Called without parameter */}
+                  {Math.round(getPassphraseStrength().score * 1.2)}{' '}
+                  {/* Called without parameter */}
                   bits
                 </div>
                 <div>
                   <strong>Time to crack:</strong>{' '}
-                  {estimateTimeToCrack(getPassphraseStrength().score * 1.2)} {/* Called without parameter */}
+                  {estimateTimeToCrack(getPassphraseStrength().score * 1.2)}{' '}
+                  {/* Called without parameter */}
                 </div>
               </div>
             </div>
