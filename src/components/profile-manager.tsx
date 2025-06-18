@@ -35,26 +35,30 @@ import type {
   FormatSettings,
   PassphraseSettings,
   PasswordHistory,
-  PasswordProfile,
+  // PasswordProfile, // Replaced by Profile
   PasswordSettings,
+  PinSettings, // Added
+  Profile, // Added
+  ProfileType, // Added
 } from '../types';
 
 interface ProfileManagerProps {
-  profiles: PasswordProfile[];
+  profiles: Profile[]; // Changed
   profileName: string;
   onProfileNameChange: (name: string) => void;
-  activeTab: string;
+  activeTab: ProfileType; // Changed
   passwordSettings: PasswordSettings;
   passphraseSettings: PassphraseSettings;
-  formatSettings: FormatSettings;
+  formatSettings: FormatSettings; // This is for the "Custom" generator
+  pinSettings?: PinSettings; // Added
   passwordHistory: PasswordHistory[];
   onSaveProfile: () => void;
-  onLoadProfile: (profile: PasswordProfile) => void;
+  onLoadProfile: (profile: Profile) => void; // Changed
   onToggleFavorite: (profileId: string) => void;
   onDeleteProfile: (profileId: string) => void;
-  onEditProfile: (profile: PasswordProfile) => void; // New prop for editing
-  editingProfileId: string | null; // New prop to indicate which profile is being edited
-  onCancelEdit: () => void; // New prop to cancel editing
+  onEditProfile: (profile: Profile) => void; // Changed
+  editingProfileId: string | null;
+  onCancelEdit: () => void;
 }
 
 export function ProfileManager({
@@ -70,19 +74,19 @@ export function ProfileManager({
   onCancelEdit, // Destructure new prop
 }: ProfileManagerProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<
-    'all' | 'password' | 'passphrase' | 'format'
-  >('all');
+  const [selectedFilter, setSelectedFilter] = useState<ProfileType | 'all'>('all'); // Changed
 
   // Get type icon with enhanced styling
-  const getTypeIcon = (type: string) => {
+  const getTypeIcon = (type: ProfileType) => { // Changed
     switch (type) {
       case 'password':
         return <Zap className="h-4 w-4" />;
       case 'passphrase':
         return <BookOpen className="h-4 w-4" />;
-      case 'format':
+      case 'custom': // Changed from 'format'
         return <FileText className="h-4 w-4" />;
+      case 'pin':
+        return <Shield className="h-4 w-4" />; // Added Shield icon, ensure it's imported if not already
       default:
         return <Settings className="h-4 w-4" />;
     }
@@ -204,7 +208,7 @@ export function ProfileManager({
 
             {/* Filter Controls */}
             <div className="flex flex-wrap gap-2">
-              {(['all', 'password', 'passphrase', 'format'] as const).map(
+              {(['all', 'password', 'passphrase', 'custom', 'pin'] as const).map( // Added 'custom', 'pin'
                 (filter) => (
                   <Button
                     key={filter}
@@ -237,7 +241,9 @@ export function ProfileManager({
                                 ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
                                 : profile.type === 'passphrase'
                                   ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                                  : 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
+                                  : profile.type === 'custom' // Changed from 'format'
+                                    ? 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
+                                    : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' // For PIN
                             }`}
                           >
                             <div
@@ -246,7 +252,9 @@ export function ProfileManager({
                                   ? 'text-blue-600 dark:text-blue-400'
                                   : profile.type === 'passphrase'
                                     ? 'text-green-600 dark:text-green-400'
-                                    : 'text-purple-600 dark:text-purple-400'
+                                    : profile.type === 'custom' // Changed from 'format'
+                                      ? 'text-purple-600 dark:text-purple-400'
+                                      : 'text-red-600 dark:text-red-400' // For PIN
                               }`}
                             >
                               {getTypeIcon(profile.type)}
@@ -263,7 +271,9 @@ export function ProfileManager({
                                   ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
                                   : profile.type === 'passphrase'
                                     ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
-                                    : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
+                                    : profile.type === 'custom' // Changed from 'format'
+                                      ? 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
+                                      : 'text-red-600 border-red-200 dark:text-red-400 dark:border-red-800' // For PIN
                               }`}
                             >
                               {profile.type.toString().charAt(0).toUpperCase() +

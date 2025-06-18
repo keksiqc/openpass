@@ -1,4 +1,4 @@
-import { BookOpen, ChevronDown, Copy, Eye, EyeOff, Shield } from 'lucide-react';
+import { BookOpen, ChevronDown, Copy, Eye, EyeOff } from 'lucide-react'; // Removed Shield
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,7 @@ import { Slider } from '@/components/ui/slider';
 import { TabsContent } from '@/components/ui/tabs';
 import { usePassphraseGenerator } from '../hooks/usePassphraseGenerator';
 import type { PassphraseSettings, PasswordHistory } from '../types';
-import { calculateEntropy, estimateTimeToCrack } from '../utils/password-strength';
+import { estimateTimeToCrack } from '../utils/password-strength'; // Removed calculateEntropy
 
 interface PassphraseGeneratorProps {
   settings: PassphraseSettings;
@@ -50,7 +50,7 @@ export function PassphraseGenerator({
     });
   };
 
-  const getPassphraseStrength = (passphrase: string) => {
+  const getPassphraseStrength = () => { // Removed unused 'passphrase' parameter
     const wordCount = settings.wordCount;
     const hasNumbers = settings.includeNumbers;
     // A more accurate entropy calculation for passphrases would involve the dictionary size
@@ -60,8 +60,17 @@ export function PassphraseGenerator({
     let entropy = wordCount * entropyPerWord;
 
     if (hasNumbers) {
-      entropy += Math.log2(10); // Add entropy for a single digit if included
+      // Add a bit more entropy for numbers. This is a rough estimate.
+      // If numbers are inserted randomly, entropy increases more significantly.
+      // If appended, it's less, but still an increase.
+      entropy += settings.insertNumbersRandomly ? Math.log2(wordCount * 10) : Math.log2(10 * (settings.wordCount/2));
     }
+
+    // Adjust score based on wordCase, if not purely lowercase
+    if (settings.wordCase !== 'lowercase') {
+        entropy += wordCount * Math.log2(1.5); // Rough boost for case variation
+    }
+
 
     if (entropy < 60) {
       return { label: 'Weak', color: 'text-red-600', score: 20 };
@@ -258,7 +267,7 @@ export function PassphraseGenerator({
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium">Generated Passphrase</Label>
             {(() => {
-              const strength = getPassphraseStrength(generatedPassphrase);
+              const strength = getPassphraseStrength(); // Called without parameter
               return (
                 <Badge variant="outline" className={`text-xs ${strength.color}`}>
                   {strength.label}
@@ -270,7 +279,7 @@ export function PassphraseGenerator({
           <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-2">
             <div
               className={`h-2.5 rounded-full ${(() => {
-                const strength = getPassphraseStrength(generatedPassphrase);
+                const strength = getPassphraseStrength(); // Called without parameter
                 if (strength.label === 'Weak') return 'bg-red-600';
                 if (strength.label === 'Fair') return 'bg-yellow-600';
                 if (strength.label === 'Good') return 'bg-blue-600';
@@ -278,11 +287,11 @@ export function PassphraseGenerator({
                 if (strength.label === 'Excellent') return 'bg-green-700';
                 return 'bg-gray-400';
               })()}`}
-              style={{ width: `${getPassphraseStrength(generatedPassphrase).score}%` }}
+              style={{ width: `${getPassphraseStrength().score}%` }} // Called without parameter
             ></div>
           </div>
           <p className="text-xs text-muted-foreground">
-            {getStrengthDescription(getPassphraseStrength(generatedPassphrase).label)}
+            {getStrengthDescription(getPassphraseStrength().label)} {/* Called without parameter */}
           </p>
 
           <div className="flex items-center gap-2">
@@ -319,12 +328,12 @@ export function PassphraseGenerator({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
             <div>
               <strong>Estimated Entropy:</strong>{' '}
-              {Math.round(getPassphraseStrength(generatedPassphrase).score * 1.2)}{' '}
+              {Math.round(getPassphraseStrength().score * 1.2)}{' '} {/* Called without parameter */}
               bits
             </div>
             <div>
               <strong>Time to crack:</strong>{' '}
-              {estimateTimeToCrack(getPassphraseStrength(generatedPassphrase).score * 1.2)}
+              {estimateTimeToCrack(getPassphraseStrength().score * 1.2)} {/* Called without parameter */}
             </div>
           </div>
         </div>

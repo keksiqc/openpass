@@ -42,7 +42,7 @@ export const usePasswordGenerator = () => {
         }
 
         let password = '';
-        let attempts = 0;
+        // let attempts = 0; // Removed unused variable
         const maxAttempts = 100; // General attempts for basic generation
         let meetsCriteria = false;
         const maxRetryForEnforcement = 20; // Retries for character type enforcement

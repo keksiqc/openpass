@@ -1,11 +1,9 @@
-import {
-  AlertTriangle,
+import { // Removed AlertTriangle, Shield
   ChevronDown,
   Copy,
   Eye,
   EyeOff,
   RefreshCw,
-  Shield,
   Zap,
 } from 'lucide-react';
 import { useState } from 'react';

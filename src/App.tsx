@@ -33,11 +33,16 @@ import {
 import type {
   AppSettings,
   FormatSettings,
+  FormatProfileSettings, // Import specific profile settings
   PassphraseSettings,
+  PassphraseProfileSettings, // Import specific profile settings
   PasswordHistory,
-  PasswordProfile,
+  Profile, // Updated umbrella Profile type
+  ProfileType, // For activeTab state
   PasswordSettings,
-  // PinSettings, // Assuming you might create this type later
+  PasswordProfileSettings, // Import specific profile settings
+  PinSettings, // For Pin generator state
+  PinProfileSettings, // Import specific profile settings
 } from './types';
 
 export default function App() {
@@ -78,12 +83,12 @@ export default function App() {
   });
 
   // Placeholder for PIN settings
-  const [pinSettings, setPinSettings] = useState({ length: 4 }); // Placeholder
+  const [pinSettings, setPinSettings] = useState<PinSettings>({ length: 4 }); // Use PinSettings type
 
   // UI states
   const [isGenerating, setIsGenerating] = useState(false);
-  const [activeTab, setActiveTab] = useState('password');
-  const [profiles, setProfiles] = useState<PasswordProfile[]>([]);
+  const [activeTab, setActiveTab] = useState<ProfileType>('password'); // Use ProfileType
+  const [profiles, setProfiles] = useState<Profile[]>([]); // Use Profile[]
   const [profileName, setProfileName] = useState('');
   const [passwordHistory, setPasswordHistory] = useState<PasswordHistory[]>([]);
   const [editingProfileId, setEditingProfileId] = useState<string | null>(null); // New state for editing profile
@@ -173,19 +178,19 @@ export default function App() {
       // Update existing profile
       const updatedProfiles = profiles.map((p) =>
         p.id === editingProfileId
-          ? {
+          ? ({
               ...p,
               name: profileName.trim(),
-              type: activeTab as PasswordProfile['type'],
+              type: activeTab, // activeTab is already ProfileType
               settings:
                 activeTab === 'password'
-                  ? (passwordSettings as PasswordProfileSettings)
+                  ? passwordSettings
                   : activeTab === 'passphrase'
-                    ? (passphraseSettings as PassphraseProfileSettings)
+                    ? passphraseSettings
                     : activeTab === 'custom'
-                      ? (formatSettings as FormatProfileSettings)
-                      : (pinSettings as PinProfileSettings),
-            }
+                      ? formatSettings
+                      : pinSettings,
+            } as Profile) // Ensure the constructed object matches one of the Profile union types
           : p,
       );
       saveProfilesToStorage(updatedProfiles);
@@ -193,22 +198,26 @@ export default function App() {
       toast.success(`Profile "${profileName.trim()}" updated successfully!`);
     } else {
       // Create new profile
-      let currentSettings: PasswordProfile['settings'];
+      let currentSettings: Profile['settings']; // Use Profile['settings'] for broader compatibility initially
       if (activeTab === 'password') {
-        currentSettings = passwordSettings as PasswordProfileSettings;
+        currentSettings = passwordSettings;
       } else if (activeTab === 'passphrase') {
-        currentSettings = passphraseSettings as PassphraseProfileSettings;
+        currentSettings = passphraseSettings;
       } else if (activeTab === 'custom') {
-        currentSettings = formatSettings as FormatProfileSettings;
+        currentSettings = formatSettings;
+      } else if (activeTab === 'pin') {
+        currentSettings = pinSettings;
       } else {
-        currentSettings = pinSettings as PinProfileSettings;
+        // Should not happen with ProfileType
+        toast.error("Invalid profile type");
+        return;
       }
 
-      const newProfile: PasswordProfile = {
+      const newProfile: Profile = { // Use the umbrella Profile type
         id: Date.now().toString(),
         name: profileName.trim(),
-        type: activeTab as PasswordProfile['type'],
-        settings: currentSettings,
+        type: activeTab, // activeTab is already ProfileType
+        settings: currentSettings, // This will be correctly typed based on activeTab
         createdAt: new Date(),
         isFavorite: false,
       };
@@ -221,60 +230,51 @@ export default function App() {
   };
 
   // Load profile
-  const loadProfile = (profile: PasswordProfile) => {
-    setActiveTab(profile.type);
+  const loadProfile = (profileToLoad: Profile) => { // Parameter type is Profile
+    setActiveTab(profileToLoad.type);
 
-    switch (profile.type) {
+    switch (profileToLoad.type) {
       case 'password':
-        setPasswordSettings({
-          ...passwordSettings,
-          ...(profile.settings as PasswordProfileSettings),
-        });
+        setPasswordSettings(profileToLoad.settings);
         break;
       case 'passphrase':
-        setPassphraseSettings({
-          ...passphraseSettings,
-          ...(profile.settings as PassphraseProfileSettings),
-        });
+        setPassphraseSettings(profileToLoad.settings);
         break;
-      case 'custom':
-        setFormatSettings({
-          ...formatSettings,
-          ...(profile.settings as FormatProfileSettings),
-        });
+      case 'custom': // Formerly 'format'
+        setFormatSettings(profileToLoad.settings);
         break;
       case 'pin':
-        setPinSettings({ ...pinSettings, ...(profile.settings as PinProfileSettings) });
+        setPinSettings(profileToLoad.settings);
         break;
     }
 
     // Update last used
-    const updatedProfile = { ...profile, lastUsed: new Date() };
+    const updatedProfile = { ...profileToLoad, lastUsed: new Date() };
     const newProfiles = profiles.map((p) =>
-      p.id === profile.id ? updatedProfile : p,
+      p.id === profileToLoad.id ? updatedProfile : p,
     );
     saveProfilesToStorage(newProfiles);
 
-    toast.success(`Profile "${profile.name}" loaded successfully!`);
+    toast.success(`Profile "${profileToLoad.name}" loaded successfully!`);
   };
 
   // Edit profile
-  const handleEditProfile = (profile: PasswordProfile) => {
-    setEditingProfileId(profile.id);
-    setProfileName(profile.name);
-    setActiveTab(profile.type);
-    switch (profile.type) {
+  const handleEditProfile = (profileToEdit: Profile) => { // Parameter type is Profile
+    setEditingProfileId(profileToEdit.id);
+    setProfileName(profileToEdit.name);
+    setActiveTab(profileToEdit.type);
+    switch (profileToEdit.type) {
       case 'password':
-        setPasswordSettings(profile.settings as PasswordProfileSettings);
+        setPasswordSettings(profileToEdit.settings);
         break;
       case 'passphrase':
-        setPassphraseSettings(profile.settings as PassphraseProfileSettings);
+        setPassphraseSettings(profileToEdit.settings);
         break;
-      case 'custom':
-        setFormatSettings(profile.settings as FormatProfileSettings);
+      case 'custom': // Formerly 'format'
+        setFormatSettings(profileToEdit.settings);
         break;
       case 'pin':
-        setPinSettings(profile.settings as PinProfileSettings);
+        setPinSettings(profileToEdit.settings);
         break;
     }
   };

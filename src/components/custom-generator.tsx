@@ -1,4 +1,4 @@
-import { ChevronDown, Copy, Eye, EyeOff, Settings, Shield } from 'lucide-react';
+import { ChevronDown, Copy, Eye, EyeOff, Settings } from 'lucide-react'; // Removed Shield
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
