@@ -1,4 +1,4 @@
-import type { AppSettings, PasswordHistory, PasswordProfile } from '../types';
+import type { AppSettings, PasswordHistory, Profile } from '../types'; // Changed PasswordProfile to Profile
 import { SimpleEncryption } from '../utils/encryption';
 
 const PROFILES_KEY = 'openpass-profiles';
@@ -52,7 +52,7 @@ const decryptData = (data: string): string => {
   return SimpleEncryption.decrypt(data, currentSettings.encryptionKey);
 };
 
-export const loadProfiles = (): PasswordProfile[] => {
+export const loadProfiles = (): Profile[] => { // Changed to Profile[]
   const saved = localStorage.getItem(PROFILES_KEY);
   if (!saved) return [];
 
@@ -70,7 +70,7 @@ export const loadProfiles = (): PasswordProfile[] => {
   }
 };
 
-export const saveProfiles = (profiles: PasswordProfile[]): void => {
+export const saveProfiles = (profiles: Profile[]): void => { // Changed to Profile[]
   const data = JSON.stringify(profiles);
   const encrypted = encryptData(data);
   localStorage.setItem(PROFILES_KEY, encrypted);
