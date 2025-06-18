@@ -1,6 +1,6 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
-import { BookOpen, Hash, Key, Settings } from 'lucide-react'; // Removed RotateCcwKey, ModeToggle, Settings
+import { BookOpen, Hash, Key, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
@@ -10,7 +10,7 @@ import { HistoryPanel } from './components/history-panel';
 import { NavBar } from './components/nav-bar';
 import { PassphraseGenerator } from './components/passphrase-generator';
 import { PasswordGenerator } from './components/password-generator';
-import { PinGenerator } from './components/pin-generator'; // Import PinGenerator
+import { PinGenerator } from './components/pin-generator';
 import { ProfileManager } from './components/profile-manager';
 import {
   clearAllData,
@@ -24,16 +24,12 @@ import {
 import type {
   AppSettings,
   FormatSettings,
-  // FormatProfileSettings, // Removed
   PassphraseSettings,
-  // PassphraseProfileSettings, // Removed
   PasswordHistory,
   PasswordSettings,
-  // PasswordProfileSettings, // Removed
-  PinSettings, // For Pin generator state
-  Profile, // Updated umbrella Profile type
-  ProfileType, // For activeTab state
-  // PinProfileSettings, // Removed
+  PinSettings,
+  Profile,
+  ProfileType,
 } from './types';
 
 export default function App() {
@@ -49,7 +45,7 @@ export default function App() {
     excludeAmbiguous: false,
     minNumbers: 1,
     minSymbols: 1,
-    requireEachCharacterType: true, // Added
+    requireEachCharacterType: true,
   });
 
   const [passphraseSettings, setPassphraseSettings] =
@@ -59,7 +55,7 @@ export default function App() {
       includeNumbers: false,
       customWords: [],
       wordCase: 'lowercase',
-      insertNumbersRandomly: false, // Added
+      insertNumbersRandomly: false,
     });
 
   const [formatSettings, setFormatSettings] = useState<FormatSettings>({
@@ -74,15 +70,15 @@ export default function App() {
   });
 
   // Placeholder for PIN settings
-  const [pinSettings, setPinSettings] = useState<PinSettings>({ length: 4 }); // Use PinSettings type
+  const [pinSettings, setPinSettings] = useState<PinSettings>({ length: 4 });
 
   // UI states
   const [isGenerating, setIsGenerating] = useState(false);
-  const [activeTab, setActiveTab] = useState<ProfileType>('password'); // Use ProfileType
-  const [profiles, setProfiles] = useState<Profile[]>([]); // Use Profile[]
+  const [activeTab, setActiveTab] = useState<ProfileType>('password');
+  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [profileName, setProfileName] = useState('');
   const [passwordHistory, setPasswordHistory] = useState<PasswordHistory[]>([]);
-  const [editingProfileId, setEditingProfileId] = useState<string | null>(null); // New state for editing profile
+  const [editingProfileId, setEditingProfileId] = useState<string | null>(null);
   const [appSettings, setAppSettings] = useState<AppSettings>({
     historyEnabled: true,
     encryptionEnabled: false,
