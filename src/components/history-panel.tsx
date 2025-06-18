@@ -118,12 +118,10 @@ export function HistoryPanel({
                 Clear All
               </Button>
             </div>
-            {history.map((entry, index) => (
+            {history.map((entry) => (
               <div
                 key={entry.id}
-                className={`p-4 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors group flex flex-col gap-3 ${
-                  index === 0 ? 'border-2 border-primary/40' : ''
-                }`}
+                className='p-4 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors group flex flex-col gap-3'
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
@@ -160,11 +158,6 @@ export function HistoryPanel({
                     >
                       {entry.strength.label}
                     </Badge>
-                    {index === 0 && (
-                      <Badge variant="default" className="text-xs font-medium">
-                        Latest
-                      </Badge>
-                    )}
                   </div>
                   <div className="flex items-center gap-1">
                     <Button

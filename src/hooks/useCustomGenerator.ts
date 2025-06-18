@@ -4,7 +4,7 @@ import type { FormatSettings, PasswordHistory } from '../types';
 import { getSecureRandom } from '../utils/crypto';
 import { calculateStrength } from '../utils/password-strength';
 
-export const useCustomGenerator = () => {
+export const useFormatGenerator = () => {
   const getCharacterSetFromFormat = useCallback((format: string): string => {
     let charset = '';
     let i = 0;

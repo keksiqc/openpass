@@ -86,7 +86,7 @@ export function ProfileManager({
         return <Zap className="h-4 w-4" />;
       case 'passphrase':
         return <BookOpen className="h-4 w-4" />;
-      case 'custom': // Changed from 'format'
+      case 'format': // Changed from 'custom'
         return <FileText className="h-4 w-4" />;
       case 'pin':
         return <Shield className="h-4 w-4" />; // Added Shield icon, ensure it's imported if not already
@@ -180,7 +180,7 @@ export function ProfileManager({
               </Badge>
               <div className="flex flex-wrap gap-2">
                 {(
-                  ['all', 'password', 'passphrase', 'custom', 'pin'] as const
+                  ['all', 'password', 'passphrase', 'format', 'pin'] as const
                 ).map((filter) => (
                   <Button
                     key={filter}
@@ -220,13 +220,13 @@ export function ProfileManager({
                               ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
                               : profile.type === 'passphrase'
                               ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                              : profile.type === 'custom'
+                              : profile.type === 'format'
                               ? 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
                               : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
                           }`}
                         >
                           <div
-                            className={`$\{profile.type === 'password' ? 'text-blue-600 dark:text-blue-400' : profile.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : profile.type === 'custom' ? 'text-purple-600 dark:text-purple-400' : 'text-red-600 dark:text-red-400'}`}
+                            className={`$\{profile.type === 'password' ? 'text-blue-600 dark:text-blue-400' : profile.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : profile.type === 'format' ? 'text-purple-600 dark:text-purple-400' : 'text-red-600 dark:text-red-400'}`}
                           >
                             {getTypeIcon(profile.type)}
                           </div>
@@ -242,7 +242,7 @@ export function ProfileManager({
                                 ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
                                 : profile.type === 'passphrase'
                                 ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
-                                : profile.type === 'custom'
+                                : profile.type === 'format'
                                 ? 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
                                 : 'text-red-600 border-red-200 dark:text-red-400 dark:border-red-800'
                             }`}

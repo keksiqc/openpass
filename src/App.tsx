@@ -179,7 +179,7 @@ export default function App() {
                   ? passwordSettings
                   : activeTab === 'passphrase'
                     ? passphraseSettings
-                    : activeTab === 'custom'
+                    : activeTab === 'format'
                       ? formatSettings
                       : pinSettings,
             } as Profile) // Ensure the constructed object matches one of the Profile union types
@@ -210,11 +210,11 @@ export default function App() {
           createdAt: new Date(),
           isFavorite: false,
         };
-      } else if (activeTab === 'custom') {
+      } else if (activeTab === 'format') {
         newProfile = {
           id: Date.now().toString(),
           name: profileName.trim(),
-          type: 'custom', // Literal type
+          type: 'format', // Literal type
           settings: formatSettings, // Specific settings type
           createdAt: new Date(),
           isFavorite: false,
@@ -255,7 +255,7 @@ export default function App() {
       case 'passphrase':
         setPassphraseSettings(profileToLoad.settings);
         break;
-      case 'custom': // Formerly 'format'
+      case 'format': // Formerly 'custom'
         setFormatSettings(profileToLoad.settings);
         break;
       case 'pin':
@@ -286,7 +286,7 @@ export default function App() {
       case 'passphrase':
         setPassphraseSettings(profileToEdit.settings);
         break;
-      case 'custom': // Formerly 'format'
+      case 'format': // Formerly 'custom'
         setFormatSettings(profileToEdit.settings);
         break;
       case 'pin':
@@ -449,10 +449,10 @@ export default function App() {
                   Passphrase
                 </TabsTrigger>
                 <TabsTrigger
-                  value="custom"
+                  value="format"
                 >
                   <Settings className="h-4 w-4 mr-2" />
-                  Custom
+                  Format
                 </TabsTrigger>
                 <TabsTrigger
                   value="pin"
@@ -482,7 +482,7 @@ export default function App() {
                 />
               </TabsContent>
 
-              <TabsContent value="custom">
+              <TabsContent value="format">
                 <CustomGenerator
                   settings={formatSettings}
                   onSettingsChange={setFormatSettings}

@@ -30,14 +30,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useCustomGenerator } from '../hooks/useCustomGenerator';
+import { useFormatGenerator } from '../hooks/useCustomGenerator';
 import type { FormatSettings, PasswordHistory } from '../types';
 import {
   calculateEntropy,
   estimateTimeToCrack,
 } from '../utils/password-strength';
 
-interface CustomGeneratorProps {
+interface FormatGeneratorProps {
   // Renamed interface to match component
   settings: FormatSettings;
   onSettingsChange: (settings: FormatSettings) => void;
@@ -50,12 +50,12 @@ export function CustomGenerator({
   onSettingsChange,
   onFormatGenerated,
   onCopyToClipboard,
-}: CustomGeneratorProps) {
+}: FormatGeneratorProps) {
   // Renamed interface to match component
   const [generatedFormat, setGeneratedFormat] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const { generateFormatPassword, getCharacterSetFromFormat } =
-    useCustomGenerator();
+    useFormatGenerator();
 
   const handleGenerate = () => {
     generateFormatPassword(settings, (format, historyEntry) => {
@@ -105,10 +105,10 @@ export function CustomGenerator({
           <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
             <Settings className="h-4 w-4 text-primary" />
           </div>
-          Custom Generator
+          Format Generator
         </CardTitle>
         <CardDescription className="text-sm leading-relaxed text-muted-foreground">
-          Define custom password formats using a flexible pattern system.
+          Define password formats using a flexible pattern system.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">

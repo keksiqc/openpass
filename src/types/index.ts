@@ -40,7 +40,7 @@ export interface FormatProfileSettings extends FormatSettings {} // For "Custom"
 export interface PinProfileSettings extends PinSettings {}
 
 // Discriminated Union for Profiles
-export type ProfileType = 'password' | 'passphrase' | 'custom' | 'pin';
+export type ProfileType = 'password' | 'passphrase' | 'format' | 'pin';
 
 export interface BaseProfile {
   id: string;
@@ -61,9 +61,9 @@ export interface PassphraseProfile extends BaseProfile {
   settings: PassphraseProfileSettings;
 }
 
-export interface CustomProfile extends BaseProfile {
-  // Renamed from FormatProfile
-  type: 'custom';
+export interface FormatProfile extends BaseProfile {
+  // Renamed from CustomProfile
+  type: 'format';
   settings: FormatProfileSettings;
 }
 
@@ -75,7 +75,7 @@ export interface PinProfile extends BaseProfile {
 export type Profile =
   | PasswordProfile
   | PassphraseProfile
-  | CustomProfile
+  | FormatProfile
   | PinProfile;
 
 // PinSettings defined above with other base settings types
