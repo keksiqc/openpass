@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import type { PasswordHistory } from '../types';
 
@@ -103,7 +104,7 @@ export function HistoryPanel({
             </p>
           </div>
         ) : (
-          <div className="space-y-3 max-h-96 overflow-y-auto">
+          <>
             <div className="flex items-center justify-between mb-2">
               <Badge variant="secondary" className="px-2.5 py-1 text-xs font-medium">
                 {history.length} entries
@@ -118,6 +119,8 @@ export function HistoryPanel({
                 Clear All
               </Button>
             </div>
+          <ScrollArea className="h-96">
+            <div className="space-y-3">
             {history.map((entry) => (
               <div
                 key={entry.id}
@@ -205,7 +208,9 @@ export function HistoryPanel({
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          </ScrollArea>
+          </>
         )}
       </CardContent>
     </Card>

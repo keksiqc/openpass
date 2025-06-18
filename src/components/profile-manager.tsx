@@ -16,6 +16,7 @@ import {
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Card,
   CardContent,
@@ -183,13 +184,13 @@ export function ProfileManager({
               <Badge
                 variant="secondary"
                 className="px-3 py-1.5 text-xs font-medium"
-              >
+                >
                 {profiles.length} profiles
               </Badge>
               <Select
                 value={selectedFilter}
                 onValueChange={(value: ProfileType | 'all') => setSelectedFilter(value)}
-              >
+                >
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Filter by type" />
                 </SelectTrigger>
@@ -209,10 +210,11 @@ export function ProfileManager({
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search profiles..."
                 className="pl-10 h-10"
-              />
+                />
             </div>
+            <ScrollArea className="h-96">
             {filteredProfiles.length > 0 ? (
-              <div className="space-y-3 max-h-96 overflow-y-auto">
+              <div className="space-y-3">
                 {filteredProfiles.map((profile) => (
                   <div
                     key={profile.id}
@@ -367,6 +369,7 @@ export function ProfileManager({
                 </p>
               </div>
             )}
+          </ScrollArea>
           </div>
         ) : (
           <div className="text-center py-12 px-6">
