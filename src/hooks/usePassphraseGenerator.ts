@@ -39,14 +39,42 @@ export const usePassphraseGenerator = () => {
           words.push(word);
         }
 
-        let passphrase = words.join(
-          settings.separator === 'none' ? '' : settings.separator,
-        );
+        let passphrase = '';
 
-        if (settings.includeNumbers) {
-          const numberCount = 2 + getSecureRandom(3); // 2-4 numbers
+        if (settings.includeNumbers && settings.insertNumbersRandomly) {
+          const numberCount = 1 + getSecureRandom(2); // 1-2 numbers for random insertion
+          const wordsWithNumbers = [...words];
           for (let i = 0; i < numberCount; i++) {
-            passphrase += getSecureRandom(10);
+            const randomWordIndex = getSecureRandom(wordsWithNumbers.length);
+            const randomNumber = getSecureRandom(10).toString();
+            // Insert number at a random position within the word or append/prepend
+            if (
+              wordsWithNumbers[randomWordIndex].length > 0 &&
+              Math.random() > 0.5
+            ) {
+              const insertPos = getSecureRandom(
+                wordsWithNumbers[randomWordIndex].length + 1,
+              );
+              wordsWithNumbers[randomWordIndex] =
+                wordsWithNumbers[randomWordIndex].slice(0, insertPos) +
+                randomNumber +
+                wordsWithNumbers[randomWordIndex].slice(insertPos);
+            } else {
+              wordsWithNumbers[randomWordIndex] += randomNumber;
+            }
+          }
+          passphrase = wordsWithNumbers.join(
+            settings.separator === 'none' ? '' : settings.separator,
+          );
+        } else {
+          passphrase = words.join(
+            settings.separator === 'none' ? '' : settings.separator,
+          );
+          if (settings.includeNumbers) {
+            const numberCount = 2 + getSecureRandom(3); // 2-4 numbers appended
+            for (let i = 0; i < numberCount; i++) {
+              passphrase += getSecureRandom(10);
+            }
           }
         }
 

@@ -21,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from './ui/card';
-import { Checkbox } from './ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -32,6 +31,7 @@ import {
 } from './ui/dialog';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { Switch } from './ui/switch';
 
 interface SettingsDialogProps {
   settings: AppSettings;
@@ -109,7 +109,9 @@ export function SettingsDialog({
       <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <SettingsIcon className="h-5 w-5" />
+            <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+              <SettingsIcon className="h-4 w-4 text-primary" />
+            </div>
             Application Settings
           </DialogTitle>
           <DialogDescription>
@@ -117,9 +119,9 @@ export function SettingsDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             {/* Privacy Settings */}
             <Card>
               <CardHeader>
@@ -128,9 +130,20 @@ export function SettingsDialog({
                   Control what data is stored locally
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <Checkbox
+              <CardContent className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label
+                      htmlFor="historyEnabled"
+                      className="text-sm font-medium"
+                    >
+                      Enable Password History
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                      Store generated passwords in local history for easy access
+                    </p>
+                  </div>
+                  <Switch
                     id="historyEnabled"
                     checked={localSettings.historyEnabled}
                     onCheckedChange={(checked) =>
@@ -140,17 +153,6 @@ export function SettingsDialog({
                       }))
                     }
                   />
-                  <div className="grid gap-1.5 leading-none">
-                    <Label
-                      htmlFor="historyEnabled"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Enable Password History
-                    </Label>
-                    <p className="text-xs text-muted-foreground">
-                      Store generated passwords in local history for easy access
-                    </p>
-                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -163,9 +165,20 @@ export function SettingsDialog({
                   Encrypt your locally stored data
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <Checkbox
+              <CardContent className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label
+                      htmlFor="encryptionEnabled"
+                      className="text-sm font-medium"
+                    >
+                      Enable Local Data Encryption
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                      Encrypt profiles and history with a custom key
+                    </p>
+                  </div>
+                  <Switch
                     id="encryptionEnabled"
                     checked={localSettings.encryptionEnabled}
                     onCheckedChange={(checked) =>
@@ -175,21 +188,9 @@ export function SettingsDialog({
                       }))
                     }
                   />
-                  <div className="grid gap-1.5 leading-none">
-                    <Label
-                      htmlFor="encryptionEnabled"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Enable Local Data Encryption
-                    </Label>
-                    <p className="text-xs text-muted-foreground">
-                      Encrypt profiles and history with a custom key
-                    </p>
-                  </div>
                 </div>
-
                 {localSettings.encryptionEnabled && (
-                  <div className="space-y-3 pl-6">
+                  <div className="space-y-3 pl-2">
                     <Label
                       htmlFor="encryptionKey"
                       className="text-sm font-medium"
