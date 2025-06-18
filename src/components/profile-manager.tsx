@@ -7,6 +7,7 @@ import {
   Save,
   Search,
   Settings,
+  Shield, // Added Shield
   Sparkles,
   Star,
   User,

@@ -33,16 +33,16 @@ import {
 import type {
   AppSettings,
   FormatSettings,
-  FormatProfileSettings, // Import specific profile settings
+  // FormatProfileSettings, // Removed
   PassphraseSettings,
-  PassphraseProfileSettings, // Import specific profile settings
+  // PassphraseProfileSettings, // Removed
   PasswordHistory,
   Profile, // Updated umbrella Profile type
   ProfileType, // For activeTab state
   PasswordSettings,
-  PasswordProfileSettings, // Import specific profile settings
+  // PasswordProfileSettings, // Removed
   PinSettings, // For Pin generator state
-  PinProfileSettings, // Import specific profile settings
+  // PinProfileSettings, // Removed
 } from './types';
 
 export default function App() {
@@ -127,7 +127,7 @@ export default function App() {
   }, []);
 
   // Save profiles to localStorage
-  const saveProfilesToStorage = (newProfiles: PasswordProfile[]) => {
+  const saveProfilesToStorage = (newProfiles: Profile[]) => { // Changed to Profile[]
     saveProfiles(newProfiles);
     setProfiles(newProfiles);
   };
@@ -198,31 +198,53 @@ export default function App() {
       toast.success(`Profile "${profileName.trim()}" updated successfully!`);
     } else {
       // Create new profile
-      let currentSettings: Profile['settings']; // Use Profile['settings'] for broader compatibility initially
+      let newProfile: Profile | null = null;
+
       if (activeTab === 'password') {
-        currentSettings = passwordSettings;
+        newProfile = {
+          id: Date.now().toString(),
+          name: profileName.trim(),
+          type: 'password', // Literal type
+          settings: passwordSettings, // Specific settings type
+          createdAt: new Date(),
+          isFavorite: false,
+        };
       } else if (activeTab === 'passphrase') {
-        currentSettings = passphraseSettings;
+        newProfile = {
+          id: Date.now().toString(),
+          name: profileName.trim(),
+          type: 'passphrase', // Literal type
+          settings: passphraseSettings, // Specific settings type
+          createdAt: new Date(),
+          isFavorite: false,
+        };
       } else if (activeTab === 'custom') {
-        currentSettings = formatSettings;
+        newProfile = {
+          id: Date.now().toString(),
+          name: profileName.trim(),
+          type: 'custom', // Literal type
+          settings: formatSettings, // Specific settings type
+          createdAt: new Date(),
+          isFavorite: false,
+        };
       } else if (activeTab === 'pin') {
-        currentSettings = pinSettings;
-      } else {
-        // Should not happen with ProfileType
-        toast.error("Invalid profile type");
+        newProfile = {
+          id: Date.now().toString(),
+          name: profileName.trim(),
+          type: 'pin', // Literal type
+          settings: pinSettings, // Specific settings type
+          createdAt: new Date(),
+          isFavorite: false,
+        };
+      }
+
+      if (!newProfile) {
+        // This case should ideally not be reached if activeTab is always a valid ProfileType
+        toast.error("Invalid profile type selected. Cannot save profile.");
         return;
       }
 
-      const newProfile: Profile = { // Use the umbrella Profile type
-        id: Date.now().toString(),
-        name: profileName.trim(),
-        type: activeTab, // activeTab is already ProfileType
-        settings: currentSettings, // This will be correctly typed based on activeTab
-        createdAt: new Date(),
-        isFavorite: false,
-      };
-
-      const newProfiles = [...profiles, newProfile];
+      const newProfiles = [...profiles, newProfile]; // newProfile is now one of the specific Profile union members
       saveProfilesToStorage(newProfiles);
       toast.success(`Profile "${newProfile.name}" saved successfully!`);
     }
@@ -453,7 +475,7 @@ export default function App() {
           <div className="lg:col-span-2 space-y-8">
             <Tabs
               value={activeTab}
-              onValueChange={setActiveTab}
+              onValueChange={(value: string) => setActiveTab(value as ProfileType)}
               className="w-full"
             >
               <TabsList className="grid w-full grid-cols-3 mb-8 h-12 rounded-xl">
