@@ -26,6 +26,7 @@ import type { PasswordHistory, PasswordSettings } from '../types';
 import {
   calculateEntropy,
   estimateTimeToCrack,
+  calculateStrength,
 } from '../utils/password-strength';
 
 interface PasswordGeneratorProps {
@@ -61,37 +62,20 @@ export function PasswordGenerator({
     });
   };
 
-  const getStrengthBadge = (password: string) => {
-    const strength = calculateEntropy(password, getCharacterSet(settings));
-    if (strength < 40) {
-      return (
-        <Badge
-          variant="destructive"
-          className="text-xs flex items-center gap-1"
-        >
-          <AlertTriangle className="h-3 w-3" />
-          Weak
-        </Badge>
-      );
-    } else if (strength < 60) {
-      return (
-        <Badge variant="secondary" className="text-xs">
-          Fair
-        </Badge>
-      );
-    } else if (strength < 80) {
-      return (
-        <Badge variant="outline" className="text-xs">
-          Good
-        </Badge>
-      );
-    } else {
-      return (
-        <Badge variant="default" className="text-xs flex items-center gap-1">
-          <Shield className="h-3 w-3" />
-          Strong
-        </Badge>
-      );
+  const getStrengthDescription = (strengthLabel: string) => {
+    switch (strengthLabel) {
+      case 'Weak':
+        return 'This password is easy to guess. Consider increasing length and character variety.';
+      case 'Fair':
+        return 'This password is moderately secure. Adding more character types or length would improve it.';
+      case 'Good':
+        return 'A good password! For even better security, try increasing its length.';
+      case 'Strong':
+        return 'Excellent password! Very difficult to crack.';
+      case 'Excellent':
+        return 'Outstanding! This password offers maximum protection.';
+      default:
+        return '';
     }
   };
 
@@ -350,8 +334,33 @@ export function PasswordGenerator({
         <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium">Generated Password</Label>
-            {getStrengthBadge(generatedPassword)}
+            {(() => {
+              const strength = calculateStrength(generatedPassword);
+              return (
+                <Badge variant="outline" className={`text-xs ${strength.color}`}>
+                  {strength.label}
+                </Badge>
+              );
+            })()}
           </div>
+
+          <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-2">
+            <div
+              className={`h-2.5 rounded-full ${(() => {
+                const strength = calculateStrength(generatedPassword);
+                if (strength.label === 'Weak') return 'bg-red-600';
+                if (strength.label === 'Fair') return 'bg-yellow-600';
+                if (strength.label === 'Good') return 'bg-blue-600';
+                if (strength.label === 'Strong') return 'bg-green-600';
+                if (strength.label === 'Excellent') return 'bg-green-700';
+                return 'bg-gray-400';
+              })()}`}
+              style={{ width: `${calculateStrength(generatedPassword).score * 10}%` }}
+            ></div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {getStrengthDescription(calculateStrength(generatedPassword).label)}
+          </p>
 
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">

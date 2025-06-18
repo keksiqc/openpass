@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Toaster } from '@/components/ui/sonner';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FormatGenerator } from './components/format-generator';
 import { HistoryPanel } from './components/history-panel';
 import { ModeToggle } from './components/mode-toggle';
@@ -79,6 +79,7 @@ export default function App() {
   const [profiles, setProfiles] = useState<PasswordProfile[]>([]);
   const [profileName, setProfileName] = useState('');
   const [passwordHistory, setPasswordHistory] = useState<PasswordHistory[]>([]);
+  const [editingProfileId, setEditingProfileId] = useState<string | null>(null); // New state for editing profile
   const [appSettings, setAppSettings] = useState<AppSettings>({
     historyEnabled: true,
     encryptionEnabled: false,
@@ -161,25 +162,47 @@ export default function App() {
       return;
     }
 
-    const newProfile: PasswordProfile = {
-      id: Date.now().toString(),
-      name: profileName.trim(),
-      type: activeTab as any,
-      settings:
-        activeTab === 'password'
-          ? passwordSettings
-          : activeTab === 'passphrase'
-            ? passphraseSettings
-            : formatSettings,
-      createdAt: new Date(),
-      isFavorite: false,
-    };
+    if (editingProfileId) {
+      // Update existing profile
+      const updatedProfiles = profiles.map((p) =>
+        p.id === editingProfileId
+          ? {
+              ...p,
+              name: profileName.trim(),
+              type: activeTab as any,
+              settings:
+                activeTab === 'password'
+                  ? passwordSettings
+                  : activeTab === 'passphrase'
+                    ? passphraseSettings
+                    : formatSettings,
+            }
+          : p,
+      );
+      saveProfilesToStorage(updatedProfiles);
+      setEditingProfileId(null);
+      toast.success(`Profile "${profileName.trim()}" updated successfully!`);
+    } else {
+      // Create new profile
+      const newProfile: PasswordProfile = {
+        id: Date.now().toString(),
+        name: profileName.trim(),
+        type: activeTab as any,
+        settings:
+          activeTab === 'password'
+            ? passwordSettings
+            : activeTab === 'passphrase'
+              ? passphraseSettings
+              : formatSettings,
+        createdAt: new Date(),
+        isFavorite: false,
+      };
 
-    const newProfiles = [...profiles, newProfile];
-    saveProfilesToStorage(newProfiles);
+      const newProfiles = [...profiles, newProfile];
+      saveProfilesToStorage(newProfiles);
+      toast.success(`Profile "${newProfile.name}" saved successfully!`);
+    }
     setProfileName('');
-
-    toast.success(`Profile "${newProfile.name}" saved successfully!`);
   };
 
   // Load profile
@@ -208,6 +231,30 @@ export default function App() {
     toast.success(`Profile "${profile.name}" loaded successfully!`);
   };
 
+  // Edit profile
+  const handleEditProfile = (profile: PasswordProfile) => {
+    setEditingProfileId(profile.id);
+    setProfileName(profile.name);
+    setActiveTab(profile.type);
+    switch (profile.type) {
+      case 'password':
+        setPasswordSettings(profile.settings as PasswordSettings);
+        break;
+      case 'passphrase':
+        setPassphraseSettings(profile.settings as PassphraseSettings);
+        break;
+      case 'format':
+        setFormatSettings(profile.settings as FormatSettings);
+        break;
+    }
+  };
+
+  // Cancel edit
+  const handleCancelEdit = () => {
+    setEditingProfileId(null);
+    setProfileName('');
+  };
+
   // Toggle favorite profile
   const toggleFavorite = (profileId: string) => {
     const newProfiles = profiles.map((p) =>
@@ -222,6 +269,13 @@ export default function App() {
     const newProfiles = profiles.filter((p) => p.id !== profileId);
     saveProfilesToStorage(newProfiles);
     toast.success(`Profile "${profile?.name}" deleted successfully!`);
+  };
+
+  // Delete individual history entry
+  const handleDeleteHistoryEntry = (id: string) => {
+    const newHistory = passwordHistory.filter((entry) => entry.id !== id);
+    saveHistoryToStorage(newHistory);
+    toast.success('History entry deleted!');
   };
 
   // Clear history
@@ -243,6 +297,21 @@ export default function App() {
       // Reload history if it was re-enabled
       setPasswordHistory(loadHistory());
     }
+  };
+
+  // Reset to defaults
+  const handleResetToDefaults = () => {
+    clearAllData(); // Clears profiles and history
+    setProfiles([]);
+    setPasswordHistory([]);
+    const defaultSettings = {
+      historyEnabled: true,
+      encryptionEnabled: false,
+      encryptionKey: '',
+    };
+    setAppSettings(defaultSettings);
+    saveSettings(defaultSettings);
+    toast.success('All settings reset to defaults!');
   };
 
   // Clear all data
@@ -338,6 +407,7 @@ export default function App() {
                 onClearAllData={handleClearAllData}
                 onExportData={exportProfiles}
                 onImportData={importProfiles}
+                onResetToDefaults={handleResetToDefaults} // Pass new prop
               />
               <ModeToggle />
             </nav>
@@ -351,73 +421,109 @@ export default function App() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Generator */}
           <div className="lg:col-span-2 space-y-8">
-            <Card className="border">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-2xl">
-                  <div className="p-2 rounded-lg bg-primary/10">
-                    <RefreshCw className="h-5 w-5 text-primary" />
-                  </div>
-                  Password Generator
-                </CardTitle>
-                <CardDescription className="text-base leading-relaxed text-muted-foreground">
-                  Choose your preferred method to generate secure passwords
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-8">
-                <Tabs
-                  value={activeTab}
-                  onValueChange={setActiveTab}
-                  className="w-full"
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
+              <TabsList className="grid w-full grid-cols-3 mb-8 h-12 rounded-xl">
+                <TabsTrigger
+                  value="password"
+                  className="text-sm font-medium data-[state=active]:text-blue-600 data-[state=active]:border-blue-200 h-full"
                 >
-                  <TabsList className="grid w-full grid-cols-3 mb-8 h-12">
-                    <TabsTrigger
-                      value="password"
-                      className="text-sm font-medium data-[state=active]:text-blue-600 data-[state=active]:border-blue-200 h-full"
-                    >
-                      <Zap className="h-4 w-4 mr-2" />
-                      Password
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="passphrase"
-                      className="text-sm font-medium data-[state=active]:text-green-600 data-[state=active]:border-green-200 h-full"
-                    >
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      Passphrase
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="format"
-                      className="text-sm font-medium data-[state=active]:text-purple-600 data-[state=active]:border-purple-200 h-full"
-                    >
-                      <Settings className="h-4 w-4 mr-2" />
-                      Format
-                    </TabsTrigger>
-                  </TabsList>
+                  <Zap className="h-4 w-4 mr-2" />
+                  Password
+                </TabsTrigger>
+                <TabsTrigger
+                  value="passphrase"
+                  className="text-sm font-medium data-[state=active]:text-green-600 data-[state=active]:border-green-200 h-full"
+                >
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Passphrase
+                </TabsTrigger>
+                <TabsTrigger
+                  value="format"
+                  className="text-sm font-medium data-[state=active]:text-purple-600 data-[state=active]:border-purple-200 h-full"
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  Format
+                </TabsTrigger>
+              </TabsList>
 
-                  <PasswordGenerator
-                    settings={passwordSettings}
-                    onSettingsChange={setPasswordSettings}
-                    onPasswordGenerated={addToHistory}
-                    onCopyToClipboard={copyToClipboard}
-                    isGenerating={isGenerating}
-                    onGeneratingChange={setIsGenerating}
-                  />
+              <TabsContent value="password">
+                <Card className="border">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <RefreshCw className="h-5 w-5 text-primary" />
+                      </div>
+                      Password Generator
+                    </CardTitle>
+                    <CardDescription className="text-base leading-relaxed text-muted-foreground">
+                      Generate strong, unique passwords with customizable options.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-8">
+                    <PasswordGenerator
+                      settings={passwordSettings}
+                      onSettingsChange={setPasswordSettings}
+                      onPasswordGenerated={addToHistory}
+                      onCopyToClipboard={copyToClipboard}
+                      isGenerating={isGenerating}
+                      onGeneratingChange={setIsGenerating}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
 
-                  <PassphraseGenerator
-                    settings={passphraseSettings}
-                    onSettingsChange={setPassphraseSettings}
-                    onPassphraseGenerated={addToHistory}
-                    onCopyToClipboard={copyToClipboard}
-                  />
+              <TabsContent value="passphrase">
+                <Card className="border">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <BookOpen className="h-5 w-5 text-primary" />
+                      </div>
+                      Passphrase Generator
+                    </CardTitle>
+                    <CardDescription className="text-base leading-relaxed text-muted-foreground">
+                      Create memorable and secure passphrases from random words.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-8">
+                    <PassphraseGenerator
+                      settings={passphraseSettings}
+                      onSettingsChange={setPassphraseSettings}
+                      onPassphraseGenerated={addToHistory}
+                      onCopyToClipboard={copyToClipboard}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
 
-                  <FormatGenerator
-                    settings={formatSettings}
-                    onSettingsChange={setFormatSettings}
-                    onFormatGenerated={addToHistory}
-                    onCopyToClipboard={copyToClipboard}
-                  />
-                </Tabs>
-              </CardContent>
-            </Card>
+              <TabsContent value="format">
+                <Card className="border">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3 text-2xl">
+                      <div className="p-2 rounded-lg bg-primary/10">
+                        <Settings className="h-5 w-5 text-primary" />
+                      </div>
+                      Format Generator
+                    </CardTitle>
+                    <CardDescription className="text-base leading-relaxed text-muted-foreground">
+                      Define custom password formats using a flexible pattern system.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-8">
+                    <FormatGenerator
+                      settings={formatSettings}
+                      onSettingsChange={setFormatSettings}
+                      onFormatGenerated={addToHistory}
+                      onCopyToClipboard={copyToClipboard}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
 
             {/* History Section - Moved under generator */}
             {appSettings.historyEnabled && (
@@ -425,6 +531,7 @@ export default function App() {
                 history={passwordHistory}
                 onCopyToClipboard={copyToClipboard}
                 onClearHistory={clearHistory}
+                onDeleteHistoryEntry={handleDeleteHistoryEntry}
               />
             )}
           </div>
@@ -445,6 +552,9 @@ export default function App() {
                 onLoadProfile={loadProfile}
                 onToggleFavorite={toggleFavorite}
                 onDeleteProfile={deleteProfile}
+                onEditProfile={handleEditProfile} // Pass new prop
+                editingProfileId={editingProfileId} // Pass new prop
+                onCancelEdit={handleCancelEdit} // Pass new prop
               />
             </div>
           </div>

@@ -5,6 +5,48 @@ import { getSecureRandom } from '../utils/crypto';
 import { calculateStrength } from '../utils/password-strength';
 
 export const useFormatGenerator = () => {
+  const getCharacterSetFromFormat = useCallback((format: string): string => {
+    let charset = '';
+    let i = 0;
+    while (i < format.length) {
+      if (/\d/.test(format[i])) {
+        let numStr = '';
+        while (i < format.length && /\d/.test(format[i])) {
+          numStr += format[i];
+          i++;
+        }
+        // const count = Number.parseInt(numStr); // Not needed for charset generation
+
+        if (i >= format.length) break;
+
+        const type = format[i];
+        switch (type) {
+          case 'u':
+            charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            break;
+          case 'l':
+            charset += 'abcdefghijklmnopqrstuvwxyz';
+            break;
+          case 'd':
+            charset += '0123456789';
+            break;
+          case '{': {
+            i++; // skip '{'
+            let customSet = '';
+            while (i < format.length && format[i] !== '}') {
+              customSet += format[i];
+              i++;
+            }
+            charset += customSet;
+            break;
+          }
+        }
+      }
+      i++;
+    }
+    return Array.from(new Set(charset)).join(''); // Return unique characters
+  }, []);
+
   const generateFormatPassword = useCallback(
     (
       settings: FormatSettings,
@@ -84,10 +126,11 @@ export const useFormatGenerator = () => {
         );
       }
     },
-    [],
+    [], // Removed getCharacterSetFromFormat from dependencies as it's a stable useCallback
   );
 
   return {
     generateFormatPassword,
+    getCharacterSetFromFormat,
   };
 };

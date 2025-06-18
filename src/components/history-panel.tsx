@@ -27,12 +27,14 @@ interface HistoryPanelProps {
   history: PasswordHistory[];
   onCopyToClipboard: (text: string) => void;
   onClearHistory: () => void;
+  onDeleteHistoryEntry: (id: string) => void; // New prop for deleting individual entries
 }
 
 export function HistoryPanel({
   history,
   onCopyToClipboard,
   onClearHistory,
+  onDeleteHistoryEntry, // Destructure new prop
 }: HistoryPanelProps) {
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>(
     {},
@@ -212,6 +214,15 @@ export function HistoryPanel({
                         title="Copy to clipboard"
                       >
                         <Copy className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onDeleteHistoryEntry(entry.id)} // Add delete button
+                        className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
+                        title="Delete entry"
+                      >
+                        <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>

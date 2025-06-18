@@ -52,6 +52,9 @@ interface ProfileManagerProps {
   onLoadProfile: (profile: PasswordProfile) => void;
   onToggleFavorite: (profileId: string) => void;
   onDeleteProfile: (profileId: string) => void;
+  onEditProfile: (profile: PasswordProfile) => void; // New prop for editing
+  editingProfileId: string | null; // New prop to indicate which profile is being edited
+  onCancelEdit: () => void; // New prop to cancel editing
 }
 
 export function ProfileManager({
@@ -62,6 +65,9 @@ export function ProfileManager({
   onLoadProfile,
   onToggleFavorite,
   onDeleteProfile,
+  onEditProfile, // Destructure new prop
+  editingProfileId, // Destructure new prop
+  onCancelEdit, // Destructure new prop
 }: ProfileManagerProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<
@@ -137,14 +143,25 @@ export function ProfileManager({
               className="h-11 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 border-2"
             />
           </div>
-          <Button
-            onClick={onSaveProfile}
-            className="w-full h-11 font-medium text-sm gap-2 transition-all duration-200 hover:shadow-md"
-            disabled={!profileName.trim()}
-          >
-            <Save className="h-4 w-4" />
-            Save Current Settings
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={onSaveProfile}
+              className="w-full h-11 font-medium text-sm gap-2 transition-all duration-200 hover:shadow-md"
+              disabled={!profileName.trim()}
+            >
+              <Save className="h-4 w-4" />
+              {editingProfileId ? 'Update Profile' : 'Save Current Settings'}
+            </Button>
+            {editingProfileId && (
+              <Button
+                onClick={onCancelEdit}
+                variant="outline"
+                className="h-11 font-medium text-sm gap-2 transition-all duration-200"
+              >
+                Cancel
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
 
@@ -325,6 +342,11 @@ export function ProfileManager({
                                 onClick={() => onLoadProfile(profile)}
                               >
                                 Load Profile
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => onEditProfile(profile)} // New Edit option
+                              >
+                                Edit Profile
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => onToggleFavorite(profile.id)}

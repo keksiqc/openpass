@@ -21,6 +21,7 @@ import { Slider } from '@/components/ui/slider';
 import { TabsContent } from '@/components/ui/tabs';
 import { usePassphraseGenerator } from '../hooks/usePassphraseGenerator';
 import type { PassphraseSettings, PasswordHistory } from '../types';
+import { calculateEntropy, estimateTimeToCrack } from '../utils/password-strength';
 
 interface PassphraseGeneratorProps {
   settings: PassphraseSettings;
@@ -49,37 +50,46 @@ export function PassphraseGenerator({
     });
   };
 
-  const getStrengthBadge = (_passphrase: string) => {
-    // For passphrases, estimate based on word count, separator, and numbers
+  const getPassphraseStrength = (passphrase: string) => {
     const wordCount = settings.wordCount;
     const hasNumbers = settings.includeNumbers;
-    const entropy = wordCount * 12.9 + (hasNumbers ? 6.6 : 0); // Rough estimation
+    // A more accurate entropy calculation for passphrases would involve the dictionary size
+    // For simplicity, we'll use a rough estimate based on common dictionary sizes (e.g., 7776 words for EFF)
+    const estimatedDictionarySize = 7776; // EFF Large Wordlist size
+    const entropyPerWord = Math.log2(estimatedDictionarySize);
+    let entropy = wordCount * entropyPerWord;
 
-    if (entropy < 50) {
-      return (
-        <Badge variant="destructive" className="text-xs">
-          Weak
-        </Badge>
-      );
-    } else if (entropy < 70) {
-      return (
-        <Badge variant="secondary" className="text-xs">
-          Fair
-        </Badge>
-      );
-    } else if (entropy < 90) {
-      return (
-        <Badge variant="outline" className="text-xs">
-          Good
-        </Badge>
-      );
+    if (hasNumbers) {
+      entropy += Math.log2(10); // Add entropy for a single digit if included
+    }
+
+    if (entropy < 60) {
+      return { label: 'Weak', color: 'text-red-600', score: 20 };
+    } else if (entropy < 80) {
+      return { label: 'Fair', color: 'text-yellow-600', score: 40 };
+    } else if (entropy < 100) {
+      return { label: 'Good', color: 'text-blue-600', score: 60 };
+    } else if (entropy < 120) {
+      return { label: 'Strong', color: 'text-green-600', score: 80 };
     } else {
-      return (
-        <Badge variant="default" className="text-xs flex items-center gap-1">
-          <Shield className="h-3 w-3" />
-          Strong
-        </Badge>
-      );
+      return { label: 'Excellent', color: 'text-green-700', score: 100 };
+    }
+  };
+
+  const getStrengthDescription = (strengthLabel: string) => {
+    switch (strengthLabel) {
+      case 'Weak':
+        return 'This passphrase is easy to guess. Consider increasing word count or adding numbers.';
+      case 'Fair':
+        return 'This passphrase is moderately secure. Adding more words or numbers would improve it.';
+      case 'Good':
+        return 'A good passphrase! For even better security, try increasing its length.';
+      case 'Strong':
+        return 'Excellent passphrase! Very difficult to crack.';
+      case 'Excellent':
+        return 'Outstanding! This passphrase offers maximum protection.';
+      default:
+        return '';
     }
   };
 
@@ -227,8 +237,33 @@ export function PassphraseGenerator({
         <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
           <div className="flex items-center justify-between">
             <Label className="text-sm font-medium">Generated Passphrase</Label>
-            {getStrengthBadge(generatedPassphrase)}
+            {(() => {
+              const strength = getPassphraseStrength(generatedPassphrase);
+              return (
+                <Badge variant="outline" className={`text-xs ${strength.color}`}>
+                  {strength.label}
+                </Badge>
+              );
+            })()}
           </div>
+
+          <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-2">
+            <div
+              className={`h-2.5 rounded-full ${(() => {
+                const strength = getPassphraseStrength(generatedPassphrase);
+                if (strength.label === 'Weak') return 'bg-red-600';
+                if (strength.label === 'Fair') return 'bg-yellow-600';
+                if (strength.label === 'Good') return 'bg-blue-600';
+                if (strength.label === 'Strong') return 'bg-green-600';
+                if (strength.label === 'Excellent') return 'bg-green-700';
+                return 'bg-gray-400';
+              })()}`}
+              style={{ width: `${getPassphraseStrength(generatedPassphrase).score}%` }}
+            ></div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {getStrengthDescription(getPassphraseStrength(generatedPassphrase).label)}
+          </p>
 
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">
@@ -261,9 +296,16 @@ export function PassphraseGenerator({
             </Button>
           </div>
 
-          <div className="text-xs text-muted-foreground">
-            <strong>Tip:</strong> Passphrases are easier to remember while
-            maintaining high security
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
+            <div>
+              <strong>Estimated Entropy:</strong>{' '}
+              {Math.round(getPassphraseStrength(generatedPassphrase).score * 1.2)}{' '}
+              bits
+            </div>
+            <div>
+              <strong>Time to crack:</strong>{' '}
+              {estimateTimeToCrack(getPassphraseStrength(generatedPassphrase).score * 1.2)}
+            </div>
           </div>
         </div>
       )}

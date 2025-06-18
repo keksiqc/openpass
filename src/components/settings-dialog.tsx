@@ -39,6 +39,7 @@ interface SettingsDialogProps {
   onClearAllData: () => void;
   onExportData: () => void;
   onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onResetToDefaults: () => void; // New prop for resetting settings
 }
 
 export function SettingsDialog({
@@ -47,11 +48,13 @@ export function SettingsDialog({
   onClearAllData,
   onExportData,
   onImportData,
+  onResetToDefaults, // Destructure new prop
 }: SettingsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [localSettings, setLocalSettings] = useState<AppSettings>(settings);
   const [showEncryptionKey, setShowEncryptionKey] = useState(false);
   const [showClearDataConfirm, setShowClearDataConfirm] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false); // New state for reset confirmation
 
   const handleSave = () => {
     onSettingsChange(localSettings);
@@ -81,6 +84,17 @@ export function SettingsDialog({
       toast.success('All data cleared successfully!');
     } else {
       setShowClearDataConfirm(true);
+    }
+  };
+
+  const handleResetToDefaults = () => {
+    if (showResetConfirm) {
+      onResetToDefaults();
+      setShowResetConfirm(false);
+      setIsOpen(false);
+      toast.success('All settings reset to defaults!');
+    } else {
+      setShowResetConfirm(true);
     }
   };
 
@@ -300,6 +314,25 @@ export function SettingsDialog({
                     <p className="text-xs text-muted-foreground">
                       Click again to permanently delete all profiles, history,
                       and settings.
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-3 mt-4">
+                  <Button
+                    variant={showResetConfirm ? 'destructive' : 'outline'}
+                    onClick={handleResetToDefaults}
+                    className="gap-2"
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                    {showResetConfirm
+                      ? 'Confirm: Reset All Settings'
+                      : 'Reset All Settings'}
+                  </Button>
+                  {showResetConfirm && (
+                    <p className="text-xs text-muted-foreground">
+                      Click again to reset all application settings to their
+                      default values. This will also clear all profiles and
+                      history.
                     </p>
                   )}
                 </div>
