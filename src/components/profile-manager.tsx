@@ -11,6 +11,7 @@ import {
   Users,
   User,
   Zap,
+  Star,
 } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
@@ -31,6 +32,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type {
   FormatSettings,
   PassphraseSettings,
@@ -178,21 +186,21 @@ export function ProfileManager({
               >
                 {profiles.length} profiles
               </Badge>
-              <div className="flex flex-wrap gap-2">
-                {(
-                  ['all', 'password', 'passphrase', 'format', 'pin'] as const
-                ).map((filter) => (
-                  <Button
-                    key={filter}
-                    variant={selectedFilter === filter ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setSelectedFilter(filter)}
-                    className="capitalize text-xs"
-                  >
-                    {filter === 'all' ? 'All' : filter}
-                  </Button>
-                ))}
-              </div>
+              <Select
+                value={selectedFilter}
+                onValueChange={(value: ProfileType | 'all') => setSelectedFilter(value)}
+              >
+                <SelectTrigger className="w-[140px]">
+                  <SelectValue placeholder="Filter by type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="password">Password</SelectItem>
+                  <SelectItem value="passphrase">Passphrase</SelectItem>
+                  <SelectItem value="format">Format</SelectItem>
+                  <SelectItem value="pin">PIN</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="relative mb-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -266,7 +274,7 @@ export function ProfileManager({
                               : 'Add to favorites'
                           }
                         >
-                          <Users
+                          <Star
                             className={`h-4 w-4 transition-colors ${
                               profile.isFavorite
                                 ? 'fill-yellow-400 text-yellow-400'
