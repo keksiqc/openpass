@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { TabsContent } from '@/components/ui/tabs';
-import { useFormatGenerator } from '../hooks/useFormatGenerator';
+import { useCustomGenerator } from '../hooks/useCustomGenerator';
 import type { FormatSettings, PasswordHistory } from '../types';
 import { calculateEntropy, estimateTimeToCrack } from '../utils/password-strength';
 
@@ -28,7 +28,7 @@ interface FormatGeneratorProps {
   onCopyToClipboard: (text: string) => void;
 }
 
-export function FormatGenerator({
+export function CustomGenerator({
   settings,
   onSettingsChange,
   onFormatGenerated,
@@ -36,7 +36,7 @@ export function FormatGenerator({
 }: FormatGeneratorProps) {
   const [generatedFormat, setGeneratedFormat] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-  const { generateFormatPassword, getCharacterSetFromFormat } = useFormatGenerator();
+  const { generateFormatPassword, getCharacterSetFromFormat } = useCustomGenerator();
 
   const handleGenerate = () => {
     generateFormatPassword(settings, (format, historyEntry) => {

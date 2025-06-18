@@ -43,23 +43,52 @@ export const usePasswordGenerator = () => {
 
         let password = '';
         let attempts = 0;
-        const maxAttempts = 100;
+        const maxAttempts = 100; // General attempts for basic generation
+        let meetsCriteria = false;
+        const maxRetryForEnforcement = 20; // Retries for character type enforcement
+        let enforcementRetries = 0;
 
-        // Generate password with minimum requirements
         do {
-          password = '';
-          for (let i = 0; i < settings.length; i++) {
-            password += charset[getSecureRandom(charset.length)];
+          // Inner loop for basic generation with minNumbers and minSymbols
+          let generationAttempts = 0;
+          do {
+            password = '';
+            for (let i = 0; i < settings.length; i++) {
+              password += charset[getSecureRandom(charset.length)];
+            }
+            generationAttempts++;
+          } while (
+            generationAttempts < maxAttempts &&
+            ((settings.minNumbers &&
+              (password.match(/\d/g) || []).length < (settings.minNumbers || 0)) ||
+              (settings.minSymbols &&
+                (password.match(new RegExp(`[${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`, 'g')) || []).length < (settings.minSymbols || 0)))
+          );
+
+          if (settings.requireEachCharacterType) {
+            meetsCriteria = true;
+            if (settings.includeUppercase && !/[A-Z]/.test(password)) meetsCriteria = false;
+            if (settings.includeLowercase && !/[a-z]/.test(password)) meetsCriteria = false;
+            if (settings.includeNumbers && !/\d/.test(password)) meetsCriteria = false;
+            // Check for symbols from the actual symbol set used
+            const symbolCharset = `${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters || ''}`.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            if (settings.includeSymbols && !new RegExp(`[${symbolCharset}]`).test(password) && symbolCharset.length > 0) meetsCriteria = false;
+
+            enforcementRetries++;
+            if (meetsCriteria) break; // Exit if criteria met
+          } else {
+            meetsCriteria = true; // Skip enforcement if not required
+            break;
           }
-          attempts++;
-        } while (
-          attempts < maxAttempts &&
-          ((settings.minNumbers &&
-            (password.match(/\d/g) || []).length < settings.minNumbers) ||
-            (settings.minSymbols &&
-              (password.match(/[^a-zA-Z0-9]/g) || []).length <
-                settings.minSymbols))
-        );
+        } while (enforcementRetries < maxRetryForEnforcement);
+
+        if (settings.requireEachCharacterType && !meetsCriteria) {
+          toast.warning(
+            "Could not enforce all character types. Try increasing length or reducing restrictions.",
+            { duration: 5000 },
+          );
+          // Proceed with the last generated password even if not all types are enforced
+        }
 
         const entropy = calculateEntropy(password, charset);
         const strength = calculateStrength(password);

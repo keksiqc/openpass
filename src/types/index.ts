@@ -1,8 +1,15 @@
+export interface PasswordProfileSettings extends PasswordSettings {}
+export interface PassphraseProfileSettings extends PassphraseSettings {}
+export interface FormatProfileSettings extends FormatSettings {}
+// Placeholder for PIN settings if it becomes part of profiles
+export interface PinProfileSettings { length: number; }
+
+
 export interface PasswordProfile {
   id: string;
   name: string;
-  type: 'password' | 'passphrase' | 'format';
-  settings: any;
+  type: 'password' | 'passphrase' | 'format' | 'pin'; // Added 'pin'
+  settings: PasswordProfileSettings | PassphraseProfileSettings | FormatProfileSettings | PinProfileSettings;
   createdAt: Date;
   lastUsed?: Date;
   isFavorite?: boolean;
@@ -19,6 +26,7 @@ export interface PasswordSettings {
   excludeAmbiguous: boolean;
   minNumbers?: number;
   minSymbols?: number;
+  requireEachCharacterType?: boolean; // Added new field
 }
 
 export interface PassphraseSettings {
@@ -27,6 +35,7 @@ export interface PassphraseSettings {
   includeNumbers: boolean;
   customWords?: string[];
   wordCase: 'lowercase' | 'uppercase' | 'capitalize' | 'mixed';
+  insertNumbersRandomly?: boolean; // Added new field
 }
 
 export interface FormatSettings {

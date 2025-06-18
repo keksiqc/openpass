@@ -2,7 +2,7 @@ import { BookOpen, ChevronDown, Copy, Eye, EyeOff, Shield } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch'; // Import Switch
 import {
   Collapsible,
   CollapsibleContent,
@@ -201,7 +201,7 @@ export function PassphraseGenerator({
         </CollapsibleTrigger>
         <CollapsibleContent className="space-y-3 p-4 bg-muted/20 rounded-lg border mt-2">
           <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
-            <Checkbox
+            <Switch
               id="include-numbers"
               checked={settings.includeNumbers}
               onCheckedChange={(checked) =>
@@ -214,10 +214,30 @@ export function PassphraseGenerator({
             <Label htmlFor="include-numbers" className="flex-1 cursor-pointer">
               <div className="font-medium">Add Numbers</div>
               <div className="text-xs text-muted-foreground">
-                Append random digits to the passphrase
+                Include numbers in the passphrase
               </div>
             </Label>
           </div>
+          {settings.includeNumbers && ( // Only show if "Add Numbers" is checked
+            <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors ml-6 mt-2"> {/* Indent slightly */}
+              <Switch
+                id="insert-numbers-randomly"
+                checked={settings.insertNumbersRandomly}
+                onCheckedChange={(checked) =>
+                  onSettingsChange({
+                    ...settings,
+                    insertNumbersRandomly: !!checked,
+                  })
+                }
+              />
+              <Label htmlFor="insert-numbers-randomly" className="flex-1 cursor-pointer">
+                <div className="font-medium">Insert numbers randomly</div>
+                <div className="text-xs text-muted-foreground">
+                  Distribute numbers within the passphrase instead of appending
+                </div>
+              </Label>
+            </div>
+          )}
         </CollapsibleContent>
       </Collapsible>
 

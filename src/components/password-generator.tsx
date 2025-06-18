@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch'; // Import Switch
 import {
   Collapsible,
   CollapsibleContent,
@@ -113,7 +113,7 @@ export function PasswordGenerator({
         <Label className="text-base font-medium">Character Types</Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
-            <Checkbox
+            <Switch
               id="uppercase"
               checked={settings.includeUppercase}
               onCheckedChange={(checked) =>
@@ -130,7 +130,7 @@ export function PasswordGenerator({
           </div>
 
           <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
-            <Checkbox
+            <Switch
               id="lowercase"
               checked={settings.includeLowercase}
               onCheckedChange={(checked) =>
@@ -147,7 +147,7 @@ export function PasswordGenerator({
           </div>
 
           <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
-            <Checkbox
+            <Switch
               id="numbers"
               checked={settings.includeNumbers}
               onCheckedChange={(checked) =>
@@ -164,7 +164,7 @@ export function PasswordGenerator({
           </div>
 
           <div className="flex items-center space-x-3 p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
-            <Checkbox
+            <Switch
               id="symbols"
               checked={settings.includeSymbols}
               onCheckedChange={(checked) =>
@@ -211,7 +211,7 @@ export function PasswordGenerator({
 
           <div className="grid grid-cols-1 gap-2">
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <Switch
                 id="exclude-similar"
                 checked={settings.excludeSimilar}
                 onCheckedChange={(checked) =>
@@ -230,7 +230,7 @@ export function PasswordGenerator({
             </div>
 
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <Switch
                 id="exclude-ambiguous"
                 checked={settings.excludeAmbiguous}
                 onCheckedChange={(checked) =>
@@ -247,6 +247,25 @@ export function PasswordGenerator({
                 Exclude ambiguous symbols
               </Label>
             </div>
+          </div>
+
+          <div className="flex items-center space-x-2 pt-3 border-t">
+            <Switch
+              id="require-each-type"
+              checked={settings.requireEachCharacterType}
+              onCheckedChange={(checked) =>
+                onSettingsChange({
+                  ...settings,
+                  requireEachCharacterType: !!checked,
+                })
+              }
+            />
+            <Label
+              htmlFor="require-each-type"
+              className="text-xs cursor-pointer"
+            >
+              Enforce each selected character type (might increase generation time)
+            </Label>
           </div>
 
           {/* Minimum Requirements */}

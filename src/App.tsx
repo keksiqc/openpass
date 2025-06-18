@@ -1,6 +1,6 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
-import { BookOpen, RefreshCw, RotateCcwKey, Settings, Zap } from 'lucide-react';
+import { BookOpen, RefreshCw, RotateCcwKey, Settings, Shield, Zap } from 'lucide-react'; // Added Shield
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import {
@@ -12,11 +12,12 @@ import {
 } from '@/components/ui/card';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FormatGenerator } from './components/format-generator';
+import { CustomGenerator } from './components/custom-generator';
 import { HistoryPanel } from './components/history-panel';
 import { ModeToggle } from './components/mode-toggle';
 import { PassphraseGenerator } from './components/passphrase-generator';
 import { PasswordGenerator } from './components/password-generator';
+import { PinGenerator } from './components/pin-generator'; // Import PinGenerator
 import { ProfileManager } from './components/profile-manager';
 import { SettingsDialog } from './components/settings-dialog';
 import { Badge } from './components/ui/badge';
@@ -36,6 +37,7 @@ import type {
   PasswordHistory,
   PasswordProfile,
   PasswordSettings,
+  // PinSettings, // Assuming you might create this type later
 } from './types';
 
 export default function App() {
@@ -51,6 +53,7 @@ export default function App() {
     excludeAmbiguous: false,
     minNumbers: 1,
     minSymbols: 1,
+    requireEachCharacterType: true, // Added
   });
 
   const [passphraseSettings, setPassphraseSettings] =
@@ -60,6 +63,7 @@ export default function App() {
       includeNumbers: false,
       customWords: [],
       wordCase: 'lowercase',
+      insertNumbersRandomly: false, // Added
     });
 
   const [formatSettings, setFormatSettings] = useState<FormatSettings>({
@@ -72,6 +76,9 @@ export default function App() {
       { name: 'Memorable', pattern: '1u4l1{#$%}4d' },
     ],
   });
+
+  // Placeholder for PIN settings
+  const [pinSettings, setPinSettings] = useState({ length: 4 }); // Placeholder
 
   // UI states
   const [isGenerating, setIsGenerating] = useState(false);
@@ -169,13 +176,15 @@ export default function App() {
           ? {
               ...p,
               name: profileName.trim(),
-              type: activeTab as any,
+              type: activeTab as PasswordProfile['type'],
               settings:
                 activeTab === 'password'
-                  ? passwordSettings
+                  ? (passwordSettings as PasswordProfileSettings)
                   : activeTab === 'passphrase'
-                    ? passphraseSettings
-                    : formatSettings,
+                    ? (passphraseSettings as PassphraseProfileSettings)
+                    : activeTab === 'custom'
+                      ? (formatSettings as FormatProfileSettings)
+                      : (pinSettings as PinProfileSettings),
             }
           : p,
       );
@@ -184,16 +193,22 @@ export default function App() {
       toast.success(`Profile "${profileName.trim()}" updated successfully!`);
     } else {
       // Create new profile
+      let currentSettings: PasswordProfile['settings'];
+      if (activeTab === 'password') {
+        currentSettings = passwordSettings as PasswordProfileSettings;
+      } else if (activeTab === 'passphrase') {
+        currentSettings = passphraseSettings as PassphraseProfileSettings;
+      } else if (activeTab === 'custom') {
+        currentSettings = formatSettings as FormatProfileSettings;
+      } else {
+        currentSettings = pinSettings as PinProfileSettings;
+      }
+
       const newProfile: PasswordProfile = {
         id: Date.now().toString(),
         name: profileName.trim(),
-        type: activeTab as any,
-        settings:
-          activeTab === 'password'
-            ? passwordSettings
-            : activeTab === 'passphrase'
-              ? passphraseSettings
-              : formatSettings,
+        type: activeTab as PasswordProfile['type'],
+        settings: currentSettings,
         createdAt: new Date(),
         isFavorite: false,
       };
@@ -211,13 +226,25 @@ export default function App() {
 
     switch (profile.type) {
       case 'password':
-        setPasswordSettings({ ...passwordSettings, ...profile.settings });
+        setPasswordSettings({
+          ...passwordSettings,
+          ...(profile.settings as PasswordProfileSettings),
+        });
         break;
       case 'passphrase':
-        setPassphraseSettings({ ...passphraseSettings, ...profile.settings });
+        setPassphraseSettings({
+          ...passphraseSettings,
+          ...(profile.settings as PassphraseProfileSettings),
+        });
         break;
-      case 'format':
-        setFormatSettings({ ...formatSettings, ...profile.settings });
+      case 'custom':
+        setFormatSettings({
+          ...formatSettings,
+          ...(profile.settings as FormatProfileSettings),
+        });
+        break;
+      case 'pin':
+        setPinSettings({ ...pinSettings, ...(profile.settings as PinProfileSettings) });
         break;
     }
 
@@ -238,13 +265,16 @@ export default function App() {
     setActiveTab(profile.type);
     switch (profile.type) {
       case 'password':
-        setPasswordSettings(profile.settings as PasswordSettings);
+        setPasswordSettings(profile.settings as PasswordProfileSettings);
         break;
       case 'passphrase':
-        setPassphraseSettings(profile.settings as PassphraseSettings);
+        setPassphraseSettings(profile.settings as PassphraseProfileSettings);
         break;
-      case 'format':
-        setFormatSettings(profile.settings as FormatSettings);
+      case 'custom':
+        setFormatSettings(profile.settings as FormatProfileSettings);
+        break;
+      case 'pin':
+        setPinSettings(profile.settings as PinProfileSettings);
         break;
     }
   };
@@ -442,11 +472,18 @@ export default function App() {
                   Passphrase
                 </TabsTrigger>
                 <TabsTrigger
-                  value="format"
+                  value="custom"
                   className="text-sm font-medium data-[state=active]:text-purple-600 data-[state=active]:border-purple-200 h-full"
                 >
                   <Settings className="h-4 w-4 mr-2" />
-                  Format
+                  Custom
+                </TabsTrigger>
+                <TabsTrigger
+                  value="pin"
+                  className="text-sm font-medium data-[state=active]:text-red-600 data-[state=active]:border-red-200 h-full"
+                >
+                  <Shield className="h-4 w-4 mr-2" />
+                  PIN
                 </TabsTrigger>
               </TabsList>
 
@@ -500,27 +537,34 @@ export default function App() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="format">
+              <TabsContent value="custom">
                 <Card className="border">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3 text-2xl">
                       <div className="p-2 rounded-lg bg-primary/10">
                         <Settings className="h-5 w-5 text-primary" />
                       </div>
-                      Format Generator
+                      Custom Generator
                     </CardTitle>
                     <CardDescription className="text-base leading-relaxed text-muted-foreground">
                       Define custom password formats using a flexible pattern system.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-8">
-                    <FormatGenerator
+                    <CustomGenerator
                       settings={formatSettings}
                       onSettingsChange={setFormatSettings}
                       onFormatGenerated={addToHistory}
                       onCopyToClipboard={copyToClipboard}
                     />
                   </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="pin">
+                <Card className="border">
+                  {/* The PinGenerator component includes its own CardHeader and CardContent */}
+                  <PinGenerator />
                 </Card>
               </TabsContent>
             </Tabs>
@@ -547,6 +591,7 @@ export default function App() {
                 passwordSettings={passwordSettings}
                 passphraseSettings={passphraseSettings}
                 formatSettings={formatSettings}
+                pinSettings={pinSettings} // Pass pinSettings
                 passwordHistory={passwordHistory}
                 onSaveProfile={saveProfile}
                 onLoadProfile={loadProfile}
