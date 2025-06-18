@@ -1,6 +1,6 @@
-import { Copy, Settings, Shield } from 'lucide-react'; // Added Shield
+import { Copy, Hash, RefreshCw } from 'lucide-react'; // Added RefreshCw
 import { Button } from '@/components/ui/button';
-import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
@@ -20,10 +20,12 @@ export function PinGenerator() {
   };
 
   return (
-    <>
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-3 text-2xl">
-          <Shield className="h-5 w-5 text-primary" /> {/* Changed from Settings */}
+          <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+            <Hash className="h-4 w-4 text-primary" />
+          </div>
           PIN Generator
         </CardTitle>
       </CardHeader>
@@ -48,7 +50,7 @@ export function PinGenerator() {
           size="lg"
           data-generate-button
         >
-          <Shield className="h-4 w-4 mr-2" /> {/* Changed from Settings */}
+          <RefreshCw className="h-4 w-4 mr-2" />
           Generate PIN
         </Button>
 
@@ -74,6 +76,6 @@ export function PinGenerator() {
           </div>
         )}
       </CardContent>
-    </>
+    </Card>
   );
 }

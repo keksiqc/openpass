@@ -1,15 +1,8 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
-import { BookOpen, RefreshCw, RotateCcwKey, Settings, Shield, Zap } from 'lucide-react'; // Added Shield
+import { BookOpen, Key, RotateCcwKey, Settings, Hash } from 'lucide-react'; // Added Shield
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CustomGenerator } from './components/custom-generator';
@@ -20,7 +13,6 @@ import { PasswordGenerator } from './components/password-generator';
 import { PinGenerator } from './components/pin-generator'; // Import PinGenerator
 import { ProfileManager } from './components/profile-manager';
 import { SettingsDialog } from './components/settings-dialog';
-import { Badge } from './components/ui/badge';
 import {
   clearAllData,
   loadHistory,
@@ -440,15 +432,6 @@ export default function App() {
             {/* Navigation and Features */}
             <nav className="flex items-center gap-4">
               <div className="hidden md:flex items-center gap-6">
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <Badge
-                    variant="secondary"
-                    className="flex items-center gap-1.5 px-3 py-1"
-                  >
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="font-medium">100% Local & Secure</span>
-                  </Badge>
-                </div>
                 <div className="text-xs text-muted-foreground border rounded-md px-3 py-1.5 bg-muted/30">
                   <kbd className="font-mono text-xs">Ctrl+G</kbd> to generate
                 </div>
@@ -483,7 +466,7 @@ export default function App() {
                   value="password"
                   className="text-sm font-medium data-[state=active]:text-blue-600 data-[state=active]:border-blue-200 h-full"
                 >
-                  <Zap className="h-4 w-4 mr-2" />
+                  <Key className="h-4 w-4 mr-2" />
                   Password
                 </TabsTrigger>
                 <TabsTrigger
@@ -504,90 +487,42 @@ export default function App() {
                   value="pin"
                   className="text-sm font-medium data-[state=active]:text-red-600 data-[state=active]:border-red-200 h-full"
                 >
-                  <Shield className="h-4 w-4 mr-2" />
+                  <Hash className="h-4 w-4 mr-2" />
                   PIN
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="password">
-                <Card> {/* Removed className="border" */}
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <RefreshCw className="h-5 w-5 text-primary" />
-                      </div>
-                      Password Generator
-                    </CardTitle>
-                    <CardDescription className="text-sm leading-relaxed text-muted-foreground"> {/* Changed to text-sm */}
-                      Generate strong, unique passwords with customizable options.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-8">
-                    <PasswordGenerator
-                      settings={passwordSettings}
-                      onSettingsChange={setPasswordSettings}
-                      onPasswordGenerated={addToHistory}
-                      onCopyToClipboard={copyToClipboard}
-                      isGenerating={isGenerating}
-                      onGeneratingChange={setIsGenerating}
-                    />
-                  </CardContent>
-                </Card>
+                <PasswordGenerator
+                  settings={passwordSettings}
+                  onSettingsChange={setPasswordSettings}
+                  onPasswordGenerated={addToHistory}
+                  onCopyToClipboard={copyToClipboard}
+                  isGenerating={isGenerating}
+                  onGeneratingChange={setIsGenerating}
+                />
               </TabsContent>
 
               <TabsContent value="passphrase">
-                <Card> {/* Removed className="border" */}
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <BookOpen className="h-5 w-5 text-primary" />
-                      </div>
-                      Passphrase Generator
-                    </CardTitle>
-                    <CardDescription className="text-sm leading-relaxed text-muted-foreground"> {/* Changed to text-sm */}
-                      Create memorable and secure passphrases from random words.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-8">
-                    <PassphraseGenerator
-                      settings={passphraseSettings}
-                      onSettingsChange={setPassphraseSettings}
-                      onPassphraseGenerated={addToHistory}
-                      onCopyToClipboard={copyToClipboard}
-                    />
-                  </CardContent>
-                </Card>
+                <PassphraseGenerator
+                  settings={passphraseSettings}
+                  onSettingsChange={setPassphraseSettings}
+                  onPassphraseGenerated={addToHistory}
+                  onCopyToClipboard={copyToClipboard}
+                />
               </TabsContent>
 
               <TabsContent value="custom">
-                <Card> {/* Removed className="border" */}
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-2xl">
-                      <div className="p-2 rounded-lg bg-primary/10">
-                        <Settings className="h-5 w-5 text-primary" />
-                      </div>
-                      Custom Generator
-                    </CardTitle>
-                    <CardDescription className="text-sm leading-relaxed text-muted-foreground"> {/* Changed to text-sm */}
-                      Define custom password formats using a flexible pattern system.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-8">
-                    <CustomGenerator
-                      settings={formatSettings}
-                      onSettingsChange={setFormatSettings}
-                      onFormatGenerated={addToHistory}
-                      onCopyToClipboard={copyToClipboard}
-                    />
-                  </CardContent>
-                </Card>
+                <CustomGenerator
+                  settings={formatSettings}
+                  onSettingsChange={setFormatSettings}
+                  onFormatGenerated={addToHistory}
+                  onCopyToClipboard={copyToClipboard}
+                />
               </TabsContent>
 
               <TabsContent value="pin">
-                <Card> {/* Removed className="border" */}
-                  {/* The PinGenerator component includes its own CardHeader and CardContent */}
                   <PinGenerator />
-                </Card>
               </TabsContent>
             </Tabs>
 
