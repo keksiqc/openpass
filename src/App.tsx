@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CustomGenerator } from './components/custom-generator';
+import { FormatGenerator } from './components/format-generator';
 import { HistoryPanel } from './components/history-panel';
 import { NavBar } from './components/nav-bar';
 import { PassphraseGenerator } from './components/passphrase-generator';
@@ -475,7 +475,7 @@ export default function App() {
               </TabsContent>
 
               <TabsContent value="format">
-                <CustomGenerator
+                <FormatGenerator
                   settings={formatSettings}
                   onSettingsChange={setFormatSettings}
                   onFormatGenerated={addToHistory}

@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useFormatGenerator } from '../hooks/useCustomGenerator';
+import { useFormatGenerator } from '../hooks/useFormatGenerator';
 import type { FormatSettings, PasswordHistory } from '../types';
 import {
   calculateEntropy,
@@ -45,7 +45,7 @@ interface FormatGeneratorProps {
   onCopyToClipboard: (text: string) => void;
 }
 
-export function CustomGenerator({
+export function FormatGenerator({
   settings,
   onSettingsChange,
   onFormatGenerated,
