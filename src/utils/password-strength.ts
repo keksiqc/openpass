@@ -1,3 +1,4 @@
+import { GENERATION_LIMITS } from '../constants/generator';
 import type { PasswordStrength } from '../types';
 
 // Password strength calculator
@@ -49,8 +50,8 @@ export const calculateEntropy = (password: string, charset: string): number => {
 
 // Time to crack estimation
 export const estimateTimeToCrack = (entropy: number): string => {
-  const guessesPerSecond = 1e12; // Assuming 1 trillion guesses per second
-  const secondsToCrack = 2 ** (entropy - 1) / guessesPerSecond;
+  const secondsToCrack =
+    2 ** (entropy - 1) / GENERATION_LIMITS.GUESSES_PER_SECOND;
 
   if (secondsToCrack < 60) return 'Instantly';
   if (secondsToCrack < 3600)

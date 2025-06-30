@@ -5,13 +5,19 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FormatGenerator } from './components/format-generator';
-import { HistoryPanel } from './components/history-panel';
-import { NavBar } from './components/nav-bar';
-import { PassphraseGenerator } from './components/passphrase-generator';
-import { PasswordGenerator } from './components/password-generator';
-import { PinGenerator } from './components/pin-generator';
-import { ProfileManager } from './components/profile-manager';
+import { FormatGenerator } from './components/generators/format-generator';
+import { PassphraseGenerator } from './components/generators/passphrase-generator';
+import { PasswordGenerator } from './components/generators/password-generator';
+import { PinGenerator } from './components/generators/pin-generator';
+import { NavBar } from './components/layout/nav-bar';
+import { HistoryPanel } from './components/shared/history-panel';
+import { ProfileManager } from './components/shared/profile-manager';
+import {
+  DEFAULT_FORMAT_SETTINGS,
+  DEFAULT_PASSPHRASE_SETTINGS,
+  DEFAULT_PASSWORD_SETTINGS,
+  DEFAULT_PIN_SETTINGS,
+} from './constants/generator';
 import {
   clearAllData,
   loadHistory,
@@ -34,43 +40,20 @@ import type {
 
 export default function App() {
   // Settings states with enhanced defaults
-  const [passwordSettings, setPasswordSettings] = useState<PasswordSettings>({
-    length: 16,
-    includeUppercase: true,
-    includeLowercase: true,
-    includeNumbers: true,
-    includeSymbols: true,
-    customCharacters: '',
-    excludeSimilar: false,
-    excludeAmbiguous: false,
-    minNumbers: 1,
-    minSymbols: 1,
-    requireEachCharacterType: true,
-  });
+  const [passwordSettings, setPasswordSettings] = useState<PasswordSettings>(
+    DEFAULT_PASSWORD_SETTINGS,
+  );
 
   const [passphraseSettings, setPassphraseSettings] =
-    useState<PassphraseSettings>({
-      wordCount: 4,
-      separator: '-',
-      includeNumbers: false,
-      customWords: [],
-      wordCase: 'lowercase',
-      insertNumbersRandomly: false,
-    });
+    useState<PassphraseSettings>(DEFAULT_PASSPHRASE_SETTINGS);
 
-  const [formatSettings, setFormatSettings] = useState<FormatSettings>({
-    format: '2u4l2d2{#$%}',
-    templates: [
-      { name: 'Strong Mixed', pattern: '2u4l2d2{#$%}' },
-      { name: 'Alphanumeric', pattern: '3u3l4d' },
-      { name: 'Complex', pattern: '1u6l1{@#$}3d1{!%&}' },
-      { name: 'Simple', pattern: '4l4d' },
-      { name: 'Memorable', pattern: '1u4l1{#$%}4d' },
-    ],
-  });
+  const [formatSettings, setFormatSettings] = useState<FormatSettings>(
+    DEFAULT_FORMAT_SETTINGS,
+  );
 
   // Placeholder for PIN settings
-  const [pinSettings, setPinSettings] = useState<PinSettings>({ length: 4 });
+  const [pinSettings, setPinSettings] =
+    useState<PinSettings>(DEFAULT_PIN_SETTINGS);
 
   // UI states
   const [isGenerating, setIsGenerating] = useState(false);

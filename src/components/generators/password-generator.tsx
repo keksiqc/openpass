@@ -19,13 +19,17 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch'; // Import Switch
 import { TabsContent } from '@/components/ui/tabs';
-import { usePasswordGenerator } from '../hooks/usePasswordGenerator';
-import type { PasswordHistory, PasswordSettings } from '../types';
+import { usePasswordGenerator } from '../../hooks/usePasswordGenerator';
+import type { PasswordHistory, PasswordSettings } from '../../types';
 import {
   calculateEntropy,
   calculateStrength,
   estimateTimeToCrack,
-} from '../utils/password-strength';
+} from '../../utils/password-strength';
+import {
+  getStrengthColor,
+  getStrengthDescription,
+} from '../../utils/strength-helpers';
 
 interface PasswordGeneratorProps {
   settings: PasswordSettings;
@@ -58,23 +62,6 @@ export function PasswordGenerator({
       onPasswordGenerated(password, historyEntry);
       onGeneratingChange(false);
     });
-  };
-
-  const getStrengthDescription = (strengthLabel: string) => {
-    switch (strengthLabel) {
-      case 'Weak':
-        return 'This password is easy to guess. Consider increasing length and character variety.';
-      case 'Fair':
-        return 'This password is moderately secure. Adding more character types or length would improve it.';
-      case 'Good':
-        return 'A good password! For even better security, try increasing its length.';
-      case 'Strong':
-        return 'Excellent password! Very difficult to crack.';
-      case 'Excellent':
-        return 'Outstanding! This password offers maximum protection.';
-      default:
-        return '';
-    }
   };
 
   return (
@@ -395,15 +382,9 @@ export function PasswordGenerator({
 
               <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-2">
                 <div
-                  className={`h-2.5 rounded-full ${(() => {
-                    const strength = calculateStrength(generatedPassword);
-                    if (strength.label === 'Weak') return 'bg-red-600';
-                    if (strength.label === 'Fair') return 'bg-yellow-600';
-                    if (strength.label === 'Good') return 'bg-blue-600';
-                    if (strength.label === 'Strong') return 'bg-green-600';
-                    if (strength.label === 'Excellent') return 'bg-green-700';
-                    return 'bg-gray-400';
-                  })()}`}
+                  className={`h-2.5 rounded-full ${getStrengthColor(
+                    calculateStrength(generatedPassword).label,
+                  )}`}
                   style={{
                     width: `${calculateStrength(generatedPassword).score * 10}%`,
                   }}
@@ -412,6 +393,7 @@ export function PasswordGenerator({
               <p className="text-xs text-muted-foreground">
                 {getStrengthDescription(
                   calculateStrength(generatedPassword).label,
+                  'password',
                 )}
               </p>
 

@@ -33,9 +33,14 @@ import {
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch'; // Import Switch
 import { TabsContent } from '@/components/ui/tabs';
-import { usePassphraseGenerator } from '../hooks/usePassphraseGenerator';
-import type { PassphraseSettings, PasswordHistory } from '../types';
-import { estimateTimeToCrack } from '../utils/password-strength'; // Removed calculateEntropy
+import { usePassphraseGenerator } from '../../hooks/usePassphraseGenerator';
+import type { PassphraseSettings, PasswordHistory } from '../../types';
+import { estimateTimeToCrack } from '../../utils/password-strength';
+import {
+  calculatePassphraseStrength,
+  getStrengthColor,
+  getStrengthDescription,
+} from '../../utils/strength-helpers';
 
 interface PassphraseGeneratorProps {
   settings: PassphraseSettings;
@@ -65,57 +70,7 @@ export function PassphraseGenerator({
   };
 
   const getPassphraseStrength = () => {
-    // Removed unused 'passphrase' parameter
-    const wordCount = settings.wordCount;
-    const hasNumbers = settings.includeNumbers;
-    // A more accurate entropy calculation for passphrases would involve the dictionary size
-    // For simplicity, we'll use a rough estimate based on common dictionary sizes (e.g., 7776 words for EFF)
-    const estimatedDictionarySize = 7776; // EFF Large Wordlist size
-    const entropyPerWord = Math.log2(estimatedDictionarySize);
-    let entropy = wordCount * entropyPerWord;
-
-    if (hasNumbers) {
-      // Add a bit more entropy for numbers. This is a rough estimate.
-      // If numbers are inserted randomly, entropy increases more significantly.
-      // If appended, it's less, but still an increase.
-      entropy += settings.insertNumbersRandomly
-        ? Math.log2(wordCount * 10)
-        : Math.log2(10 * (settings.wordCount / 2));
-    }
-
-    // Adjust score based on wordCase, if not purely lowercase
-    if (settings.wordCase !== 'lowercase') {
-      entropy += wordCount * Math.log2(1.5); // Rough boost for case variation
-    }
-
-    if (entropy < 60) {
-      return { label: 'Weak', color: 'text-red-600', score: 20 };
-    } else if (entropy < 80) {
-      return { label: 'Fair', color: 'text-yellow-600', score: 40 };
-    } else if (entropy < 100) {
-      return { label: 'Good', color: 'text-blue-600', score: 60 };
-    } else if (entropy < 120) {
-      return { label: 'Strong', color: 'text-green-600', score: 80 };
-    } else {
-      return { label: 'Excellent', color: 'text-green-700', score: 100 };
-    }
-  };
-
-  const getStrengthDescription = (strengthLabel: string) => {
-    switch (strengthLabel) {
-      case 'Weak':
-        return 'This passphrase is easy to guess. Consider increasing word count or adding numbers.';
-      case 'Fair':
-        return 'This passphrase is moderately secure. Adding more words or numbers would improve it.';
-      case 'Good':
-        return 'A good passphrase! For even better security, try increasing its length.';
-      case 'Strong':
-        return 'Excellent passphrase! Very difficult to crack.';
-      case 'Excellent':
-        return 'Outstanding! This passphrase offers maximum protection.';
-      default:
-        return '';
-    }
+    return calculatePassphraseStrength(settings);
   };
 
   return (
@@ -302,21 +257,17 @@ export function PassphraseGenerator({
 
               <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-2">
                 <div
-                  className={`h-2.5 rounded-full ${(() => {
-                    const strength = getPassphraseStrength(); // Called without parameter
-                    if (strength.label === 'Weak') return 'bg-red-600';
-                    if (strength.label === 'Fair') return 'bg-yellow-600';
-                    if (strength.label === 'Good') return 'bg-blue-600';
-                    if (strength.label === 'Strong') return 'bg-green-600';
-                    if (strength.label === 'Excellent') return 'bg-green-700';
-                    return 'bg-gray-400';
-                  })()}`}
-                  style={{ width: `${getPassphraseStrength().score}%` }} // Called without parameter
+                  className={`h-2.5 rounded-full ${getStrengthColor(
+                    getPassphraseStrength().label,
+                  )}`}
+                  style={{ width: `${getPassphraseStrength().score * 10}%` }}
                 ></div>
               </div>
               <p className="text-xs text-muted-foreground">
-                {getStrengthDescription(getPassphraseStrength().label)}{' '}
-                {/* Called without parameter */}
+                {getStrengthDescription(
+                  getPassphraseStrength().label,
+                  'passphrase',
+                )}
               </p>
 
               <div className="flex items-center gap-2">

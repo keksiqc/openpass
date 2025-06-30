@@ -30,12 +30,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useFormatGenerator } from '../hooks/useFormatGenerator';
-import type { FormatSettings, PasswordHistory } from '../types';
+import { useFormatGenerator } from '../../hooks/useFormatGenerator';
+import type { FormatSettings, PasswordHistory } from '../../types';
 import {
   calculateEntropy,
   estimateTimeToCrack,
-} from '../utils/password-strength';
+} from '../../utils/password-strength';
+import {
+  createStrengthObject,
+  getStrengthColor,
+  getStrengthDescription,
+} from '../../utils/strength-helpers';
 
 interface FormatGeneratorProps {
   // Renamed interface to match component
@@ -67,35 +72,7 @@ export function FormatGenerator({
   const getFormatStrength = (password: string) => {
     const charset = getCharacterSetFromFormat(settings.format);
     const entropy = calculateEntropy(password, charset);
-
-    if (entropy < 60) {
-      return { label: 'Weak', color: 'text-red-600', score: 20 };
-    } else if (entropy < 80) {
-      return { label: 'Fair', color: 'text-yellow-600', score: 40 };
-    } else if (entropy < 100) {
-      return { label: 'Good', color: 'text-blue-600', score: 60 };
-    } else if (entropy < 120) {
-      return { label: 'Strong', color: 'text-green-600', score: 80 };
-    } else {
-      return { label: 'Excellent', color: 'text-green-700', score: 100 };
-    }
-  };
-
-  const getStrengthDescription = (strengthLabel: string) => {
-    switch (strengthLabel) {
-      case 'Weak':
-        return 'This password is easy to guess. Consider increasing length or character variety in your format.';
-      case 'Fair':
-        return 'This password is moderately secure. Adjusting the format for more complexity would improve it.';
-      case 'Good':
-        return 'A good format password! For even better security, try increasing its length or character types.';
-      case 'Strong':
-        return 'Excellent format password! Very difficult to crack.';
-      case 'Excellent':
-        return 'Outstanding! This format password offers maximum protection.';
-      default:
-        return '';
-    }
+    return createStrengthObject(entropy);
   };
 
   return (
@@ -267,23 +244,18 @@ export function FormatGenerator({
 
               <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-2">
                 <div
-                  className={`h-2.5 rounded-full ${(() => {
-                    const strength = getFormatStrength(generatedFormat);
-                    if (strength.label === 'Weak') return 'bg-red-600';
-                    if (strength.label === 'Fair') return 'bg-yellow-600';
-                    if (strength.label === 'Good') return 'bg-blue-600';
-                    if (strength.label === 'Strong') return 'bg-green-600';
-                    if (strength.label === 'Excellent') return 'bg-green-700';
-                    return 'bg-gray-400';
-                  })()}`}
+                  className={`h-2.5 rounded-full ${getStrengthColor(
+                    getFormatStrength(generatedFormat).label,
+                  )}`}
                   style={{
-                    width: `${getFormatStrength(generatedFormat).score}%`,
+                    width: `${getFormatStrength(generatedFormat).score * 10}%`,
                   }}
                 ></div>
               </div>
               <p className="text-xs text-muted-foreground">
                 {getStrengthDescription(
                   getFormatStrength(generatedFormat).label,
+                  'format',
                 )}
               </p>
 
