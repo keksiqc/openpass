@@ -127,26 +127,26 @@ export function ProfileManager({
     });
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/95">
+      <CardHeader className="pb-6">
         <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
-            <Users className="h-4 w-4 text-primary" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+            <Users className="h-5 w-5 text-primary" />
           </div>
           Profile Manager
         </CardTitle>
-        <CardDescription className="text-sm leading-relaxed text-muted-foreground">
+        <CardDescription className="text-base leading-relaxed text-muted-foreground">
           Save and manage your generator profiles for quick access.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
         {/* Save Profile Section */}
-        <div className="space-y-4">
+        <div className="space-y-5">
           <Label
             htmlFor="profile-name"
-            className="text-sm font-medium flex items-center gap-2"
+            className="text-base font-semibold flex items-center gap-2"
           >
-            <User className="h-3.5 w-3.5" />
+            <User className="h-4 w-4" />
             Profile Name
           </Label>
           <Input
@@ -154,12 +154,12 @@ export function ProfileManager({
             value={profileName}
             onChange={(e) => onProfileNameChange(e.target.value)}
             placeholder="e.g., Work Passwords, Personal Settings..."
-            className="h-11 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 border-2"
+            className="h-12 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 border-2"
           />
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <Button
               onClick={onSaveProfile}
-              className="w-full h-11 font-medium text-sm gap-2 transition-all duration-200 hover:shadow-md"
+              className="flex-1 h-12 font-medium text-sm gap-2 transition-all duration-200 hover:shadow-md"
               disabled={!profileName.trim()}
             >
               <Save className="h-4 w-4" />
@@ -169,7 +169,7 @@ export function ProfileManager({
               <Button
                 onClick={onCancelEdit}
                 variant="outline"
-                className="h-11 font-medium text-sm gap-2 transition-all duration-200"
+                className="h-12 font-medium text-sm gap-2 transition-all duration-200"
               >
                 Cancel
               </Button>
@@ -179,13 +179,13 @@ export function ProfileManager({
 
         {/* Saved Profiles Section */}
         {profiles.length > 0 ? (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between mb-2">
+          <div className="space-y-5">
+            <div className="flex items-center justify-between mb-3">
               <Badge
                 variant="secondary"
-                className="px-3 py-1.5 text-xs font-medium"
+                className="px-3 py-2 text-sm font-medium"
               >
-                {profiles.length} profiles
+                {profiles.length} profile{profiles.length !== 1 ? 's' : ''}
               </Badge>
               <Select
                 value={selectedFilter}
@@ -193,7 +193,7 @@ export function ProfileManager({
                   setSelectedFilter(value)
                 }
               >
-                <SelectTrigger className="w-[140px]">
+                <SelectTrigger className="w-[150px] h-10">
                   <SelectValue placeholder="Filter by type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,58 +205,58 @@ export function ProfileManager({
                 </SelectContent>
               </Select>
             </div>
-            <div className="relative mb-2">
+            <div className="relative mb-4">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search profiles..."
-                className="pl-10 h-10"
+                className="pl-10 h-11"
               />
             </div>
-            <ScrollArea className="h-96">
+            <ScrollArea className="h-[400px]">
               {filteredProfiles.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {filteredProfiles.map((profile) => (
                     <div
                       key={profile.id}
-                      className={`p-4 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors group flex flex-col gap-3 ${
-                        profile.isFavorite ? 'border-2 border-primary/40' : ''
+                      className={`p-5 rounded-xl border border-border/60 bg-gradient-to-br from-muted/40 to-muted/20 hover:from-muted/60 hover:to-muted/40 transition-all duration-200 group flex flex-col gap-4 shadow-sm hover:shadow-md ${
+                        profile.isFavorite ? 'ring-2 ring-primary/30 border-primary/40' : ''
                       }`}
                     >
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
                           <div
-                            className={`p-2 rounded-md transition-colors ${
+                            className={`p-2.5 rounded-xl transition-colors shadow-sm ${
                               profile.type === 'password'
-                                ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
+                                ? 'bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800'
                                 : profile.type === 'passphrase'
-                                  ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                                  ? 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800'
                                   : profile.type === 'format'
-                                    ? 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
-                                    : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+                                    ? 'bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-800'
+                                    : 'bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800'
                             }`}
                           >
                             <div
-                              className={`$\{profile.type === 'password' ? 'text-blue-600 dark:text-blue-400' : profile.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : profile.type === 'format' ? 'text-purple-600 dark:text-purple-400' : 'text-red-600 dark:text-red-400'}`}
+                              className={`${profile.type === 'password' ? 'text-blue-600 dark:text-blue-400' : profile.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : profile.type === 'format' ? 'text-purple-600 dark:text-purple-400' : 'text-red-600 dark:text-red-400'}`}
                             >
                               {getTypeIcon(profile.type)}
                             </div>
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <h3 className="font-semibold text-base truncate">
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <h3 className="font-semibold text-base truncate leading-tight">
                               {profile.name}
                             </h3>
                             <Badge
                               variant="outline"
                               className={`text-xs font-medium ${
                                 profile.type === 'password'
-                                  ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
+                                  ? 'text-blue-600 border-blue-200 bg-blue-50/50 dark:text-blue-400 dark:border-blue-800 dark:bg-blue-900/20'
                                   : profile.type === 'passphrase'
-                                    ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
+                                    ? 'text-green-600 border-green-200 bg-green-50/50 dark:text-green-400 dark:border-green-800 dark:bg-green-900/20'
                                     : profile.type === 'format'
-                                      ? 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
-                                      : 'text-red-600 border-red-200 dark:text-red-400 dark:border-red-800'
+                                      ? 'text-purple-600 border-purple-200 bg-purple-50/50 dark:text-purple-400 dark:border-purple-800 dark:bg-purple-900/20'
+                                      : 'text-red-600 border-red-200 bg-red-50/50 dark:text-red-400 dark:border-red-800 dark:bg-red-900/20'
                               }`}
                             >
                               {profile.type.toString().charAt(0).toUpperCase() +
@@ -264,7 +264,7 @@ export function ProfileManager({
                             </Badge>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-2">
                           <Button
                             variant="outline"
                             size="sm"
@@ -315,7 +315,7 @@ export function ProfileManager({
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
                                 onClick={() => onDeleteProfile(profile.id)}
-                                variant="destructive"
+                                className="text-destructive focus:text-destructive"
                               >
                                 Delete Profile
                               </DropdownMenuItem>
@@ -323,30 +323,32 @@ export function ProfileManager({
                           </DropdownMenu>
                         </div>
                       </div>
+                      
                       <div className="flex flex-col items-start gap-2 text-xs text-muted-foreground">
                         <div
-                          className="flex items-center gap-1"
+                          className="flex items-center gap-2"
                           title={`Created ${profile.createdAt.toLocaleDateString()}`}
                         >
                           <Plus className="h-3 w-3" />
-                          <span>{profile.createdAt.toLocaleDateString()}</span>
+                          <span>Created {profile.createdAt.toLocaleDateString()}</span>
                         </div>
                         {profile.lastUsed && (
                           <div
-                            className="flex items-center gap-1"
+                            className="flex items-center gap-2"
                             title={`Last used ${profile.lastUsed.toLocaleDateString()}`}
                           >
                             <Clock className="h-3 w-3" />
-                            <span>{profile.lastUsed.toLocaleDateString()}</span>
+                            <span>Last used {profile.lastUsed.toLocaleDateString()}</span>
                           </div>
                         )}
                       </div>
-                      <div className="flex items-center justify-between pt-2">
+                      
+                      <div className="flex items-center justify-between pt-3 border-t border-border/40">
                         <Button
                           variant="default"
                           size="sm"
                           onClick={() => onLoadProfile(profile)}
-                          className="flex-1 mr-2 h-9 font-medium"
+                          className="flex-1 h-10 font-medium shadow-sm hover:shadow-md transition-all duration-200"
                         >
                           Load Profile
                         </Button>
@@ -355,12 +357,12 @@ export function ProfileManager({
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 px-6">
-                  <div className="p-3 rounded-full bg-muted/30 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
-                    <Search className="h-5 w-5 text-muted-foreground/50" />
+                <div className="text-center py-12 px-6">
+                  <div className="p-4 rounded-full bg-muted/40 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                    <Search className="h-6 w-6 text-muted-foreground/50" />
                   </div>
-                  <p className="text-sm font-medium mb-1">No profiles found</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-base font-medium mb-2">No profiles found</p>
+                  <p className="text-sm text-muted-foreground">
                     Try adjusting your search or filter
                   </p>
                 </div>
@@ -368,19 +370,19 @@ export function ProfileManager({
             </ScrollArea>
           </div>
         ) : (
-          <div className="text-center py-12 px-6">
-            <div className="p-4 rounded-full bg-gradient-to-br from-muted/40 to-muted/20 w-20 h-20 mx-auto mb-6 flex items-center justify-center border border-muted-foreground/10">
-              <Users className="h-8 w-8 text-muted-foreground/50" />
+          <div className="text-center py-16 px-6">
+            <div className="p-6 rounded-full bg-gradient-to-br from-muted/50 to-muted/30 w-24 h-24 mx-auto mb-6 flex items-center justify-center border border-muted-foreground/20 shadow-sm">
+              <Users className="h-10 w-10 text-muted-foreground/50" />
             </div>
-            <h3 className="font-semibold text-lg mb-2">
+            <h3 className="font-semibold text-xl mb-3">
               No saved profiles yet
             </h3>
-            <p className="text-sm text-muted-foreground/80 mb-6 leading-relaxed max-w-sm mx-auto">
+            <p className="text-base text-muted-foreground/80 mb-6 leading-relaxed max-w-sm mx-auto">
               Create your first profile to save your current generator settings
               for quick access later
             </p>
-            <div className="text-xs text-muted-foreground bg-muted/30 p-4 rounded-lg border border-muted-foreground/10 max-w-md mx-auto">
-              <strong className="font-medium">Tip:</strong> Profiles let you
+            <div className="text-sm text-muted-foreground bg-muted/40 p-5 rounded-xl border border-muted-foreground/20 max-w-md mx-auto">
+              <strong className="font-medium">💡 Tip:</strong> Profiles let you
               quickly switch between different password configurations for work,
               personal use, or specific requirements
             </div>
