@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { toast } from 'sonner';
+import { CHARACTER_SETS, GENERATION_LIMITS } from '../constants/generator';
 import type { PasswordHistory, PasswordSettings } from '../types';
 import { getSecureRandom } from '../utils/crypto';
 import {
@@ -12,18 +13,23 @@ export const usePasswordGenerator = () => {
   const getCharacterSet = useCallback((settings: PasswordSettings): string => {
     let charset = '';
 
-    if (settings.includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (settings.includeLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
-    if (settings.includeNumbers) charset += '0123456789';
-    if (settings.includeSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    if (settings.includeUppercase) charset += CHARACTER_SETS.UPPERCASE;
+    if (settings.includeLowercase) charset += CHARACTER_SETS.LOWERCASE;
+    if (settings.includeNumbers) charset += CHARACTER_SETS.NUMBERS;
+    if (settings.includeSymbols) charset += CHARACTER_SETS.SYMBOLS;
     if (settings.customCharacters) charset += settings.customCharacters;
 
     if (settings.excludeSimilar) {
-      charset = charset.replace(/[0O1lI]/g, '');
+      const similarRegex = new RegExp(`[${CHARACTER_SETS.SIMILAR}]`, 'g');
+      charset = charset.replace(similarRegex, '');
     }
 
     if (settings.excludeAmbiguous) {
-      charset = charset.replace(/[{}[\]()/\\'"~,;.<>]/g, '');
+      const ambiguousRegex = new RegExp(
+        `[${CHARACTER_SETS.AMBIGUOUS.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`,
+        'g',
+      );
+      charset = charset.replace(ambiguousRegex, '');
     }
 
     return charset;
@@ -42,10 +48,10 @@ export const usePasswordGenerator = () => {
         }
 
         let password = '';
-        // let attempts = 0; // Removed unused variable
-        const maxAttempts = 100; // General attempts for basic generation
+        const maxAttempts = GENERATION_LIMITS.MAX_ATTEMPTS; // General attempts for basic generation
         let meetsCriteria = false;
-        const maxRetryForEnforcement = 20; // Retries for character type enforcement
+        const maxRetryForEnforcement =
+          GENERATION_LIMITS.MAX_ENFORCEMENT_RETRIES; // Retries for character type enforcement
         let enforcementRetries = 0;
 
         do {

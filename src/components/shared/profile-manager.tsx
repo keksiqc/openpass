@@ -49,7 +49,7 @@ import type {
   PinSettings, // Added
   Profile, // Added
   ProfileType, // Added
-} from '../types';
+} from '../../types';
 
 interface ProfileManagerProps {
   profiles: Profile[]; // Changed

@@ -11,16 +11,16 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import type { AppSettings } from '../types';
-import { SimpleEncryption } from '../utils/encryption';
-import { Button } from './ui/button';
+import type { AppSettings } from '../../types';
+import { SimpleEncryption } from '../../utils/encryption';
+import { Button } from '../ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from './ui/card';
+} from '../ui/card';
 import {
   Dialog,
   DialogContent,
@@ -28,10 +28,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './ui/dialog';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Switch } from './ui/switch';
+} from '../ui/dialog';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Switch } from '../ui/switch';
 
 interface SettingsDialogProps {
   settings: AppSettings;

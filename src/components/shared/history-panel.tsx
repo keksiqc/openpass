@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { PasswordHistory } from '../types';
+import type { PasswordHistory } from '../../types';
 
 interface HistoryPanelProps {
   history: PasswordHistory[];
