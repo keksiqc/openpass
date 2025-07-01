@@ -78,100 +78,102 @@ export function HistoryPanel({
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/95">
+      <CardHeader className="pb-6">
         <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
-            <History className="h-4 w-4 text-primary" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+            <History className="h-5 w-5 text-primary" />
           </div>
           Password History
         </CardTitle>
-        <CardDescription className="text-sm leading-relaxed text-muted-foreground">
+        <CardDescription className="text-base leading-relaxed text-muted-foreground">
           Your recently generated passwords and passphrases
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
         {history.length === 0 ? (
-          <div className="text-center py-10 px-6 text-muted-foreground">
-            <div className="p-4 rounded-full bg-muted/30 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Shield className="h-7 w-7 opacity-50" />
+          <div className="text-center py-16 px-6 text-muted-foreground">
+            <div className="p-6 rounded-full bg-muted/40 w-20 h-20 mx-auto mb-6 flex items-center justify-center border border-muted-foreground/20 shadow-sm">
+              <Shield className="h-8 w-8 opacity-50" />
             </div>
-            <p className="text-base font-medium mb-2">
+            <p className="text-xl font-medium mb-3">
               No passwords generated yet
             </p>
-            <p className="text-sm text-muted-foreground/80 leading-relaxed">
+            <p className="text-base text-muted-foreground/80 leading-relaxed">
               Your generation history will appear here for easy access
             </p>
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-4">
               <Badge
                 variant="secondary"
-                className="px-2.5 py-1 text-xs font-medium"
+                className="px-3 py-2 text-sm font-medium"
               >
-                {history.length} entries
+                {history.length} entr{history.length !== 1 ? 'ies' : 'y'}
               </Badge>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onClearHistory}
-                className="text-xs hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
+                className="text-sm hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20 transition-colors"
               >
-                <Trash2 className="h-4 w-4 mr-1.5" />
+                <Trash2 className="h-4 w-4 mr-2" />
                 Clear All
               </Button>
             </div>
-            <ScrollArea className="h-96">
-              <div className="space-y-3">
+            <ScrollArea className="h-[400px]">
+              <div className="space-y-4">
                 {history.map((entry) => (
                   <div
                     key={entry.id}
-                    className="p-4 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors group flex flex-col gap-3"
+                    className="p-5 rounded-xl border border-border/60 bg-gradient-to-br from-muted/40 to-muted/20 hover:from-muted/60 hover:to-muted/40 transition-all duration-200 group flex flex-col gap-4 shadow-sm hover:shadow-md"
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
                         <div
-                          className={`p-1.5 rounded-md ${
+                          className={`p-2.5 rounded-xl ${
                             entry.type === 'password'
-                              ? 'bg-blue-100 dark:bg-blue-900/30'
+                              ? 'bg-blue-100 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-800'
                               : entry.type === 'passphrase'
-                                ? 'bg-green-100 dark:bg-green-900/30'
-                                : 'bg-purple-100 dark:bg-purple-900/30'
+                                ? 'bg-green-100 dark:bg-green-900/40 border border-green-200 dark:border-green-800'
+                                : 'bg-purple-100 dark:bg-purple-900/40 border border-purple-200 dark:border-purple-800'
                           }`}
                         >
                           <div
-                            className={`$\{entry.type === 'password' ? 'text-blue-600 dark:text-blue-400' : entry.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : 'text-purple-600 dark:text-purple-400'}`}
+                            className={`${entry.type === 'password' ? 'text-blue-600 dark:text-blue-400' : entry.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : 'text-purple-600 dark:text-purple-400'}`}
                           >
                             {getTypeIcon(entry.type)}
                           </div>
                         </div>
-                        <Badge
-                          variant="outline"
-                          className={`text-xs font-medium ${
-                            entry.type === 'password'
-                              ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
-                              : entry.type === 'passphrase'
-                                ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
-                                : 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
-                          }`}
-                        >
-                          {entry.type.toString().charAt(0).toUpperCase() +
-                            entry.type.slice(1)}
-                        </Badge>
-                        <Badge
-                          variant="outline"
-                          className={`text-xs font-medium ${getStrengthColor(entry.strength.label)}`}
-                        >
-                          {entry.strength.label}
-                        </Badge>
+                        <div className="flex flex-col gap-1">
+                          <Badge
+                            variant="outline"
+                            className={`text-xs font-medium w-fit ${
+                              entry.type === 'password'
+                                ? 'text-blue-600 border-blue-200 bg-blue-50/50 dark:text-blue-400 dark:border-blue-800 dark:bg-blue-900/20'
+                                : entry.type === 'passphrase'
+                                  ? 'text-green-600 border-green-200 bg-green-50/50 dark:text-green-400 dark:border-green-800 dark:bg-green-900/20'
+                                  : 'text-purple-600 border-purple-200 bg-purple-50/50 dark:text-purple-400 dark:border-purple-800 dark:bg-purple-900/20'
+                            }`}
+                          >
+                            {entry.type.toString().charAt(0).toUpperCase() +
+                              entry.type.slice(1)}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className={`text-xs font-medium w-fit ${getStrengthColor(entry.strength.label)}`}
+                          >
+                            {entry.strength.label}
+                          </Badge>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-2">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => togglePasswordVisibility(entry.id)}
-                          className="h-8 w-8 p-0"
+                          className="h-9 w-9 p-0"
                           title={
                             showPasswords[entry.id]
                               ? 'Hide password'
@@ -185,10 +187,10 @@ export function HistoryPanel({
                           )}
                         </Button>
                         <Button
-                          variant="outline"
+                          variant="default"
                           size="sm"
                           onClick={() => onCopyToClipboard(entry.password)}
-                          className="h-8 w-8 p-0"
+                          className="h-9 w-9 p-0 shadow-sm hover:shadow-md transition-all duration-200"
                           title="Copy to clipboard"
                         >
                           <Copy className="h-4 w-4" />
@@ -197,7 +199,7 @@ export function HistoryPanel({
                           variant="outline"
                           size="sm"
                           onClick={() => onDeleteHistoryEntry(entry.id)}
-                          className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
+                          className="h-9 w-9 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive hover:border-destructive/20"
                           title="Delete entry"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -211,16 +213,18 @@ export function HistoryPanel({
                           : '•'.repeat(Math.min(entry.password.length, 20))
                       }
                       readOnly
-                      className="font-mono text-xs bg-muted/30"
+                      className="font-mono text-sm bg-background/60"
                     />
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      {new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      }).format(entry.createdAt)}
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground pt-2 border-t border-border/40">
+                      <Clock className="h-3.5 w-3.5" />
+                      <span>
+                        {new Intl.DateTimeFormat('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        }).format(entry.createdAt)}
+                      </span>
                     </div>
                   </div>
                 ))}

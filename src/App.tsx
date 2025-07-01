@@ -402,11 +402,21 @@ export default function App() {
         handleResetToDefaults={handleResetToDefaults}
       />
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      <main className="container mx-auto px-4 py-6 max-w-7xl">
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="text-center max-w-2xl mx-auto">
+            <h1 className="text-3xl font-bold tracking-tight mb-2">Generate Secure Passwords</h1>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              Create strong, unique passwords and passphrases with customizable security options
+            </p>
+          </div>
+        </div>
+
         {/* Main Grid Layout */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-[2fr_1fr] gap-6 lg:gap-8">
           {/* Main Generator */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="space-y-6">
             <Tabs
               value={activeTab}
               onValueChange={(value: string) =>
@@ -414,26 +424,26 @@ export default function App() {
               }
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-4 h-12 rounded-xl">
-                <TabsTrigger value="password">
-                  <Key className="h-4 w-4 mr-2" />
-                  Password
+              <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 mb-6 h-14 rounded-xl p-1 bg-muted/50">
+                <TabsTrigger value="password" className="flex items-center gap-2 h-10 px-4 text-sm font-medium">
+                  <Key className="h-4 w-4" />
+                  <span className="hidden sm:inline">Password</span>
                 </TabsTrigger>
-                <TabsTrigger value="passphrase">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Passphrase
+                <TabsTrigger value="passphrase" className="flex items-center gap-2 h-10 px-4 text-sm font-medium">
+                  <BookOpen className="h-4 w-4" />
+                  <span className="hidden sm:inline">Passphrase</span>
                 </TabsTrigger>
-                <TabsTrigger value="format">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Format
+                <TabsTrigger value="format" className="flex items-center gap-2 h-10 px-4 text-sm font-medium">
+                  <Settings className="h-4 w-4" />
+                  <span className="hidden sm:inline">Format</span>
                 </TabsTrigger>
-                <TabsTrigger value="pin">
-                  <Hash className="h-4 w-4 mr-2" />
-                  PIN
+                <TabsTrigger value="pin" className="flex items-center gap-2 h-10 px-4 text-sm font-medium">
+                  <Hash className="h-4 w-4" />
+                  <span className="hidden sm:inline">PIN</span>
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="password">
+              <TabsContent value="password" className="mt-0">
                 <PasswordGenerator
                   settings={passwordSettings}
                   onSettingsChange={setPasswordSettings}
@@ -444,7 +454,7 @@ export default function App() {
                 />
               </TabsContent>
 
-              <TabsContent value="passphrase">
+              <TabsContent value="passphrase" className="mt-0">
                 <PassphraseGenerator
                   settings={passphraseSettings}
                   onSettingsChange={setPassphraseSettings}
@@ -453,7 +463,7 @@ export default function App() {
                 />
               </TabsContent>
 
-              <TabsContent value="format">
+              <TabsContent value="format" className="mt-0">
                 <FormatGenerator
                   settings={formatSettings}
                   onSettingsChange={setFormatSettings}
@@ -462,12 +472,12 @@ export default function App() {
                 />
               </TabsContent>
 
-              <TabsContent value="pin">
+              <TabsContent value="pin" className="mt-0">
                 <PinGenerator />
               </TabsContent>
             </Tabs>
 
-            {/* History Section - Moved under generator */}
+            {/* History Section */}
             {appSettings.historyEnabled && (
               <HistoryPanel
                 history={passwordHistory}
@@ -480,7 +490,7 @@ export default function App() {
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24">
+            <div className="sticky top-20 space-y-6">
               <ProfileManager
                 profiles={profiles}
                 profileName={profileName}
@@ -489,15 +499,15 @@ export default function App() {
                 passwordSettings={passwordSettings}
                 passphraseSettings={passphraseSettings}
                 formatSettings={formatSettings}
-                pinSettings={pinSettings} // Pass pinSettings
+                pinSettings={pinSettings}
                 passwordHistory={passwordHistory}
                 onSaveProfile={saveProfile}
                 onLoadProfile={loadProfile}
                 onToggleFavorite={toggleFavorite}
                 onDeleteProfile={deleteProfile}
-                onEditProfile={handleEditProfile} // Pass new prop
-                editingProfileId={editingProfileId} // Pass new prop
-                onCancelEdit={handleCancelEdit} // Pass new prop
+                onEditProfile={handleEditProfile}
+                editingProfileId={editingProfileId}
+                onCancelEdit={handleCancelEdit}
               />
             </div>
           </div>
