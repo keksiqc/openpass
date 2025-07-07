@@ -15,12 +15,13 @@
   "addons": [
     "turborepo",
     "biome",
-    "husky"
+    "husky",
+    "starlight"
   ],
   "examples": [],
   "auth": false,
   "packageManager": "pnpm",
   "dbSetup": "none",
   "api": "none",
-  "webDeploy": "none"
+  "webDeploy": "workers"
 }
