@@ -3,6 +3,7 @@
   packages = [
     pkgs.nodejs_24
     pkgs.pnpm
+    pkgs.ni
   ];
   idx.extensions = [
     "biomejs.biome"
