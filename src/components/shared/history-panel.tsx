@@ -41,6 +41,37 @@ export function HistoryPanel({
     {}
   );
 
+  // Helper functions to avoid nested ternaries
+  const getTypeBackgroundClass = (type: string): string => {
+    if (type === 'password') {
+      return 'bg-blue-100 dark:bg-blue-900/30';
+    }
+    if (type === 'passphrase') {
+      return 'bg-green-100 dark:bg-green-900/30';
+    }
+    return 'bg-purple-100 dark:bg-purple-900/30';
+  };
+
+  const getTypeTextClass = (type: string): string => {
+    if (type === 'password') {
+      return 'text-blue-600 dark:text-blue-400';
+    }
+    if (type === 'passphrase') {
+      return 'text-green-600 dark:text-green-400';
+    }
+    return 'text-purple-600 dark:text-purple-400';
+  };
+
+  const getTypeBadgeClass = (type: string): string => {
+    if (type === 'password') {
+      return 'border-blue-200 text-blue-600 dark:border-blue-800 dark:text-blue-400';
+    }
+    if (type === 'passphrase') {
+      return 'border-green-200 text-green-600 dark:border-green-800 dark:text-green-400';
+    }
+    return 'border-purple-200 text-purple-600 dark:border-purple-800 dark:text-purple-400';
+  };
+
   const togglePasswordVisibility = (entryId: string) => {
     setShowPasswords((prev) => ({
       ...prev,
@@ -132,34 +163,14 @@ export function HistoryPanel({
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <div
-                          className={`rounded-md p-1.5 ${
-                            entry.type === 'password'
-                              ? 'bg-blue-100 dark:bg-blue-900/30'
-                              : entry.type === 'passphrase'
-                                ? 'bg-green-100 dark:bg-green-900/30'
-                                : 'bg-purple-100 dark:bg-purple-900/30'
-                          }`}
+                          className={`rounded-md p-1.5 ${getTypeBackgroundClass(entry.type)}`}
                         >
-                          <div
-                            className={
-                              entry.type === 'password'
-                                ? 'text-blue-600 dark:text-blue-400'
-                                : entry.type === 'passphrase'
-                                  ? 'text-green-600 dark:text-green-400'
-                                  : 'text-purple-600 dark:text-purple-400'
-                            }
-                          >
+                          <div className={getTypeTextClass(entry.type)}>
                             {getTypeIcon(entry.type)}
                           </div>
                         </div>
                         <Badge
-                          className={`font-medium text-xs ${
-                            entry.type === 'password'
-                              ? 'border-blue-200 text-blue-600 dark:border-blue-800 dark:text-blue-400'
-                              : entry.type === 'passphrase'
-                                ? 'border-green-200 text-green-600 dark:border-green-800 dark:text-green-400'
-                                : 'border-purple-200 text-purple-600 dark:border-purple-800 dark:text-purple-400'
-                          }`}
+                          className={`font-medium text-xs ${getTypeBadgeClass(entry.type)}`}
                           variant="outline"
                         >
                           {entry.type.toString().charAt(0).toUpperCase() +
