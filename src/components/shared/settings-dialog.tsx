@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import { toast } from 'sonner';
 import type { AppSettings } from '../../types';
-import { SimpleEncryption } from '../../utils/encryption';
+import { generateKey } from '../../utils/encryption';
 import { Button } from '../ui/button';
 import {
   Card,
@@ -68,7 +68,7 @@ export function SettingsDialog({
   };
 
   const generateNewKey = () => {
-    const newKey = SimpleEncryption.generateKey();
+    const newKey = generateKey();
     setLocalSettings((prev) => ({
       ...prev,
       encryptionKey: newKey,

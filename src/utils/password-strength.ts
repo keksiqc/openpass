@@ -1,6 +1,66 @@
 import { GENERATION_LIMITS } from '../constants/generator';
 import type { PasswordStrength } from '../types';
 
+// Regex patterns for password strength analysis (moved to top-level for performance)
+const LOWERCASE_REGEX = /[a-z]/;
+const UPPERCASE_REGEX = /[A-Z]/;
+const DIGIT_REGEX = /[0-9]/;
+const SPECIAL_CHAR_REGEX = /[^a-zA-Z0-9]/;
+const REPEATED_CHARS_REGEX = /(.)\1{2,}/;
+const SEQUENTIAL_NUMBERS_REGEX = /012|123|234|345|456|567|678|789|890/;
+const SEQUENTIAL_LETTERS_REGEX =
+  /abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz/i;
+
+// Helper function to check character variety
+const checkCharacterVariety = (password: string): number => {
+  let score = 0;
+  if (LOWERCASE_REGEX.test(password)) {
+    score += 1;
+  }
+  if (UPPERCASE_REGEX.test(password)) {
+    score += 1;
+  }
+  if (DIGIT_REGEX.test(password)) {
+    score += 1;
+  }
+  if (SPECIAL_CHAR_REGEX.test(password)) {
+    score += 1;
+  }
+  return score;
+};
+
+// Helper function to apply pattern penalties
+const applyPatternPenalties = (password: string): number => {
+  let penalties = 0;
+  if (REPEATED_CHARS_REGEX.test(password)) {
+    penalties += 1; // Repeated characters
+  }
+  if (SEQUENTIAL_NUMBERS_REGEX.test(password)) {
+    penalties += 1; // Sequential numbers
+  }
+  if (SEQUENTIAL_LETTERS_REGEX.test(password)) {
+    penalties += 1; // Sequential letters
+  }
+  return penalties;
+};
+
+// Helper function to get strength label and color
+const getStrengthLabel = (score: number): { label: string; color: string } => {
+  if (score <= 2) {
+    return { label: 'Weak', color: 'text-red-600' };
+  }
+  if (score <= 4) {
+    return { label: 'Fair', color: 'text-yellow-600' };
+  }
+  if (score <= 6) {
+    return { label: 'Good', color: 'text-blue-600' };
+  }
+  if (score <= 8) {
+    return { label: 'Strong', color: 'text-green-600' };
+  }
+  return { label: 'Excellent', color: 'text-green-700' };
+};
+
 // Password strength calculator
 export const calculateStrength = (password: string): PasswordStrength => {
   let score = 0;
@@ -20,19 +80,8 @@ export const calculateStrength = (password: string): PasswordStrength => {
     score += 1;
   }
 
-  // Character variety
-  if (/[a-z]/.test(password)) {
-    score += 1;
-  }
-  if (/[A-Z]/.test(password)) {
-    score += 1;
-  }
-  if (/[0-9]/.test(password)) {
-    score += 1;
-  }
-  if (/[^a-zA-Z0-9]/.test(password)) {
-    score += 1;
-  }
+  // Character variety scoring
+  score += checkCharacterVariety(password);
 
   // Bonus points for high diversity
   const uniqueChars = new Set(password).size;
@@ -40,37 +89,14 @@ export const calculateStrength = (password: string): PasswordStrength => {
     score += 1;
   }
 
-  // Pattern detection penalties
-  if (/(.)\1{2,}/.test(password)) {
-    score -= 1; // Repeated characters
-  }
-  if (/012|123|234|345|456|567|678|789|890/.test(password)) {
-    score -= 1; // Sequential numbers
-  }
-  if (
-    /abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz/i.test(
-      password
-    )
-  ) {
-    score -= 1; // Sequential letters
-  }
+  // Apply pattern penalties
+  score -= applyPatternPenalties(password);
 
   // Ensure minimum score of 0
   score = Math.max(0, score);
 
-  if (score <= 2) {
-    return { score, label: 'Weak', color: 'text-red-600' };
-  }
-  if (score <= 4) {
-    return { score, label: 'Fair', color: 'text-yellow-600' };
-  }
-  if (score <= 6) {
-    return { score, label: 'Good', color: 'text-blue-600' };
-  }
-  if (score <= 8) {
-    return { score, label: 'Strong', color: 'text-green-600' };
-  }
-  return { score, label: 'Excellent', color: 'text-green-700' };
+  const strengthInfo = getStrengthLabel(score);
+  return { score, ...strengthInfo };
 };
 
 // Enhanced entropy calculation

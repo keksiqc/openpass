@@ -1,11 +1,12 @@
 import { RotateCcwKey } from 'lucide-react';
 import type React from 'react';
+import type { AppSettings } from '../../types';
 import { ModeToggle } from '../mode-toggle';
 import { SettingsDialog } from '../shared/settings-dialog';
 
 interface NavBarProps {
-  appSettings: any;
-  handleSettingsChange: (settings: any) => void;
+  appSettings: AppSettings;
+  handleSettingsChange: (settings: AppSettings) => void;
   handleClearAllData: () => void;
   exportProfiles: () => void;
   importProfiles: (event: React.ChangeEvent<HTMLInputElement>) => void;

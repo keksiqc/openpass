@@ -128,6 +128,59 @@ export default function App() {
     }
   };
 
+  // Helper function to get current settings based on active tab
+  const getCurrentSettings = () => {
+    if (activeTab === 'password') {
+      return passwordSettings;
+    }
+    if (activeTab === 'passphrase') {
+      return passphraseSettings;
+    }
+    if (activeTab === 'format') {
+      return formatSettings;
+    }
+    return pinSettings;
+  };
+
+  // Helper function to create a new profile
+  const createNewProfile = (name: string): Profile => {
+    const baseProfile = {
+      id: Date.now().toString(),
+      name: name.trim(),
+      createdAt: new Date(),
+      isFavorite: false,
+    };
+
+    if (activeTab === 'password') {
+      return { ...baseProfile, type: 'password', settings: passwordSettings };
+    }
+    if (activeTab === 'passphrase') {
+      return {
+        ...baseProfile,
+        type: 'passphrase',
+        settings: passphraseSettings,
+      };
+    }
+    if (activeTab === 'format') {
+      return { ...baseProfile, type: 'format', settings: formatSettings };
+    }
+    return { ...baseProfile, type: 'pin', settings: pinSettings };
+  };
+
+  // Helper function to update existing profile
+  const updateExistingProfile = (profileId: string, name: string) => {
+    return profiles.map((p) =>
+      p.id === profileId
+        ? ({
+            ...p,
+            name: name.trim(),
+            type: activeTab,
+            settings: getCurrentSettings(),
+          } as Profile)
+        : p
+    );
+  };
+
   // Save profile
   const saveProfile = () => {
     if (!profileName.trim()) {
@@ -147,75 +200,17 @@ export default function App() {
 
     if (editingProfileId) {
       // Update existing profile
-      const updatedProfiles = profiles.map((p) =>
-        p.id === editingProfileId
-          ? ({
-              ...p,
-              name: profileName.trim(),
-              type: activeTab, // activeTab is already ProfileType
-              settings:
-                activeTab === 'password'
-                  ? passwordSettings
-                  : activeTab === 'passphrase'
-                    ? passphraseSettings
-                    : activeTab === 'format'
-                      ? formatSettings
-                      : pinSettings,
-            } as Profile) // Ensure the constructed object matches one of the Profile union types
-          : p
+      const updatedProfiles = updateExistingProfile(
+        editingProfileId,
+        profileName
       );
       saveProfilesToStorage(updatedProfiles);
       setEditingProfileId(null);
       toast.success(`Profile "${profileName.trim()}" updated successfully!`);
     } else {
       // Create new profile
-      let newProfile: Profile | null = null;
-
-      if (activeTab === 'password') {
-        newProfile = {
-          id: Date.now().toString(),
-          name: profileName.trim(),
-          type: 'password', // Literal type
-          settings: passwordSettings, // Specific settings type
-          createdAt: new Date(),
-          isFavorite: false,
-        };
-      } else if (activeTab === 'passphrase') {
-        newProfile = {
-          id: Date.now().toString(),
-          name: profileName.trim(),
-          type: 'passphrase', // Literal type
-          settings: passphraseSettings, // Specific settings type
-          createdAt: new Date(),
-          isFavorite: false,
-        };
-      } else if (activeTab === 'format') {
-        newProfile = {
-          id: Date.now().toString(),
-          name: profileName.trim(),
-          type: 'format', // Literal type
-          settings: formatSettings, // Specific settings type
-          createdAt: new Date(),
-          isFavorite: false,
-        };
-      } else if (activeTab === 'pin') {
-        newProfile = {
-          id: Date.now().toString(),
-          name: profileName.trim(),
-          type: 'pin', // Literal type
-          settings: pinSettings, // Specific settings type
-          createdAt: new Date(),
-          isFavorite: false,
-        };
-      }
-
-      if (!newProfile) {
-        // This case should ideally not be reached if activeTab is always a valid ProfileType
-        toast.error('Invalid profile type selected. Cannot save profile.');
-        return;
-      }
-
-      const newProfiles = [...profiles, newProfile]; // newProfile is now one of the specific Profile union members
+      const newProfile = createNewProfile(profileName);
+      const newProfiles = [...profiles, newProfile];
       saveProfilesToStorage(newProfiles);
       toast.success(`Profile "${newProfile.name}" saved successfully!`);
     }
@@ -240,6 +235,10 @@ export default function App() {
       case 'pin':
         setPinSettings(profileToLoad.settings);
         break;
+      default:
+        // This should never happen with proper typing, but handle gracefully
+        toast.error('Unknown profile type');
+        return;
     }
 
     // Update last used
@@ -271,6 +270,10 @@ export default function App() {
       case 'pin':
         setPinSettings(profileToEdit.settings);
         break;
+      default:
+        // This should never happen with proper typing, but handle gracefully
+        toast.error('Unknown profile type');
+        return;
     }
   };
 
