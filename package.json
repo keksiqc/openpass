@@ -30,7 +30,7 @@
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
-    "@vitejs/plugin-react-oxc": "^0.2.3",
+    "@vitejs/plugin-react": "^5.0.1",
     "globals": "^16.3.0",
     "lefthook": "^1.12.3",
     "taze": "^19.1.1",
