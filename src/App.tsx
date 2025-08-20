@@ -41,14 +41,14 @@ import type {
 export default function App() {
   // Settings states with enhanced defaults
   const [passwordSettings, setPasswordSettings] = useState<PasswordSettings>(
-    DEFAULT_PASSWORD_SETTINGS,
+    DEFAULT_PASSWORD_SETTINGS
   );
 
   const [passphraseSettings, setPassphraseSettings] =
     useState<PassphraseSettings>(DEFAULT_PASSPHRASE_SETTINGS);
 
   const [formatSettings, setFormatSettings] = useState<FormatSettings>(
-    DEFAULT_FORMAT_SETTINGS,
+    DEFAULT_FORMAT_SETTINGS
   );
 
   // Placeholder for PIN settings
@@ -84,7 +84,7 @@ export default function App() {
         event.preventDefault();
         // Trigger generation based on active tab
         const generateButton = document.querySelector(
-          '[data-generate-button]',
+          '[data-generate-button]'
         ) as HTMLButtonElement;
         if (generateButton) {
           generateButton.click();
@@ -138,7 +138,7 @@ export default function App() {
     // Check for duplicate names
     if (
       profiles.some(
-        (p) => p.name.toLowerCase() === profileName.trim().toLowerCase(),
+        (p) => p.name.toLowerCase() === profileName.trim().toLowerCase()
       )
     ) {
       toast.error('A profile with this name already exists');
@@ -162,7 +162,7 @@ export default function App() {
                       ? formatSettings
                       : pinSettings,
             } as Profile) // Ensure the constructed object matches one of the Profile union types
-          : p,
+          : p
       );
       saveProfilesToStorage(updatedProfiles);
       setEditingProfileId(null);
@@ -245,7 +245,7 @@ export default function App() {
     // Update last used
     const updatedProfile = { ...profileToLoad, lastUsed: new Date() };
     const newProfiles = profiles.map((p) =>
-      p.id === profileToLoad.id ? updatedProfile : p,
+      p.id === profileToLoad.id ? updatedProfile : p
     );
     saveProfilesToStorage(newProfiles);
 
@@ -283,7 +283,7 @@ export default function App() {
   // Toggle favorite profile
   const toggleFavorite = (profileId: string) => {
     const newProfiles = profiles.map((p) =>
-      p.id === profileId ? { ...p, isFavorite: !p.isFavorite } : p,
+      p.id === profileId ? { ...p, isFavorite: !p.isFavorite } : p
     );
     saveProfilesToStorage(newProfiles);
   };
@@ -315,12 +315,12 @@ export default function App() {
     saveSettings(newSettings);
 
     // If history was disabled, clear it
-    if (!newSettings.historyEnabled) {
-      setPasswordHistory([]);
-      saveHistoryToStorage([]);
-    } else {
+    if (newSettings.historyEnabled) {
       // Reload history if it was re-enabled
       setPasswordHistory(loadHistory());
+    } else {
+      setPasswordHistory([]);
+      saveHistoryToStorage([]);
     }
   };
 
@@ -371,7 +371,9 @@ export default function App() {
 
   const importProfiles = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -395,70 +397,70 @@ export default function App() {
     <div className="min-h-screen bg-background">
       <NavBar
         appSettings={appSettings}
-        handleSettingsChange={handleSettingsChange}
-        handleClearAllData={handleClearAllData}
         exportProfiles={exportProfiles}
-        importProfiles={importProfiles}
+        handleClearAllData={handleClearAllData}
         handleResetToDefaults={handleResetToDefaults}
+        handleSettingsChange={handleSettingsChange}
+        importProfiles={importProfiles}
       />
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
+      <main className="container mx-auto max-w-7xl px-4 py-8">
         {/* Main Grid Layout */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid gap-8 lg:grid-cols-3">
           {/* Main Generator */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="space-y-8 lg:col-span-2">
             <Tabs
-              value={activeTab}
+              className="w-full"
               onValueChange={(value: string) =>
                 setActiveTab(value as ProfileType)
               }
-              className="w-full"
+              value={activeTab}
             >
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-4 h-12 rounded-xl">
+              <TabsList className="mb-4 grid h-12 w-full grid-cols-2 rounded-xl sm:grid-cols-4">
                 <TabsTrigger value="password">
-                  <Key className="h-4 w-4 mr-2" />
+                  <Key className="mr-2 h-4 w-4" />
                   Password
                 </TabsTrigger>
                 <TabsTrigger value="passphrase">
-                  <BookOpen className="h-4 w-4 mr-2" />
+                  <BookOpen className="mr-2 h-4 w-4" />
                   Passphrase
                 </TabsTrigger>
                 <TabsTrigger value="format">
-                  <Settings className="h-4 w-4 mr-2" />
+                  <Settings className="mr-2 h-4 w-4" />
                   Format
                 </TabsTrigger>
                 <TabsTrigger value="pin">
-                  <Hash className="h-4 w-4 mr-2" />
+                  <Hash className="mr-2 h-4 w-4" />
                   PIN
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="password">
                 <PasswordGenerator
-                  settings={passwordSettings}
-                  onSettingsChange={setPasswordSettings}
-                  onPasswordGenerated={addToHistory}
-                  onCopyToClipboard={copyToClipboard}
                   isGenerating={isGenerating}
+                  onCopyToClipboard={copyToClipboard}
                   onGeneratingChange={setIsGenerating}
+                  onPasswordGenerated={addToHistory}
+                  onSettingsChange={setPasswordSettings}
+                  settings={passwordSettings}
                 />
               </TabsContent>
 
               <TabsContent value="passphrase">
                 <PassphraseGenerator
-                  settings={passphraseSettings}
-                  onSettingsChange={setPassphraseSettings}
-                  onPassphraseGenerated={addToHistory}
                   onCopyToClipboard={copyToClipboard}
+                  onPassphraseGenerated={addToHistory}
+                  onSettingsChange={setPassphraseSettings}
+                  settings={passphraseSettings}
                 />
               </TabsContent>
 
               <TabsContent value="format">
                 <FormatGenerator
-                  settings={formatSettings}
-                  onSettingsChange={setFormatSettings}
-                  onFormatGenerated={addToHistory}
                   onCopyToClipboard={copyToClipboard}
+                  onFormatGenerated={addToHistory}
+                  onSettingsChange={setFormatSettings}
+                  settings={formatSettings}
                 />
               </TabsContent>
 
@@ -471,8 +473,8 @@ export default function App() {
             {appSettings.historyEnabled && (
               <HistoryPanel
                 history={passwordHistory}
-                onCopyToClipboard={copyToClipboard}
                 onClearHistory={clearHistory}
+                onCopyToClipboard={copyToClipboard}
                 onDeleteHistoryEntry={handleDeleteHistoryEntry}
               />
             )}
@@ -482,22 +484,22 @@ export default function App() {
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <ProfileManager
-                profiles={profiles}
-                profileName={profileName}
-                onProfileNameChange={setProfileName}
                 activeTab={activeTab}
-                passwordSettings={passwordSettings}
-                passphraseSettings={passphraseSettings}
+                editingProfileId={editingProfileId}
                 formatSettings={formatSettings}
-                pinSettings={pinSettings} // Pass pinSettings
-                passwordHistory={passwordHistory}
-                onSaveProfile={saveProfile}
-                onLoadProfile={loadProfile}
-                onToggleFavorite={toggleFavorite}
+                onCancelEdit={handleCancelEdit}
                 onDeleteProfile={deleteProfile}
-                onEditProfile={handleEditProfile} // Pass new prop
-                editingProfileId={editingProfileId} // Pass new prop
-                onCancelEdit={handleCancelEdit} // Pass new prop
+                onEditProfile={handleEditProfile}
+                onLoadProfile={loadProfile}
+                onProfileNameChange={setProfileName} // Pass pinSettings
+                onSaveProfile={saveProfile}
+                onToggleFavorite={toggleFavorite}
+                passphraseSettings={passphraseSettings}
+                passwordHistory={passwordHistory}
+                passwordSettings={passwordSettings}
+                pinSettings={pinSettings} // Pass new prop
+                profileName={profileName} // Pass new prop
+                profiles={profiles} // Pass new prop
               />
             </div>
           </div>

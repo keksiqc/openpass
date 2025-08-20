@@ -23,7 +23,7 @@ export function PinGenerator() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+          <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
             <Hash className="h-4 w-4 text-primary" />
           </div>
           PIN Generator
@@ -33,42 +33,42 @@ export function PinGenerator() {
         {' '}
         {/* Changed from space-y-8 to space-y-6 */}
         <div className="space-y-3">
-          <Label htmlFor="pin-length" className="text-base font-medium">
+          <Label className="font-medium text-base" htmlFor="pin-length">
             PIN Length: {length}
           </Label>
           <Slider
-            id="pin-length"
-            min={4}
-            max={12}
-            value={[length]}
-            onValueChange={(value) => setLength(value[0])}
             className="w-full"
+            id="pin-length"
+            max={12}
+            min={4}
+            onValueChange={(value) => setLength(value[0])}
+            value={[length]}
           />
         </div>
         <Button
-          onClick={generatePin}
           className="w-full"
-          size="lg"
           data-generate-button
+          onClick={generatePin}
+          size="lg"
         >
-          <RefreshCw className="h-4 w-4 mr-2" />
+          <RefreshCw className="mr-2 h-4 w-4" />
           Generate PIN
         </Button>
         {pin && (
-          <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
-            <Label className="text-sm font-medium">Generated PIN</Label>
+          <div className="space-y-3 rounded-lg border bg-muted/50 p-4">
+            <Label className="font-medium text-sm">Generated PIN</Label>
             <div className="flex items-center gap-2">
               <Input
-                value={pin}
+                className="pr-2 font-mono text-sm"
                 readOnly
                 type="text"
-                className="font-mono text-sm pr-2"
+                value={pin}
               />
               <Button
-                variant="outline"
-                size="icon"
-                onClick={handleCopyToClipboard}
                 className="shrink-0"
+                onClick={handleCopyToClipboard}
+                size="icon"
+                variant="outline"
               >
                 <Copy className="h-4 w-4" />
               </Button>

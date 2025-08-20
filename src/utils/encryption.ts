@@ -6,7 +6,9 @@ export class SimpleEncryption {
   // Simple XOR-based encryption for demo purposes
   // In production, use a proper encryption library like crypto-js
   static encrypt(text: string, key: string): string {
-    if (!key) return text;
+    if (!key) {
+      return text;
+    }
 
     const keyBytes = SimpleEncryption.encoder.encode(key);
     const textBytes = SimpleEncryption.encoder.encode(text);
@@ -20,14 +22,16 @@ export class SimpleEncryption {
   }
 
   static decrypt(encryptedText: string, key: string): string {
-    if (!key) return encryptedText;
+    if (!key) {
+      return encryptedText;
+    }
 
     try {
       const keyBytes = SimpleEncryption.encoder.encode(key);
       const encryptedBytes = new Uint8Array(
         atob(encryptedText)
           .split('')
-          .map((char) => char.charCodeAt(0)),
+          .map((char) => char.charCodeAt(0))
       );
       const decrypted = new Uint8Array(encryptedBytes.length);
 
@@ -36,8 +40,7 @@ export class SimpleEncryption {
       }
 
       return SimpleEncryption.decoder.decode(decrypted);
-    } catch (error) {
-      console.error('Decryption failed:', error);
+    } catch (_error) {
       return encryptedText;
     }
   }

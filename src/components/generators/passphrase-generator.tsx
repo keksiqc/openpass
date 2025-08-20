@@ -47,7 +47,7 @@ interface PassphraseGeneratorProps {
   onSettingsChange: (settings: PassphraseSettings) => void;
   onPassphraseGenerated: (
     passphrase: string,
-    historyEntry: PasswordHistory,
+    historyEntry: PasswordHistory
   ) => void;
   onCopyToClipboard: (text: string) => void;
 }
@@ -77,58 +77,58 @@ export function PassphraseGenerator({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+          <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
             <BookOpen className="h-4 w-4 text-primary" />
           </div>
           Passphrase Generator
         </CardTitle>
-        <CardDescription className="text-sm leading-relaxed text-muted-foreground">
+        <CardDescription className="text-muted-foreground text-sm leading-relaxed">
           Create memorable and secure passphrases from random words.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
-        <TabsContent value="passphrase" className="space-y-6">
+        <TabsContent className="space-y-6" value="passphrase">
           {/* Word Count */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="text-base font-medium">Word Count</Label>
-              <Badge variant="outline" className="text-sm">
+              <Label className="font-medium text-base">Word Count</Label>
+              <Badge className="text-sm" variant="outline">
                 {settings.wordCount} words
               </Badge>
             </div>
             <Slider
-              value={[settings.wordCount]}
+              className="w-full"
+              max={8}
+              min={2}
               onValueChange={(value) =>
                 onSettingsChange({
                   ...settings,
                   wordCount: value[0],
                 })
               }
-              max={8}
-              min={2}
               step={1}
-              className="w-full"
+              value={[settings.wordCount]}
             />
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-muted-foreground text-xs">
               <span>2</span>
               <span>8</span>
             </div>
           </div>
 
           {/* Separator and Case Options */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="separator" className="text-base font-medium">
+              <Label className="font-medium text-base" htmlFor="separator">
                 Separator
               </Label>
               <Select
-                value={settings.separator}
                 onValueChange={(value) =>
                   onSettingsChange({
                     ...settings,
                     separator: value,
                   })
                 }
+                value={settings.separator}
               >
                 <SelectTrigger className="bg-card">
                   <SelectValue />
@@ -144,17 +144,17 @@ export function PassphraseGenerator({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="word-case" className="text-base font-medium">
+              <Label className="font-medium text-base" htmlFor="word-case">
                 Word Case
               </Label>
               <Select
-                value={settings.wordCase}
                 onValueChange={(value) =>
                   onSettingsChange({
                     ...settings,
                     wordCase: value as PassphraseSettings['wordCase'],
                   })
                 }
+                value={settings.wordCase}
               >
                 <SelectTrigger className="bg-card">
                   <SelectValue />
@@ -171,22 +171,22 @@ export function PassphraseGenerator({
 
           {/* Additional Options */}
           <Collapsible>
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-3 text-left bg-muted/30 hover:bg-muted/50 rounded-lg border transition-colors">
-              <span className="text-sm font-medium">Additional Options</span>
+            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border bg-muted/30 p-3 text-left transition-colors hover:bg-muted/50">
+              <span className="font-medium text-sm">Additional Options</span>
               <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-3 p-4 bg-muted/20 rounded-lg border mt-2">
+            <CollapsibleContent className="mt-2 space-y-3 rounded-lg border bg-muted/20 p-4">
               {/* Add Numbers Option - New Structure */}
               <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
-                <Label htmlFor="include-numbers" className="flex flex-col pr-2">
+                <Label className="flex flex-col pr-2" htmlFor="include-numbers">
                   <span className="font-medium">Add Numbers</span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     Include numbers in the passphrase
                   </span>
                 </Label>
                 <Switch
-                  id="include-numbers"
                   checked={settings.includeNumbers}
+                  id="include-numbers"
                   onCheckedChange={(checked) =>
                     onSettingsChange({
                       ...settings,
@@ -197,21 +197,21 @@ export function PassphraseGenerator({
               </div>
               {settings.includeNumbers && ( // Only show if "Add Numbers" is checked
                 // Insert Numbers Randomly Option - New Structure (with slight indent if desired, or remove ml-6 for same level)
-                <div className="flex items-center justify-between rounded-md border p-3 shadow-sm ml-0 mt-2">
+                <div className="mt-2 ml-0 flex items-center justify-between rounded-md border p-3 shadow-sm">
                   {' '}
                   {/* Adjusted indent and margin top */}
                   <Label
-                    htmlFor="insert-numbers-randomly"
                     className="flex flex-col pr-2"
+                    htmlFor="insert-numbers-randomly"
                   >
                     <span className="font-medium">Insert numbers randomly</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-muted-foreground text-xs">
                       Distribute numbers within the passphrase
                     </span>
                   </Label>
                   <Switch
-                    id="insert-numbers-randomly"
                     checked={settings.insertNumbersRandomly}
+                    id="insert-numbers-randomly"
                     onCheckedChange={(checked) =>
                       onSettingsChange({
                         ...settings,
@@ -226,28 +226,28 @@ export function PassphraseGenerator({
 
           {/* Generate Button */}
           <Button
-            onClick={handleGenerate}
             className="w-full"
-            size="lg"
             data-generate-button
+            onClick={handleGenerate}
+            size="lg"
           >
-            <RefreshCw className="h-4 w-4 mr-2" />
+            <RefreshCw className="mr-2 h-4 w-4" />
             Generate Passphrase
           </Button>
 
           {/* Generated Passphrase Display */}
           {generatedPassphrase && (
-            <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
+            <div className="space-y-3 rounded-lg border bg-muted/50 p-4">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">
+                <Label className="font-medium text-sm">
                   Generated Passphrase
                 </Label>
                 {(() => {
                   const strength = getPassphraseStrength(); // Called without parameter
                   return (
                     <Badge
-                      variant="outline"
                       className={`text-xs ${strength.color}`}
+                      variant="outline"
                     >
                       {strength.label}
                     </Badge>
@@ -255,35 +255,35 @@ export function PassphraseGenerator({
                 })()}
               </div>
 
-              <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-2">
+              <div className="mb-2 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
                 <div
                   className={`h-2.5 rounded-full ${getStrengthColor(
-                    getPassphraseStrength().label,
+                    getPassphraseStrength().label
                   )}`}
                   style={{ width: `${getPassphraseStrength().score * 10}%` }}
-                ></div>
+                />
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {getStrengthDescription(
                   getPassphraseStrength().label,
-                  'passphrase',
+                  'passphrase'
                 )}
               </p>
 
               <div className="flex items-center gap-2">
-                <div className="flex-1 relative">
+                <div className="relative flex-1">
                   <Input
-                    value={generatedPassphrase}
+                    className="pr-2 font-mono text-sm"
                     readOnly
                     type={showPassword ? 'text' : 'password'}
-                    className="font-mono text-sm pr-2"
+                    value={generatedPassphrase}
                   />
                 </div>
                 <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setShowPassword(!showPassword)}
                   className="shrink-0"
+                  onClick={() => setShowPassword(!showPassword)}
+                  size="icon"
+                  variant="outline"
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -292,16 +292,16 @@ export function PassphraseGenerator({
                   )}
                 </Button>
                 <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => onCopyToClipboard(generatedPassphrase)}
                   className="shrink-0"
+                  onClick={() => onCopyToClipboard(generatedPassphrase)}
+                  size="icon"
+                  variant="outline"
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
+              <div className="grid grid-cols-1 gap-2 text-muted-foreground text-xs sm:grid-cols-2">
                 <div>
                   <strong>Estimated Entropy:</strong>{' '}
                   {Math.round(getPassphraseStrength().score * 1.2)}{' '}

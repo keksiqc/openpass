@@ -79,12 +79,12 @@ export function FormatGenerator({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+          <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
             <Settings className="h-4 w-4 text-primary" />
           </div>
           Format Generator
         </CardTitle>
-        <CardDescription className="text-sm leading-relaxed text-muted-foreground">
+        <CardDescription className="text-muted-foreground text-sm leading-relaxed">
           Define password formats using a flexible pattern system.
         </CardDescription>
       </CardHeader>
@@ -94,12 +94,12 @@ export function FormatGenerator({
           {/* Changed from TabsContent to div, removed value prop */}
           {/* Format Pattern Input */}
           <div className="space-y-3">
-            <Label htmlFor="format" className="text-base font-medium">
+            <Label className="font-medium text-base" htmlFor="format">
               Format Pattern
             </Label>
             <Input
+              className="bg-card font-mono text-sm"
               id="format"
-              value={settings.format}
               onChange={(e) =>
                 onSettingsChange({
                   ...settings,
@@ -107,18 +107,18 @@ export function FormatGenerator({
                 })
               }
               placeholder="e.g., 2u4l2d2{#$%}"
-              className="font-mono text-sm bg-card"
+              value={settings.format}
             />
-            <div className="text-xs text-muted-foreground space-y-1">
+            <div className="space-y-1 text-muted-foreground text-xs">
               <p>
                 <strong>Format:</strong> Nu (uppercase), Nl (lowercase), Nd
-                (digits), N{`{chars}`} (custom)
+                (digits), N{'{chars}'} (custom)
               </p>
               <p>
                 <strong>Example:</strong>{' '}
-                <code className="font-mono bg-muted px-1 rounded">3u2l4d</code>{' '}
+                <code className="rounded bg-muted px-1 font-mono">3u2l4d</code>{' '}
                 →{' '}
-                <code className="font-mono bg-muted px-1 rounded">
+                <code className="rounded bg-muted px-1 font-mono">
                   ABCde1234
                 </code>
               </p>
@@ -126,7 +126,7 @@ export function FormatGenerator({
           </div>
           {/* Quick Templates */}
           <div className="space-y-3">
-            <Label className="text-base font-medium">Quick Templates</Label>
+            <Label className="font-medium text-base">Quick Templates</Label>
             <Select
               onValueChange={(value) =>
                 onSettingsChange({
@@ -143,7 +143,7 @@ export function FormatGenerator({
                   <SelectItem key={template.name} value={template.pattern}>
                     <div className="flex flex-col">
                       <span className="font-medium">{template.name}</span>
-                      <span className="text-xs text-muted-foreground font-mono">
+                      <span className="font-mono text-muted-foreground text-xs">
                         {template.pattern}
                       </span>
                     </div>
@@ -154,14 +154,14 @@ export function FormatGenerator({
           </div>
           {/* Format Guide */}
           <Collapsible>
-            <CollapsibleTrigger className="flex items-center justify-between w-full p-3 text-left bg-muted/30 hover:bg-muted/50 rounded-lg border transition-colors">
-              <span className="text-sm font-medium">Format Guide</span>
+            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border bg-muted/30 p-3 text-left transition-colors hover:bg-muted/50">
+              <span className="font-medium text-sm">Format Guide</span>
               <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-3 p-4 bg-muted/20 rounded-lg border mt-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+            <CollapsibleContent className="mt-2 space-y-3 rounded-lg border bg-muted/20 p-4">
+              <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
                 <div className="flex items-center gap-2">
-                  <code className="px-2 py-1 bg-background rounded text-xs font-mono">
+                  <code className="rounded bg-background px-2 py-1 font-mono text-xs">
                     2u
                   </code>
                   <span className="text-muted-foreground">
@@ -169,7 +169,7 @@ export function FormatGenerator({
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <code className="px-2 py-1 bg-background rounded text-xs font-mono">
+                  <code className="rounded bg-background px-2 py-1 font-mono text-xs">
                     4l
                   </code>
                   <span className="text-muted-foreground">
@@ -177,22 +177,22 @@ export function FormatGenerator({
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <code className="px-2 py-1 bg-background rounded text-xs font-mono">
+                  <code className="rounded bg-background px-2 py-1 font-mono text-xs">
                     3d
                   </code>
                   <span className="text-muted-foreground">3 digits</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <code className="px-2 py-1 bg-background rounded text-xs font-mono">
-                    2{`{#$%}`}
+                  <code className="rounded bg-background px-2 py-1 font-mono text-xs">
+                    2{'{#$%}'}
                   </code>
                   <span className="text-muted-foreground">
                     2 from custom set
                   </span>
                 </div>
               </div>
-              <div className="mt-4 p-3 bg-background rounded-lg border">
-                <div className="text-xs font-medium mb-2 text-muted-foreground">
+              <div className="mt-4 rounded-lg border bg-background p-3">
+                <div className="mb-2 font-medium text-muted-foreground text-xs">
                   Popular Patterns:
                 </div>
                 <div className="space-y-1 text-xs">
@@ -201,7 +201,7 @@ export function FormatGenerator({
                     alphanumeric (12 chars)
                   </div>
                   <div>
-                    <code className="font-mono">2u6l2d2{`{!@#}`}</code> →
+                    <code className="font-mono">2u6l2d2{'{!@#}'}</code> →
                     Complex mixed (12 chars)
                   </div>
                   <div>
@@ -214,27 +214,27 @@ export function FormatGenerator({
           </Collapsible>
           {/* Generate Button */}
           <Button
-            onClick={handleGenerate}
             className="w-full"
-            size="lg"
             data-generate-button
+            onClick={handleGenerate}
+            size="lg"
           >
-            <RefreshCw className="h-4 w-4 mr-2" />
+            <RefreshCw className="mr-2 h-4 w-4" />
             Generate Format Password
           </Button>
           {/* Generated Format Password Display */}
           {generatedFormat && (
-            <div className="space-y-3 p-4 bg-muted/50 rounded-lg border">
+            <div className="space-y-3 rounded-lg border bg-muted/50 p-4">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">
+                <Label className="font-medium text-sm">
                   Generated Format Password
                 </Label>
                 {(() => {
                   const strength = getFormatStrength(generatedFormat);
                   return (
                     <Badge
-                      variant="outline"
                       className={`text-xs ${strength.color}`}
+                      variant="outline"
                     >
                       {strength.label}
                     </Badge>
@@ -242,37 +242,37 @@ export function FormatGenerator({
                 })()}
               </div>
 
-              <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mb-2">
+              <div className="mb-2 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
                 <div
                   className={`h-2.5 rounded-full ${getStrengthColor(
-                    getFormatStrength(generatedFormat).label,
+                    getFormatStrength(generatedFormat).label
                   )}`}
                   style={{
                     width: `${getFormatStrength(generatedFormat).score * 10}%`,
                   }}
-                ></div>
+                />
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {getStrengthDescription(
                   getFormatStrength(generatedFormat).label,
-                  'format',
+                  'format'
                 )}
               </p>
 
               <div className="flex items-center gap-2">
-                <div className="flex-1 relative">
+                <div className="relative flex-1">
                   <Input
-                    value={generatedFormat}
+                    className="pr-2 font-mono text-sm"
                     readOnly
                     type={showPassword ? 'text' : 'password'}
-                    className="font-mono text-sm pr-2"
+                    value={generatedFormat}
                   />
                 </div>
                 <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setShowPassword(!showPassword)}
                   className="shrink-0"
+                  onClick={() => setShowPassword(!showPassword)}
+                  size="icon"
+                  variant="outline"
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -281,23 +281,23 @@ export function FormatGenerator({
                   )}
                 </Button>
                 <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => onCopyToClipboard(generatedFormat)}
                   className="shrink-0"
+                  onClick={() => onCopyToClipboard(generatedFormat)}
+                  size="icon"
+                  variant="outline"
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground">
+              <div className="grid grid-cols-1 gap-2 text-muted-foreground text-xs sm:grid-cols-2">
                 <div>
                   <strong>Entropy:</strong>{' '}
                   {Math.round(
                     calculateEntropy(
                       generatedFormat,
-                      getCharacterSetFromFormat(settings.format),
-                    ),
+                      getCharacterSetFromFormat(settings.format)
+                    )
                   )}{' '}
                   bits
                 </div>
@@ -306,8 +306,8 @@ export function FormatGenerator({
                   {estimateTimeToCrack(
                     calculateEntropy(
                       generatedFormat,
-                      getCharacterSetFromFormat(settings.format),
-                    ),
+                      getCharacterSetFromFormat(settings.format)
+                    )
                   )}
                 </div>
               </div>

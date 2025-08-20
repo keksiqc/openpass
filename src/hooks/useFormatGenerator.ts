@@ -17,7 +17,9 @@ export const useFormatGenerator = () => {
         }
         // const count = Number.parseInt(numStr); // Not needed for charset generation
 
-        if (i >= format.length) break;
+        if (i >= format.length) {
+          break;
+        }
 
         const type = format[i];
         switch (type) {
@@ -50,7 +52,7 @@ export const useFormatGenerator = () => {
   const generateFormatPassword = useCallback(
     (
       settings: FormatSettings,
-      onSuccess: (password: string, historyEntry: PasswordHistory) => void,
+      onSuccess: (password: string, historyEntry: PasswordHistory) => void
     ) => {
       const format = settings.format;
       let result = '';
@@ -65,9 +67,11 @@ export const useFormatGenerator = () => {
               numStr += format[i];
               i++;
             }
-            const count = Number.parseInt(numStr);
+            const count = Number.parseInt(numStr, 10);
 
-            if (i >= format.length) break;
+            if (i >= format.length) {
+              break;
+            }
 
             const type = format[i];
             let charset = '';
@@ -122,11 +126,11 @@ export const useFormatGenerator = () => {
         toast.success(`${strength.label} format password generated!`);
       } catch {
         toast.error(
-          'Invalid format. Use: Nu (uppercase), Nl (lowercase), Nd (digits), N{chars} (custom)',
+          'Invalid format. Use: Nu (uppercase), Nl (lowercase), Nd (digits), N{chars} (custom)'
         );
       }
     },
-    [], // Removed getCharacterSetFromFormat from dependencies as it's a stable useCallback
+    [] // Removed getCharacterSetFromFormat from dependencies as it's a stable useCallback
   );
 
   return {

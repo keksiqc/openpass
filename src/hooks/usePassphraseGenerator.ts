@@ -9,7 +9,7 @@ export const usePassphraseGenerator = () => {
   const generatePassphrase = useCallback(
     (
       settings: PassphraseSettings,
-      onSuccess: (passphrase: string, historyEntry: PasswordHistory) => void,
+      onSuccess: (passphrase: string, historyEntry: PasswordHistory) => void
     ) => {
       try {
         const wordSource =
@@ -53,7 +53,7 @@ export const usePassphraseGenerator = () => {
               Math.random() > 0.5
             ) {
               const insertPos = getSecureRandom(
-                wordsWithNumbers[randomWordIndex].length + 1,
+                wordsWithNumbers[randomWordIndex].length + 1
               );
               wordsWithNumbers[randomWordIndex] =
                 wordsWithNumbers[randomWordIndex].slice(0, insertPos) +
@@ -64,11 +64,11 @@ export const usePassphraseGenerator = () => {
             }
           }
           passphrase = wordsWithNumbers.join(
-            settings.separator === 'none' ? '' : settings.separator,
+            settings.separator === 'none' ? '' : settings.separator
           );
         } else {
           passphrase = words.join(
-            settings.separator === 'none' ? '' : settings.separator,
+            settings.separator === 'none' ? '' : settings.separator
           );
           if (settings.includeNumbers) {
             const numberCount = 2 + getSecureRandom(3); // 2-4 numbers appended
@@ -93,13 +93,13 @@ export const usePassphraseGenerator = () => {
         onSuccess(passphrase, historyEntry);
 
         toast.success(
-          `${strength.label} passphrase generated! (${Math.round(entropy)} bits entropy)`,
+          `${strength.label} passphrase generated! (${Math.round(entropy)} bits entropy)`
         );
       } catch {
         toast.error('Failed to generate passphrase');
       }
     },
-    [],
+    []
   );
 
   return {
