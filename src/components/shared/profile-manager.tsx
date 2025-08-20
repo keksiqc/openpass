@@ -84,7 +84,7 @@ export function ProfileManager({
 }: ProfileManagerProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState<ProfileType | 'all'>(
-    'all',
+    'all'
   ); // Changed
 
   // Get type icon with enhanced styling
@@ -116,13 +116,21 @@ export function ProfileManager({
     })
     .sort((a, b) => {
       // Favorites first, then by last used, then by creation date
-      if (a.isFavorite && !b.isFavorite) return -1;
-      if (!a.isFavorite && b.isFavorite) return 1;
+      if (a.isFavorite && !b.isFavorite) {
+        return -1;
+      }
+      if (!a.isFavorite && b.isFavorite) {
+        return 1;
+      }
       if (a.lastUsed && b.lastUsed) {
         return b.lastUsed.getTime() - a.lastUsed.getTime();
       }
-      if (a.lastUsed && !b.lastUsed) return -1;
-      if (!a.lastUsed && b.lastUsed) return 1;
+      if (a.lastUsed && !b.lastUsed) {
+        return -1;
+      }
+      if (!a.lastUsed && b.lastUsed) {
+        return 1;
+      }
       return b.createdAt.getTime() - a.createdAt.getTime();
     });
 
@@ -130,12 +138,12 @@ export function ProfileManager({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+          <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
             <Users className="h-4 w-4 text-primary" />
           </div>
           Profile Manager
         </CardTitle>
-        <CardDescription className="text-sm leading-relaxed text-muted-foreground">
+        <CardDescription className="text-muted-foreground text-sm leading-relaxed">
           Save and manage your generator profiles for quick access.
         </CardDescription>
       </CardHeader>
@@ -143,33 +151,33 @@ export function ProfileManager({
         {/* Save Profile Section */}
         <div className="space-y-4">
           <Label
+            className="flex items-center gap-2 font-medium text-sm"
             htmlFor="profile-name"
-            className="text-sm font-medium flex items-center gap-2"
           >
             <User className="h-3.5 w-3.5" />
             Profile Name
           </Label>
           <Input
+            className="h-11 border-2 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20"
             id="profile-name"
-            value={profileName}
             onChange={(e) => onProfileNameChange(e.target.value)}
             placeholder="e.g., Work Passwords, Personal Settings..."
-            className="h-11 text-sm transition-all duration-200 focus:ring-2 focus:ring-primary/20 border-2"
+            value={profileName}
           />
           <div className="flex gap-2">
             <Button
-              onClick={onSaveProfile}
-              className="w-full h-11 font-medium text-sm gap-2 transition-all duration-200 hover:shadow-md"
+              className="h-11 w-full gap-2 font-medium text-sm transition-all duration-200 hover:shadow-md"
               disabled={!profileName.trim()}
+              onClick={onSaveProfile}
             >
               <Save className="h-4 w-4" />
               {editingProfileId ? 'Update Profile' : 'Save Current Settings'}
             </Button>
             {editingProfileId && (
               <Button
+                className="h-11 gap-2 font-medium text-sm transition-all duration-200"
                 onClick={onCancelEdit}
                 variant="outline"
-                className="h-11 font-medium text-sm gap-2 transition-all duration-200"
               >
                 Cancel
               </Button>
@@ -180,18 +188,18 @@ export function ProfileManager({
         {/* Saved Profiles Section */}
         {profiles.length > 0 ? (
           <div className="space-y-4">
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <Badge
+                className="px-3 py-1.5 font-medium text-xs"
                 variant="secondary"
-                className="px-3 py-1.5 text-xs font-medium"
               >
                 {profiles.length} profiles
               </Badge>
               <Select
-                value={selectedFilter}
                 onValueChange={(value: ProfileType | 'all') =>
                   setSelectedFilter(value)
                 }
+                value={selectedFilter}
               >
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Filter by type" />
@@ -206,12 +214,12 @@ export function ProfileManager({
               </Select>
             </div>
             <div className="relative mb-2">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-muted-foreground" />
               <Input
-                value={searchQuery}
+                className="h-10 pl-10"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search profiles..."
-                className="pl-10 h-10"
+                value={searchQuery}
               />
             </div>
             <ScrollArea className="h-96">
@@ -219,45 +227,53 @@ export function ProfileManager({
                 <div className="space-y-3">
                   {filteredProfiles.map((profile) => (
                     <div
-                      key={profile.id}
-                      className={`p-4 rounded-lg border border-border/50 bg-muted/30 hover:bg-muted/50 transition-colors group flex flex-col gap-3 ${
+                      className={`group flex flex-col gap-3 rounded-lg border border-border/50 bg-muted/30 p-4 transition-colors hover:bg-muted/50 ${
                         profile.isFavorite ? 'border-2 border-primary/40' : ''
                       }`}
+                      key={profile.id}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                        <div className="flex min-w-0 flex-1 items-center gap-2">
                           <div
-                            className={`p-2 rounded-md transition-colors ${
+                            className={`rounded-md p-2 transition-colors ${
                               profile.type === 'password'
-                                ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'
+                                ? 'border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20'
                                 : profile.type === 'passphrase'
-                                  ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                                  ? 'border border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
                                   : profile.type === 'format'
-                                    ? 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800'
-                                    : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
+                                    ? 'border border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-900/20'
+                                    : 'border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'
                             }`}
                           >
                             <div
-                              className={`$\{profile.type === 'password' ? 'text-blue-600 dark:text-blue-400' : profile.type === 'passphrase' ? 'text-green-600 dark:text-green-400' : profile.type === 'format' ? 'text-purple-600 dark:text-purple-400' : 'text-red-600 dark:text-red-400'}`}
+                              className={
+                                profile.type === 'password'
+                                  ? 'text-blue-600 dark:text-blue-400'
+                                  : profile.type === 'passphrase'
+                                    ? 'text-green-600 dark:text-green-400'
+                                    : profile.type === 'format'
+                                      ? 'text-purple-600 dark:text-purple-400'
+                                      : 'text-red-600 dark:text-red-400'
+                              }
                             >
                               {getTypeIcon(profile.type)}
                             </div>
                           </div>
                           <div className="min-w-0 flex-1">
-                            <h3 className="font-semibold text-base truncate">
+                            <h3 className="truncate font-semibold text-base">
                               {profile.name}
                             </h3>
                             <Badge
-                              variant="outline"
-                              className={`text-xs font-medium ${
+                              className={`font-medium text-xs ${
                                 profile.type === 'password'
-                                  ? 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800'
+                                  ? 'border-blue-200 text-blue-600 dark:border-blue-800 dark:text-blue-400'
                                   : profile.type === 'passphrase'
-                                    ? 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800'
+                                    ? 'border-green-200 text-green-600 dark:border-green-800 dark:text-green-400'
                                     : profile.type === 'format'
-                                      ? 'text-purple-600 border-purple-200 dark:text-purple-400 dark:border-purple-800'
-                                      : 'text-red-600 border-red-200 dark:text-red-400 dark:border-red-800'
+                                      ? 'border-purple-200 text-purple-600 dark:border-purple-800 dark:text-purple-400'
+                                      : 'border-red-200 text-red-600 dark:border-red-800 dark:text-red-400'
                               }`}
+                              variant="outline"
                             >
                               {profile.type.toString().charAt(0).toUpperCase() +
                                 profile.type.slice(1)}
@@ -266,15 +282,15 @@ export function ProfileManager({
                         </div>
                         <div className="flex items-center gap-1">
                           <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => onToggleFavorite(profile.id)}
                             className="h-9 w-9 p-0"
+                            onClick={() => onToggleFavorite(profile.id)}
+                            size="sm"
                             title={
                               profile.isFavorite
                                 ? 'Remove from favorites'
                                 : 'Add to favorites'
                             }
+                            variant="outline"
                           >
                             <Star
                               className={`h-4 w-4 transition-colors ${
@@ -287,9 +303,9 @@ export function ProfileManager({
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button
-                                variant="outline"
-                                size="sm"
                                 className="h-9 w-9 p-0"
+                                size="sm"
+                                variant="outline"
                               >
                                 <MoreVertical className="h-4 w-4" />
                               </Button>
@@ -323,7 +339,7 @@ export function ProfileManager({
                           </DropdownMenu>
                         </div>
                       </div>
-                      <div className="flex flex-col items-start gap-2 text-xs text-muted-foreground">
+                      <div className="flex flex-col items-start gap-2 text-muted-foreground text-xs">
                         <div
                           className="flex items-center gap-1"
                           title={`Created ${profile.createdAt.toLocaleDateString()}`}
@@ -343,10 +359,10 @@ export function ProfileManager({
                       </div>
                       <div className="flex items-center justify-between pt-2">
                         <Button
-                          variant="default"
-                          size="sm"
+                          className="mr-2 h-9 flex-1 font-medium"
                           onClick={() => onLoadProfile(profile)}
-                          className="flex-1 mr-2 h-9 font-medium"
+                          size="sm"
+                          variant="default"
                         >
                           Load Profile
                         </Button>
@@ -355,12 +371,12 @@ export function ProfileManager({
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 px-6">
-                  <div className="p-3 rounded-full bg-muted/30 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
+                <div className="px-6 py-8 text-center">
+                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted/30 p-3">
                     <Search className="h-5 w-5 text-muted-foreground/50" />
                   </div>
-                  <p className="text-sm font-medium mb-1">No profiles found</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="mb-1 font-medium text-sm">No profiles found</p>
+                  <p className="text-muted-foreground text-xs">
                     Try adjusting your search or filter
                   </p>
                 </div>
@@ -368,18 +384,18 @@ export function ProfileManager({
             </ScrollArea>
           </div>
         ) : (
-          <div className="text-center py-12 px-6">
-            <div className="p-4 rounded-full bg-gradient-to-br from-muted/40 to-muted/20 w-20 h-20 mx-auto mb-6 flex items-center justify-center border border-muted-foreground/10">
+          <div className="px-6 py-12 text-center">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-muted-foreground/10 bg-gradient-to-br from-muted/40 to-muted/20 p-4">
               <Users className="h-8 w-8 text-muted-foreground/50" />
             </div>
-            <h3 className="font-semibold text-lg mb-2">
+            <h3 className="mb-2 font-semibold text-lg">
               No saved profiles yet
             </h3>
-            <p className="text-sm text-muted-foreground/80 mb-6 leading-relaxed max-w-sm mx-auto">
+            <p className="mx-auto mb-6 max-w-sm text-muted-foreground/80 text-sm leading-relaxed">
               Create your first profile to save your current generator settings
               for quick access later
             </p>
-            <div className="text-xs text-muted-foreground bg-muted/30 p-4 rounded-lg border border-muted-foreground/10 max-w-md mx-auto">
+            <div className="mx-auto max-w-md rounded-lg border border-muted-foreground/10 bg-muted/30 p-4 text-muted-foreground text-xs">
               <strong className="font-medium">Tip:</strong> Profiles let you
               quickly switch between different password configurations for work,
               personal use, or specific requirements

@@ -1,5 +1,24 @@
 import type { AppSettings, PasswordHistory, Profile } from '../types'; // Changed PasswordProfile to Profile
-import { SimpleEncryption } from '../utils/encryption';
+import { decrypt, encrypt } from '../utils/encryption';
+
+// Internal interfaces for parsed JSON data
+interface ParsedProfile {
+  id: string;
+  name: string;
+  type: string;
+  settings: unknown;
+  createdAt: string;
+  lastUsed?: string;
+  isFavorite?: boolean;
+}
+
+interface ParsedHistoryEntry {
+  id: string;
+  password: string;
+  type: string;
+  createdAt: string;
+  strength: { score: number; label: string };
+}
 
 const PROFILES_KEY = 'openpass-profiles';
 const HISTORY_KEY = 'openpass-history';
@@ -25,8 +44,7 @@ export const loadSettings = (): AppSettings => {
   try {
     currentSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
     return currentSettings;
-  } catch (error) {
-    console.error('Failed to parse saved settings:', error);
+  } catch (_error) {
     currentSettings = { ...DEFAULT_SETTINGS };
     return currentSettings;
   }
@@ -39,34 +57,35 @@ export const saveSettings = (settings: AppSettings): void => {
 
 // Helper functions for encryption
 const encryptData = (data: string): string => {
-  if (!currentSettings.encryptionEnabled || !currentSettings.encryptionKey) {
+  if (!(currentSettings.encryptionEnabled && currentSettings.encryptionKey)) {
     return data;
   }
-  return SimpleEncryption.encrypt(data, currentSettings.encryptionKey);
+  return encrypt(data, currentSettings.encryptionKey);
 };
 
 const decryptData = (data: string): string => {
-  if (!currentSettings.encryptionEnabled || !currentSettings.encryptionKey) {
+  if (!(currentSettings.encryptionEnabled && currentSettings.encryptionKey)) {
     return data;
   }
-  return SimpleEncryption.decrypt(data, currentSettings.encryptionKey);
+  return decrypt(data, currentSettings.encryptionKey);
 };
 
 export const loadProfiles = (): Profile[] => {
   // Changed to Profile[]
   const saved = localStorage.getItem(PROFILES_KEY);
-  if (!saved) return [];
+  if (!saved) {
+    return [];
+  }
 
   try {
     const decrypted = decryptData(saved);
-    const parsed = JSON.parse(decrypted);
-    return parsed.map((p: any) => ({
+    const parsed: ParsedProfile[] = JSON.parse(decrypted);
+    return parsed.map((p) => ({
       ...p,
       createdAt: new Date(p.createdAt),
       lastUsed: p.lastUsed ? new Date(p.lastUsed) : undefined,
-    }));
-  } catch (error) {
-    console.error('Failed to parse saved profiles:', error);
+    })) as Profile[];
+  } catch (_error) {
     return [];
   }
 };
@@ -84,17 +103,18 @@ export const loadHistory = (): PasswordHistory[] => {
   }
 
   const saved = localStorage.getItem(HISTORY_KEY);
-  if (!saved) return [];
+  if (!saved) {
+    return [];
+  }
 
   try {
     const decrypted = decryptData(saved);
-    const parsed = JSON.parse(decrypted);
-    return parsed.map((h: any) => ({
+    const parsed: ParsedHistoryEntry[] = JSON.parse(decrypted);
+    return parsed.map((h) => ({
       ...h,
       createdAt: new Date(h.createdAt),
-    }));
-  } catch (error) {
-    console.error('Failed to parse password history:', error);
+    })) as PasswordHistory[];
+  } catch (_error) {
     return [];
   }
 };

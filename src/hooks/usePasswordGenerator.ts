@@ -13,11 +13,21 @@ export const usePasswordGenerator = () => {
   const getCharacterSet = useCallback((settings: PasswordSettings): string => {
     let charset = '';
 
-    if (settings.includeUppercase) charset += CHARACTER_SETS.UPPERCASE;
-    if (settings.includeLowercase) charset += CHARACTER_SETS.LOWERCASE;
-    if (settings.includeNumbers) charset += CHARACTER_SETS.NUMBERS;
-    if (settings.includeSymbols) charset += CHARACTER_SETS.SYMBOLS;
-    if (settings.customCharacters) charset += settings.customCharacters;
+    if (settings.includeUppercase) {
+      charset += CHARACTER_SETS.UPPERCASE;
+    }
+    if (settings.includeLowercase) {
+      charset += CHARACTER_SETS.LOWERCASE;
+    }
+    if (settings.includeNumbers) {
+      charset += CHARACTER_SETS.NUMBERS;
+    }
+    if (settings.includeSymbols) {
+      charset += CHARACTER_SETS.SYMBOLS;
+    }
+    if (settings.customCharacters) {
+      charset += settings.customCharacters;
+    }
 
     if (settings.excludeSimilar) {
       const similarRegex = new RegExp(`[${CHARACTER_SETS.SIMILAR}]`, 'g');
@@ -27,7 +37,7 @@ export const usePasswordGenerator = () => {
     if (settings.excludeAmbiguous) {
       const ambiguousRegex = new RegExp(
         `[${CHARACTER_SETS.AMBIGUOUS.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`,
-        'g',
+        'g'
       );
       charset = charset.replace(ambiguousRegex, '');
     }
@@ -38,7 +48,7 @@ export const usePasswordGenerator = () => {
   const generatePassword = useCallback(
     (
       settings: PasswordSettings,
-      onSuccess: (password: string, historyEntry: PasswordHistory) => void,
+      onSuccess: (password: string, historyEntry: PasswordHistory) => void
     ) => {
       try {
         const charset = getCharacterSet(settings);
@@ -73,35 +83,41 @@ export const usePasswordGenerator = () => {
                   password.match(
                     new RegExp(
                       `[${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`,
-                      'g',
-                    ),
+                      'g'
+                    )
                   ) || []
                 ).length < (settings.minSymbols || 0)))
           );
 
           if (settings.requireEachCharacterType) {
             meetsCriteria = true;
-            if (settings.includeUppercase && !/[A-Z]/.test(password))
+            if (settings.includeUppercase && !/[A-Z]/.test(password)) {
               meetsCriteria = false;
-            if (settings.includeLowercase && !/[a-z]/.test(password))
+            }
+            if (settings.includeLowercase && !/[a-z]/.test(password)) {
               meetsCriteria = false;
-            if (settings.includeNumbers && !/\d/.test(password))
+            }
+            if (settings.includeNumbers && !/\d/.test(password)) {
               meetsCriteria = false;
+            }
             // Check for symbols from the actual symbol set used
             const symbolCharset =
               `${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters || ''}`.replace(
                 /[.*+?^${}()|[\]\\]/g,
-                '\\$&',
+                '\\$&'
               );
             if (
               settings.includeSymbols &&
               !new RegExp(`[${symbolCharset}]`).test(password) &&
               symbolCharset.length > 0
-            )
+            ) {
               meetsCriteria = false;
+            }
 
             enforcementRetries++;
-            if (meetsCriteria) break; // Exit if criteria met
+            if (meetsCriteria) {
+              break; // Exit if criteria met
+            }
           } else {
             meetsCriteria = true; // Skip enforcement if not required
             break;
@@ -111,7 +127,7 @@ export const usePasswordGenerator = () => {
         if (settings.requireEachCharacterType && !meetsCriteria) {
           toast.warning(
             'Could not enforce all character types. Try increasing length or reducing restrictions.',
-            { duration: 5000 },
+            { duration: 5000 }
           );
           // Proceed with the last generated password even if not all types are enforced
         }
@@ -131,13 +147,13 @@ export const usePasswordGenerator = () => {
         onSuccess(password, historyEntry);
 
         toast.success(
-          `${strength.label} password generated! (${Math.round(entropy)} bits entropy)`,
+          `${strength.label} password generated! (${Math.round(entropy)} bits entropy)`
         );
       } catch {
         toast.error('Failed to generate password');
       }
     },
-    [getCharacterSet],
+    [getCharacterSet]
   );
 
   return {

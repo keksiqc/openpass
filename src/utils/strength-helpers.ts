@@ -9,7 +9,7 @@ import type { PasswordStrength } from '../types';
  */
 export function getStrengthDescription(
   strengthLabel: string,
-  type: 'password' | 'passphrase' | 'format' = 'password',
+  type: 'password' | 'passphrase' | 'format' = 'password'
 ): string {
   const descriptions = {
     password: {
@@ -68,15 +68,17 @@ export function getStrengthColor(strengthLabel: string): string {
 export function createStrengthObject(entropy: number): PasswordStrength {
   if (entropy < STRENGTH_THRESHOLDS.WEAK) {
     return { label: 'Weak', color: 'text-red-600', score: 2 };
-  } else if (entropy < STRENGTH_THRESHOLDS.FAIR) {
-    return { label: 'Fair', color: 'text-yellow-600', score: 4 };
-  } else if (entropy < STRENGTH_THRESHOLDS.GOOD) {
-    return { label: 'Good', color: 'text-blue-600', score: 6 };
-  } else if (entropy < STRENGTH_THRESHOLDS.STRONG) {
-    return { label: 'Strong', color: 'text-green-600', score: 8 };
-  } else {
-    return { label: 'Excellent', color: 'text-green-700', score: 10 };
   }
+  if (entropy < STRENGTH_THRESHOLDS.FAIR) {
+    return { label: 'Fair', color: 'text-yellow-600', score: 4 };
+  }
+  if (entropy < STRENGTH_THRESHOLDS.GOOD) {
+    return { label: 'Good', color: 'text-blue-600', score: 6 };
+  }
+  if (entropy < STRENGTH_THRESHOLDS.STRONG) {
+    return { label: 'Strong', color: 'text-green-600', score: 8 };
+  }
+  return { label: 'Excellent', color: 'text-green-700', score: 10 };
 }
 
 /**

@@ -21,7 +21,7 @@ export const CHARACTER_SETS = {
   NUMBERS: '0123456789',
   SYMBOLS: '!@#$%^&*()_+-=[]{}|;:,.<>?',
   SIMILAR: '0O1lI',
-  AMBIGUOUS: '{}[]()\\\/\'"~,;.<>',
+  AMBIGUOUS: '{}[]()\\/\'"~,;.<>',
 } as const;
 
 // Default settings

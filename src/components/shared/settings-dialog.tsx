@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import { toast } from 'sonner';
 import type { AppSettings } from '../../types';
-import { SimpleEncryption } from '../../utils/encryption';
+import { generateKey } from '../../utils/encryption';
 import { Button } from '../ui/button';
 import {
   Card,
@@ -68,7 +68,7 @@ export function SettingsDialog({
   };
 
   const generateNewKey = () => {
-    const newKey = SimpleEncryption.generateKey();
+    const newKey = generateKey();
     setLocalSettings((prev) => ({
       ...prev,
       encryptionKey: newKey,
@@ -99,17 +99,17 @@ export function SettingsDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
+        <Button className="gap-2" variant="outline">
           <SettingsIcon className="h-4 w-4" />
           Settings
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10">
+            <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
               <SettingsIcon className="h-4 w-4 text-primary" />
             </div>
             Application Settings
@@ -119,7 +119,7 @@ export function SettingsDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Left Column */}
           <div className="space-y-8">
             {/* Privacy Settings */}
@@ -134,18 +134,18 @@ export function SettingsDialog({
                 <div className="flex items-center justify-between">
                   <div>
                     <Label
+                      className="font-medium text-sm"
                       htmlFor="historyEnabled"
-                      className="text-sm font-medium"
                     >
                       Enable Password History
                     </Label>
-                    <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                    <p className="mt-1 max-w-xs text-muted-foreground text-xs">
                       Store generated passwords in local history for easy access
                     </p>
                   </div>
                   <Switch
-                    id="historyEnabled"
                     checked={localSettings.historyEnabled}
+                    id="historyEnabled"
                     onCheckedChange={(checked) =>
                       setLocalSettings((prev) => ({
                         ...prev,
@@ -169,18 +169,18 @@ export function SettingsDialog({
                 <div className="flex items-center justify-between">
                   <div>
                     <Label
+                      className="font-medium text-sm"
                       htmlFor="encryptionEnabled"
-                      className="text-sm font-medium"
                     >
                       Enable Local Data Encryption
                     </Label>
-                    <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                    <p className="mt-1 max-w-xs text-muted-foreground text-xs">
                       Encrypt profiles and history with a custom key
                     </p>
                   </div>
                   <Switch
-                    id="encryptionEnabled"
                     checked={localSettings.encryptionEnabled}
+                    id="encryptionEnabled"
                     onCheckedChange={(checked) =>
                       setLocalSettings((prev) => ({
                         ...prev,
@@ -192,17 +192,16 @@ export function SettingsDialog({
                 {localSettings.encryptionEnabled && (
                   <div className="space-y-3 pl-2">
                     <Label
+                      className="font-medium text-sm"
                       htmlFor="encryptionKey"
-                      className="text-sm font-medium"
                     >
                       Encryption Key
                     </Label>
                     <div className="flex gap-2">
                       <div className="relative flex-1">
                         <Input
+                          className="pr-10"
                           id="encryptionKey"
-                          type={showEncryptionKey ? 'text' : 'password'}
-                          value={localSettings.encryptionKey}
                           onChange={(e) =>
                             setLocalSettings((prev) => ({
                               ...prev,
@@ -210,16 +209,17 @@ export function SettingsDialog({
                             }))
                           }
                           placeholder="Enter encryption key..."
-                          className="pr-10"
+                          type={showEncryptionKey ? 'text' : 'password'}
+                          value={localSettings.encryptionKey}
                         />
                         <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                          className="absolute top-0 right-0 h-full px-3 hover:bg-transparent"
                           onClick={() =>
                             setShowEncryptionKey(!showEncryptionKey)
                           }
+                          size="sm"
+                          type="button"
+                          variant="ghost"
                         >
                           {showEncryptionKey ? (
                             <EyeOff className="h-4 w-4" />
@@ -229,17 +229,17 @@ export function SettingsDialog({
                         </Button>
                       </div>
                       <Button
+                        className="gap-2"
+                        onClick={generateNewKey}
+                        size="sm"
                         type="button"
                         variant="outline"
-                        size="sm"
-                        onClick={generateNewKey}
-                        className="gap-2"
                       >
                         <RefreshCw className="h-4 w-4" />
                         Generate
                       </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Keep this key safe! You'll need it to decrypt your data.
                     </p>
                   </div>
@@ -253,7 +253,7 @@ export function SettingsDialog({
             {/* Data Management */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-base">
                   <Download className="h-4 w-4" />
                   Data Management
                 </CardTitle>
@@ -263,26 +263,26 @@ export function SettingsDialog({
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button
+                  className="w-full gap-2"
                   onClick={onExportData}
                   variant="outline"
-                  className="w-full gap-2"
                 >
                   <Download className="h-4 w-4" />
                   Export All Data
                 </Button>
                 <div className="relative">
                   <Button
+                    className="w-full cursor-pointer gap-2"
                     variant="outline"
-                    className="w-full gap-2 cursor-pointer"
                   >
                     <Upload className="h-4 w-4" />
                     Import From Backup
                   </Button>
                   <Input
-                    type="file"
                     accept=".json"
+                    className="absolute inset-0 cursor-pointer opacity-0"
                     onChange={onImportData}
-                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    type="file"
                   />
                 </div>
               </CardContent>
@@ -291,7 +291,7 @@ export function SettingsDialog({
             {/* Danger Zone */}
             <Card className="border-destructive/20">
               <CardHeader>
-                <CardTitle className="text-base text-destructive flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-base text-destructive">
                   <AlertTriangle className="h-4 w-4" />
                   Danger Zone
                 </CardTitle>
@@ -302,9 +302,9 @@ export function SettingsDialog({
               <CardContent>
                 <div className="space-y-3">
                   <Button
-                    variant={showClearDataConfirm ? 'destructive' : 'outline'}
-                    onClick={handleClearAllData}
                     className="gap-2"
+                    onClick={handleClearAllData}
+                    variant={showClearDataConfirm ? 'destructive' : 'outline'}
                   >
                     <Trash2 className="h-4 w-4" />
                     {showClearDataConfirm
@@ -312,17 +312,17 @@ export function SettingsDialog({
                       : 'Clear All Data'}
                   </Button>
                   {showClearDataConfirm && (
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Click again to permanently delete all profiles, history,
                       and settings.
                     </p>
                   )}
                 </div>
-                <div className="space-y-3 mt-4">
+                <div className="mt-4 space-y-3">
                   <Button
-                    variant={showResetConfirm ? 'destructive' : 'outline'}
-                    onClick={handleResetToDefaults}
                     className="gap-2"
+                    onClick={handleResetToDefaults}
+                    variant={showResetConfirm ? 'destructive' : 'outline'}
                   >
                     <RefreshCw className="h-4 w-4" />
                     {showResetConfirm
@@ -330,7 +330,7 @@ export function SettingsDialog({
                       : 'Reset All Settings'}
                   </Button>
                   {showResetConfirm && (
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       Click again to reset all application settings to their
                       default values. This will also clear all profiles and
                       history.
@@ -343,11 +343,11 @@ export function SettingsDialog({
         </div>
 
         {/* Dialog Actions */}
-        <div className="flex justify-end gap-3 pt-4 border-t">
-          <Button variant="outline" onClick={handleCancel}>
+        <div className="flex justify-end gap-3 border-t pt-4">
+          <Button onClick={handleCancel} variant="outline">
             Cancel
           </Button>
-          <Button onClick={handleSave} className="gap-2">
+          <Button className="gap-2" onClick={handleSave}>
             <Save className="h-4 w-4" />
             Save Settings
           </Button>
