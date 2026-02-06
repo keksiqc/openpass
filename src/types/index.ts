@@ -22,10 +22,21 @@ export interface PassphraseSettings {
   insertNumbersRandomly?: boolean;
 }
 
+export type ReadableStrength = "easy" | "moderate" | "strong" | "ultra";
+export type FormatMode = "custom" | "readable";
+
+export interface ReadablePreset {
+  strength: ReadableStrength;
+  label: string;
+  description: string;
+  pattern: string;
+}
+
 export interface FormatSettings {
-  // This is for "Custom" generator
+  mode: FormatMode;
   format: string;
   templates: Array<{ name: string; pattern: string }>;
+  readableStrength: ReadableStrength;
 }
 
 export interface PinSettings {

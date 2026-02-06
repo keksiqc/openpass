@@ -6,7 +6,7 @@ import {
   EyeOff,
   RefreshCw,
 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { TabsContent } from "@/components/ui/tabs";
+import { PASSPHRASE_CONSTRAINTS } from "../../constants/generator";
 import { usePassphraseGenerator } from "../../hooks/use-passphrase-generator";
 import type { PassphraseSettings, PasswordHistory } from "../../types";
 import { estimateTimeToCrack } from "../../utils/password-strength";
@@ -69,9 +69,25 @@ export function PassphraseGenerator({
     });
   };
 
-  const getPassphraseStrength = () => {
-    return calculatePassphraseStrength(settings);
-  };
+  // Derive strength and entropy once
+  const outputInfo = useMemo(() => {
+    const strength = calculatePassphraseStrength(settings);
+
+    // Calculate real entropy from word count and dictionary size
+    const entropyPerWord = Math.log2(PASSPHRASE_CONSTRAINTS.DICTIONARY_SIZE);
+    let entropy = settings.wordCount * entropyPerWord;
+    if (settings.includeNumbers) {
+      entropy += settings.insertNumbersRandomly
+        ? Math.log2(settings.wordCount * 10)
+        : Math.log2(10 * (settings.wordCount / 2));
+    }
+    if (settings.wordCase !== "lowercase") {
+      entropy += settings.wordCount * Math.log2(1.5);
+    }
+
+    const timeToCrack = estimateTimeToCrack(entropy);
+    return { strength, entropy, timeToCrack };
+  }, [settings]);
 
   return (
     <Card>
@@ -87,7 +103,7 @@ export function PassphraseGenerator({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
-        <TabsContent className="space-y-6" value="passphrase">
+        <div className="space-y-6">
           {/* Word Count */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -184,7 +200,6 @@ export function PassphraseGenerator({
               <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
-              {/* Add Numbers Option */}
               <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="include-numbers">
                   <span className="font-bold text-sm">Add Numbers</span>
@@ -203,7 +218,7 @@ export function PassphraseGenerator({
                   }
                 />
               </div>
-              {settings.includeNumbers && (
+              {settings.includeNumbers ? (
                 <div className="mt-2 ml-0 flex items-center justify-between border-2 border-foreground p-3">
                   <Label
                     className="flex flex-col pr-2"
@@ -227,7 +242,7 @@ export function PassphraseGenerator({
                     }
                   />
                 </div>
-              )}
+              ) : null}
             </CollapsibleContent>
           </Collapsible>
 
@@ -243,36 +258,31 @@ export function PassphraseGenerator({
           </Button>
 
           {/* Generated Passphrase Display */}
-          {generatedPassphrase && (
+          {generatedPassphrase ? (
             <div className="space-y-4 border-2 border-foreground p-4 shadow-brutal">
               <div className="flex items-center justify-between">
                 <Label className="font-bold text-xs uppercase tracking-widest">
                   Output
                 </Label>
-                {(() => {
-                  const strength = getPassphraseStrength();
-                  return (
-                    <Badge
-                      className={`text-xs ${strength.color}`}
-                      variant="outline"
-                    >
-                      {strength.label}
-                    </Badge>
-                  );
-                })()}
+                <Badge
+                  className={`text-xs ${outputInfo.strength.color}`}
+                  variant="outline"
+                >
+                  {outputInfo.strength.label}
+                </Badge>
               </div>
 
               <div className="h-3 w-full border-2 border-foreground bg-muted">
                 <div
-                  className={`h-full ${getStrengthColor(
-                    getPassphraseStrength().label
-                  )}`}
-                  style={{ width: `${getPassphraseStrength().score * 10}%` }}
+                  className={`h-full transition-all ${getStrengthColor(outputInfo.strength.label)}`}
+                  style={{
+                    width: `${outputInfo.strength.score * 10}%`,
+                  }}
                 />
               </div>
               <p className="text-muted-foreground text-xs">
                 {getStrengthDescription(
-                  getPassphraseStrength().label,
+                  outputInfo.strength.label,
                   "passphrase"
                 )}
               </p>
@@ -288,7 +298,7 @@ export function PassphraseGenerator({
                 </div>
                 <Button
                   className="shrink-0"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword((prev) => !prev)}
                   size="icon"
                   variant="outline"
                 >
@@ -310,19 +320,16 @@ export function PassphraseGenerator({
 
               <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs sm:grid-cols-2">
                 <div>
-                  <strong>Estimated Entropy:</strong>{" "}
-                  {Math.round(getPassphraseStrength().score * 1.2)} bits
+                  <strong>Entropy:</strong> {Math.round(outputInfo.entropy)}{" "}
+                  bits
                 </div>
                 <div>
-                  <strong>Time to crack:</strong>{" "}
-                  {estimateTimeToCrack(
-                    getPassphraseStrength().score * 1.2
-                  )}{" "}
+                  <strong>Time to crack:</strong> {outputInfo.timeToCrack}
                 </div>
               </div>
             </div>
-          )}
-        </TabsContent>
+          ) : null}
+        </div>
       </CardContent>
     </Card>
   );

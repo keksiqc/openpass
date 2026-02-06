@@ -383,10 +383,23 @@ export default function App() {
       try {
         const data = JSON.parse(e.target?.result as string);
         if (data.profiles) {
-          saveProfilesToStorage([...profiles, ...data.profiles]);
+          const parsedProfiles = data.profiles.map(
+            (p: Record<string, unknown>) => ({
+              ...p,
+              createdAt: new Date(p.createdAt as string),
+              lastUsed: p.lastUsed ? new Date(p.lastUsed as string) : undefined,
+            })
+          );
+          saveProfilesToStorage([...profiles, ...parsedProfiles]);
         }
         if (data.passwordHistory) {
-          saveHistoryToStorage([...passwordHistory, ...data.passwordHistory]);
+          const parsedHistory = data.passwordHistory.map(
+            (h: Record<string, unknown>) => ({
+              ...h,
+              createdAt: new Date(h.createdAt as string),
+            })
+          );
+          saveHistoryToStorage([...passwordHistory, ...parsedHistory]);
         }
         toast.success("Data imported successfully!");
       } catch {
@@ -468,7 +481,12 @@ export default function App() {
               </TabsContent>
 
               <TabsContent value="pin">
-                <PinGenerator />
+                <PinGenerator
+                  onCopyToClipboard={copyToClipboard}
+                  onPinGenerated={addToHistory}
+                  onSettingsChange={setPinSettings}
+                  settings={pinSettings}
+                />
               </TabsContent>
             </Tabs>
 

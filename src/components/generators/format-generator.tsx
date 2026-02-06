@@ -1,12 +1,14 @@
 import {
   ChevronDown,
+  Code,
   Copy,
   Eye,
   EyeOff,
   RefreshCw,
   Settings,
+  Type,
 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,8 +32,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { READABLE_PRESETS } from "../../constants/generator";
 import { useFormatGenerator } from "../../hooks/use-format-generator";
-import type { FormatSettings, PasswordHistory } from "../../types";
+import type {
+  FormatMode,
+  FormatSettings,
+  PasswordHistory,
+  ReadableStrength,
+} from "../../types";
 import {
   calculateEntropy,
   estimateTimeToCrack,
@@ -49,6 +57,20 @@ interface FormatGeneratorProps {
   onCopyToClipboard: (text: string) => void;
 }
 
+const STRENGTH_ACCENT: Record<ReadableStrength, string> = {
+  easy: "border-yellow-500 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
+  moderate: "border-blue-500 bg-blue-500/10 text-blue-700 dark:text-blue-400",
+  strong: "border-green-500 bg-green-500/10 text-green-700 dark:text-green-400",
+  ultra: "border-accent bg-accent/10 text-accent-foreground",
+};
+
+const STRENGTH_ACTIVE: Record<ReadableStrength, string> = {
+  easy: "border-yellow-500 bg-yellow-500 text-yellow-950",
+  moderate: "border-blue-500 bg-blue-500 text-white",
+  strong: "border-green-500 bg-green-500 text-green-950",
+  ultra: "border-accent bg-accent text-accent-foreground",
+};
+
 export function FormatGenerator({
   settings,
   onSettingsChange,
@@ -60,18 +82,57 @@ export function FormatGenerator({
   const { generateFormatPassword, getCharacterSetFromFormat } =
     useFormatGenerator();
 
+  const activePattern =
+    settings.mode === "readable"
+      ? (READABLE_PRESETS.find((p) => p.strength === settings.readableStrength)
+          ?.pattern ?? settings.format)
+      : settings.format;
+
   const handleGenerate = () => {
-    generateFormatPassword(settings, (format, historyEntry) => {
+    const genSettings = { ...settings, format: activePattern };
+    generateFormatPassword(genSettings, (format, historyEntry) => {
       setGeneratedFormat(format);
       onFormatGenerated(format, historyEntry);
     });
   };
 
-  const getFormatStrength = (password: string) => {
-    const charset = getCharacterSetFromFormat(settings.format);
-    const entropy = calculateEntropy(password, charset);
-    return createStrengthObject(entropy);
+  const handleModeChange = (mode: FormatMode) => {
+    if (mode === "readable") {
+      const preset = READABLE_PRESETS.find(
+        (p) => p.strength === settings.readableStrength
+      );
+      onSettingsChange({
+        ...settings,
+        mode,
+        format: preset?.pattern ?? settings.format,
+      });
+      return;
+    }
+    onSettingsChange({ ...settings, mode });
   };
+
+  const handleStrengthChange = (strength: ReadableStrength) => {
+    const preset = READABLE_PRESETS.find((p) => p.strength === strength);
+    if (preset) {
+      onSettingsChange({
+        ...settings,
+        readableStrength: strength,
+        format: preset.pattern,
+      });
+    }
+  };
+
+  // Derive strength once for output display
+  const outputStrength = useMemo(() => {
+    if (!generatedFormat) {
+      return null;
+    }
+    const charset = getCharacterSetFromFormat(activePattern);
+    const entropy = calculateEntropy(generatedFormat, charset);
+    const strength = createStrengthObject(entropy);
+    const timeToCrack = estimateTimeToCrack(entropy);
+    return { ...strength, entropy, timeToCrack };
+  }, [generatedFormat, activePattern, getCharacterSetFromFormat]);
 
   return (
     <Card>
@@ -83,140 +144,220 @@ export function FormatGenerator({
           Format Generator
         </CardTitle>
         <CardDescription className="text-muted-foreground text-sm leading-relaxed">
-          Define password formats using a flexible pattern system.
+          Generate passwords from readable presets or custom format patterns.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
         <div className="space-y-6">
-          {/* Format Pattern Input */}
-          <div className="space-y-3">
-            <Label
-              className="font-bold text-sm uppercase tracking-wider"
-              htmlFor="format"
-            >
-              Format Pattern
-            </Label>
-            <Input
-              className="bg-card font-mono text-sm"
-              id="format"
-              onChange={(e) =>
-                onSettingsChange({
-                  ...settings,
-                  format: e.target.value,
-                })
-              }
-              placeholder="e.g., 2u4l2d2{#$%}"
-              value={settings.format}
-            />
-            <div className="space-y-1 text-muted-foreground text-xs">
-              <p>
-                <strong>Format:</strong> Nu (uppercase), Nl (lowercase), Nd
-                (digits), N{"{chars}"} (custom)
-              </p>
-              <p>
-                <strong>Example:</strong>{" "}
-                <code className="border border-foreground/30 bg-secondary px-1 font-mono">
-                  3u2l4d
-                </code>{" "}
-                →{" "}
-                <code className="border border-foreground/30 bg-secondary px-1 font-mono">
-                  ABCde1234
-                </code>
-              </p>
-            </div>
-          </div>
-          {/* Quick Templates */}
+          {/* Mode Toggle */}
           <div className="space-y-3">
             <Label className="font-bold text-sm uppercase tracking-wider">
-              Quick Templates
+              Mode
             </Label>
-            <Select
-              onValueChange={(value) =>
-                onSettingsChange({
-                  ...settings,
-                  format: value,
-                })
-              }
-            >
-              <SelectTrigger className="w-full bg-card">
-                <SelectValue placeholder="Choose a template..." />
-              </SelectTrigger>
-              <SelectContent>
-                {settings.templates.map((template) => (
-                  <SelectItem key={template.name} value={template.pattern}>
-                    <div className="flex flex-col">
-                      <span className="font-bold">{template.name}</span>
-                      <span className="font-mono text-muted-foreground text-xs">
-                        {template.pattern}
+            <div className="grid grid-cols-2 gap-0 border-2 border-foreground">
+              <button
+                className={`flex items-center justify-center gap-2 border-foreground border-r p-3 font-bold text-sm uppercase tracking-wider transition-colors ${
+                  settings.mode === "readable"
+                    ? "bg-accent text-accent-foreground"
+                    : "bg-card hover:bg-secondary"
+                }`}
+                onClick={() => handleModeChange("readable")}
+                type="button"
+              >
+                <Type className="h-4 w-4" />
+                Readable
+              </button>
+              <button
+                className={`flex items-center justify-center gap-2 p-3 font-bold text-sm uppercase tracking-wider transition-colors ${
+                  settings.mode === "custom"
+                    ? "bg-accent text-accent-foreground"
+                    : "bg-card hover:bg-secondary"
+                }`}
+                onClick={() => handleModeChange("custom")}
+                type="button"
+              >
+                <Code className="h-4 w-4" />
+                Custom
+              </button>
+            </div>
+          </div>
+
+          {/* Readable Presets */}
+          {settings.mode === "readable" ? (
+            <div className="space-y-3">
+              <Label className="font-bold text-sm uppercase tracking-wider">
+                Strength Level
+              </Label>
+              <div className="grid grid-cols-2 gap-3">
+                {READABLE_PRESETS.map((preset) => {
+                  const isActive =
+                    settings.readableStrength === preset.strength;
+                  return (
+                    <button
+                      className={`border-2 p-3 text-left transition-all ${
+                        isActive
+                          ? STRENGTH_ACTIVE[preset.strength]
+                          : `${STRENGTH_ACCENT[preset.strength]} hover:opacity-80`
+                      }`}
+                      key={preset.strength}
+                      onClick={() => handleStrengthChange(preset.strength)}
+                      type="button"
+                    >
+                      <div className="font-bold text-sm uppercase tracking-wider">
+                        {preset.label}
+                      </div>
+                      <div
+                        className={`mt-1 text-[10px] leading-tight ${isActive ? "opacity-80" : "opacity-60"}`}
+                      >
+                        {preset.description}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="border-2 border-foreground/30 bg-secondary/50 p-3">
+                <div className="mb-1 font-bold text-[10px] text-muted-foreground uppercase tracking-wider">
+                  Active Pattern
+                </div>
+                <code className="font-mono text-xs">{activePattern}</code>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Custom Format Pattern Input */}
+              <div className="space-y-3">
+                <Label
+                  className="font-bold text-sm uppercase tracking-wider"
+                  htmlFor="format"
+                >
+                  Format Pattern
+                </Label>
+                <Input
+                  className="bg-card font-mono text-sm"
+                  id="format"
+                  onChange={(e) =>
+                    onSettingsChange({
+                      ...settings,
+                      format: e.target.value,
+                    })
+                  }
+                  placeholder="e.g., 2u4l2d2{#$%}"
+                  value={settings.format}
+                />
+                <div className="space-y-1 text-muted-foreground text-xs">
+                  <p>
+                    <strong>Format:</strong> Nu (uppercase), Nl (lowercase), Nd
+                    (digits), N{"{chars}"} (custom)
+                  </p>
+                  <p>
+                    <strong>Example:</strong>{" "}
+                    <code className="border border-foreground/30 bg-secondary px-1 font-mono">
+                      3u2l4d
+                    </code>{" "}
+                    →{" "}
+                    <code className="border border-foreground/30 bg-secondary px-1 font-mono">
+                      ABCde1234
+                    </code>
+                  </p>
+                </div>
+              </div>
+
+              {/* Quick Templates */}
+              <div className="space-y-3">
+                <Label className="font-bold text-sm uppercase tracking-wider">
+                  Quick Templates
+                </Label>
+                <Select
+                  onValueChange={(value) =>
+                    onSettingsChange({
+                      ...settings,
+                      format: value,
+                    })
+                  }
+                >
+                  <SelectTrigger className="w-full bg-card">
+                    <SelectValue placeholder="Choose a template..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {settings.templates.map((template) => (
+                      <SelectItem key={template.name} value={template.pattern}>
+                        <div className="flex flex-col">
+                          <span className="font-bold">{template.name}</span>
+                          <span className="font-mono text-muted-foreground text-xs">
+                            {template.pattern}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Format Guide */}
+              <Collapsible>
+                <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
+                  <span className="font-bold text-sm uppercase tracking-wider">
+                    Format Guide
+                  </span>
+                  <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
+                  <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+                    <div className="flex items-center gap-2">
+                      <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
+                        2u
+                      </code>
+                      <span className="text-muted-foreground">
+                        2 uppercase letters
                       </span>
                     </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          {/* Format Guide */}
-          <Collapsible>
-            <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
-              <span className="font-bold text-sm uppercase tracking-wider">
-                Format Guide
-              </span>
-              <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
-              <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
-                <div className="flex items-center gap-2">
-                  <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
-                    2u
-                  </code>
-                  <span className="text-muted-foreground">
-                    2 uppercase letters
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
-                    4l
-                  </code>
-                  <span className="text-muted-foreground">
-                    4 lowercase letters
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
-                    3d
-                  </code>
-                  <span className="text-muted-foreground">3 digits</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
-                    2{"{#$%}"}
-                  </code>
-                  <span className="text-muted-foreground">
-                    2 from custom set
-                  </span>
-                </div>
-              </div>
-              <div className="mt-4 border-2 border-foreground bg-background p-3">
-                <div className="mb-2 font-bold text-muted-foreground text-xs uppercase tracking-wider">
-                  Popular Patterns:
-                </div>
-                <div className="space-y-1 text-xs">
-                  <div>
-                    <code className="font-mono">4u4l4d</code> → Strong
-                    alphanumeric (12 chars)
+                    <div className="flex items-center gap-2">
+                      <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
+                        4l
+                      </code>
+                      <span className="text-muted-foreground">
+                        4 lowercase letters
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
+                        3d
+                      </code>
+                      <span className="text-muted-foreground">3 digits</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
+                        2{"{#$%}"}
+                      </code>
+                      <span className="text-muted-foreground">
+                        2 from custom set
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <code className="font-mono">2u6l2d2{"{!@#}"}</code> →
-                    Complex mixed (12 chars)
+                  <div className="mt-4 border-2 border-foreground bg-background p-3">
+                    <div className="mb-2 font-bold text-muted-foreground text-xs uppercase tracking-wider">
+                      Popular Patterns:
+                    </div>
+                    <div className="space-y-1 text-xs">
+                      <div>
+                        <code className="font-mono">4u4l4d</code> → Strong
+                        alphanumeric (12 chars)
+                      </div>
+                      <div>
+                        <code className="font-mono">2u6l2d2{"{!@#}"}</code> →
+                        Complex mixed (12 chars)
+                      </div>
+                      <div>
+                        <code className="font-mono">8l4d</code> → Simple
+                        memorable (12 chars)
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <code className="font-mono">8l4d</code> → Simple memorable
-                    (12 chars)
-                  </div>
-                </div>
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
+                </CollapsibleContent>
+              </Collapsible>
+            </>
+          )}
+
           {/* Generate Button */}
           <Button
             className="w-full"
@@ -225,43 +366,35 @@ export function FormatGenerator({
             size="lg"
           >
             <RefreshCw className="mr-2 h-4 w-4" />
-            Generate Format Password
+            Generate {settings.mode === "readable" ? "Readable" : "Format"}{" "}
+            Password
           </Button>
+
           {/* Generated Format Password Display */}
-          {generatedFormat && (
+          {generatedFormat && outputStrength ? (
             <div className="space-y-4 border-2 border-foreground p-4 shadow-brutal">
               <div className="flex items-center justify-between">
                 <Label className="font-bold text-xs uppercase tracking-widest">
                   Output
                 </Label>
-                {(() => {
-                  const strength = getFormatStrength(generatedFormat);
-                  return (
-                    <Badge
-                      className={`text-xs ${strength.color}`}
-                      variant="outline"
-                    >
-                      {strength.label}
-                    </Badge>
-                  );
-                })()}
+                <Badge
+                  className={`text-xs ${outputStrength.color}`}
+                  variant="outline"
+                >
+                  {outputStrength.label}
+                </Badge>
               </div>
 
               <div className="h-3 w-full border-2 border-foreground bg-muted">
                 <div
-                  className={`h-full ${getStrengthColor(
-                    getFormatStrength(generatedFormat).label
-                  )}`}
+                  className={`h-full transition-all ${getStrengthColor(outputStrength.label)}`}
                   style={{
-                    width: `${getFormatStrength(generatedFormat).score * 10}%`,
+                    width: `${outputStrength.score * 10}%`,
                   }}
                 />
               </div>
               <p className="text-muted-foreground text-xs">
-                {getStrengthDescription(
-                  getFormatStrength(generatedFormat).label,
-                  "format"
-                )}
+                {getStrengthDescription(outputStrength.label, "format")}
               </p>
 
               <div className="flex items-center gap-2">
@@ -275,7 +408,7 @@ export function FormatGenerator({
                 </div>
                 <Button
                   className="shrink-0"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword((prev) => !prev)}
                   size="icon"
                   variant="outline"
                 >
@@ -297,27 +430,15 @@ export function FormatGenerator({
 
               <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs sm:grid-cols-2">
                 <div>
-                  <strong>Entropy:</strong>{" "}
-                  {Math.round(
-                    calculateEntropy(
-                      generatedFormat,
-                      getCharacterSetFromFormat(settings.format)
-                    )
-                  )}{" "}
+                  <strong>Entropy:</strong> {Math.round(outputStrength.entropy)}{" "}
                   bits
                 </div>
                 <div>
-                  <strong>Time to crack:</strong>{" "}
-                  {estimateTimeToCrack(
-                    calculateEntropy(
-                      generatedFormat,
-                      getCharacterSetFromFormat(settings.format)
-                    )
-                  )}
+                  <strong>Time to crack:</strong> {outputStrength.timeToCrack}
                 </div>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </CardContent>
     </Card>

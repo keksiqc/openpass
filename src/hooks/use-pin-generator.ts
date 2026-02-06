@@ -1,17 +1,34 @@
 import { useCallback, useState } from "react";
+import { toast } from "sonner";
+import type { PasswordHistory, PinSettings } from "../types";
+import { getSecureRandom } from "../utils/crypto";
 
 export const usePinGenerator = () => {
-  const [length, setLength] = useState(4);
   const [pin, setPin] = useState("");
 
-  const generatePin = useCallback(() => {
-    let newPin = "";
-    for (let i = 0; i < length; i++) {
-      newPin += Math.floor(Math.random() * 10).toString();
-    }
-    setPin(newPin);
-    // Add toast notification for success
-  }, [length]);
+  const generatePin = useCallback(
+    (
+      settings: PinSettings,
+      onSuccess: (pin: string, historyEntry: PasswordHistory) => void
+    ) => {
+      const newPin = Array.from({ length: settings.length }, () =>
+        getSecureRandom(10).toString()
+      ).join("");
+      setPin(newPin);
 
-  return { pin, length, setLength, generatePin };
+      const historyEntry: PasswordHistory = {
+        id: Date.now().toString(),
+        password: newPin,
+        type: "pin",
+        createdAt: new Date(),
+        strength: { score: 1, label: "PIN" },
+      };
+
+      onSuccess(newPin, historyEntry);
+      toast.success("Secure PIN generated!");
+    },
+    []
+  );
+
+  return { pin, generatePin };
 };

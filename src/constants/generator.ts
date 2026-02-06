@@ -48,8 +48,37 @@ export const DEFAULT_PASSPHRASE_SETTINGS = {
   insertNumbersRandomly: false,
 };
 
+export const READABLE_PRESETS = [
+  {
+    strength: "easy" as const,
+    label: "Easy",
+    description: "Simple and memorable, 8 chars",
+    pattern: "6l2d",
+  },
+  {
+    strength: "moderate" as const,
+    label: "Moderate",
+    description: "Balanced readability, 12 chars",
+    pattern: "1u4l1{-}3d1{-}2l",
+  },
+  {
+    strength: "strong" as const,
+    label: "Strong",
+    description: "Secure yet typeable, 14 chars",
+    pattern: "1u3l2d1{!@#}1{-}1u3l2d",
+  },
+  {
+    strength: "ultra" as const,
+    label: "Ultra",
+    description: "Maximum with structure, 18 chars",
+    pattern: "1u3l1{!@#$}2d1{-}1u3l1{!@#$}2d1u1l",
+  },
+];
+
 export const DEFAULT_FORMAT_SETTINGS = {
-  format: "2u4l2d2{#$%}",
+  mode: "readable" as const,
+  format: "1u4l1{-}3d1{-}2l",
+  readableStrength: "moderate" as const,
   templates: [
     { name: "Strong Mixed", pattern: "2u4l2d2{#$%}" },
     { name: "Alphanumeric", pattern: "3u3l4d" },

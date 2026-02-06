@@ -1,5 +1,5 @@
 import { ChevronDown, Copy, Eye, EyeOff, Key, RefreshCw } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { TabsContent } from "@/components/ui/tabs";
 import { usePasswordGenerator } from "../../hooks/use-password-generator";
 import type { PasswordHistory, PasswordSettings } from "../../types";
 import {
@@ -64,6 +63,18 @@ export function PasswordGenerator({
     });
   };
 
+  // Derive strength once for output display
+  const outputStrength = useMemo(() => {
+    if (!generatedPassword) {
+      return null;
+    }
+    const strength = calculateStrength(generatedPassword);
+    const charset = getCharacterSet(settings);
+    const entropy = calculateEntropy(generatedPassword, charset);
+    const timeToCrack = estimateTimeToCrack(entropy);
+    return { ...strength, entropy, timeToCrack };
+  }, [generatedPassword, settings, getCharacterSet]);
+
   return (
     <Card>
       <CardHeader>
@@ -78,7 +89,7 @@ export function PasswordGenerator({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
-        <TabsContent className="space-y-6" value="password">
+        <div className="space-y-6">
           {/* Password Length */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -112,7 +123,6 @@ export function PasswordGenerator({
               Character Types
             </Label>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {/* Uppercase Option */}
               <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="uppercase">
                   <span className="font-bold text-sm">Uppercase</span>
@@ -132,7 +142,6 @@ export function PasswordGenerator({
                 />
               </div>
 
-              {/* Lowercase Option */}
               <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="lowercase">
                   <span className="font-bold text-sm">Lowercase</span>
@@ -152,7 +161,6 @@ export function PasswordGenerator({
                 />
               </div>
 
-              {/* Numbers Option */}
               <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="numbers">
                   <span className="font-bold text-sm">Numbers</span>
@@ -172,7 +180,6 @@ export function PasswordGenerator({
                 />
               </div>
 
-              {/* Symbols Option */}
               <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="symbols">
                   <span className="font-bold text-sm">Symbols</span>
@@ -353,7 +360,9 @@ export function PasswordGenerator({
           >
             {isGenerating ? (
               <>
-                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                <div className="mr-2 animate-spin">
+                  <RefreshCw className="h-4 w-4" />
+                </div>
                 Generating...
               </>
             ) : (
@@ -365,40 +374,30 @@ export function PasswordGenerator({
           </Button>
 
           {/* Generated Password Display */}
-          {generatedPassword && (
+          {generatedPassword && outputStrength ? (
             <div className="space-y-4 border-2 border-foreground p-4 shadow-brutal">
               <div className="flex items-center justify-between">
                 <Label className="font-bold text-xs uppercase tracking-widest">
                   Output
                 </Label>
-                {(() => {
-                  const strength = calculateStrength(generatedPassword);
-                  return (
-                    <Badge
-                      className={`text-xs ${strength.color}`}
-                      variant="outline"
-                    >
-                      {strength.label}
-                    </Badge>
-                  );
-                })()}
+                <Badge
+                  className={`text-xs ${outputStrength.color}`}
+                  variant="outline"
+                >
+                  {outputStrength.label}
+                </Badge>
               </div>
 
               <div className="h-3 w-full border-2 border-foreground bg-muted">
                 <div
-                  className={`h-full ${getStrengthColor(
-                    calculateStrength(generatedPassword).label
-                  )}`}
+                  className={`h-full transition-all ${getStrengthColor(outputStrength.label)}`}
                   style={{
-                    width: `${calculateStrength(generatedPassword).score * 10}%`,
+                    width: `${outputStrength.score * 10}%`,
                   }}
                 />
               </div>
               <p className="text-muted-foreground text-xs">
-                {getStrengthDescription(
-                  calculateStrength(generatedPassword).label,
-                  "password"
-                )}
+                {getStrengthDescription(outputStrength.label, "password")}
               </p>
 
               <div className="flex items-center gap-2">
@@ -412,7 +411,7 @@ export function PasswordGenerator({
                 </div>
                 <Button
                   className="shrink-0"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowPassword((prev) => !prev)}
                   size="icon"
                   variant="outline"
                 >
@@ -432,30 +431,18 @@ export function PasswordGenerator({
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs">
+              <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs sm:grid-cols-2">
                 <div>
-                  <strong>Entropy:</strong>{" "}
-                  {Math.round(
-                    calculateEntropy(
-                      generatedPassword,
-                      getCharacterSet(settings)
-                    )
-                  )}{" "}
+                  <strong>Entropy:</strong> {Math.round(outputStrength.entropy)}{" "}
                   bits
                 </div>
                 <div>
-                  <strong>Time to crack:</strong>{" "}
-                  {estimateTimeToCrack(
-                    calculateEntropy(
-                      generatedPassword,
-                      getCharacterSet(settings)
-                    )
-                  )}
+                  <strong>Time to crack:</strong> {outputStrength.timeToCrack}
                 </div>
               </div>
             </div>
-          )}
-        </TabsContent>
+          ) : null}
+        </div>
       </CardContent>
     </Card>
   );

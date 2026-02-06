@@ -207,7 +207,11 @@ export function HistoryPanel({
                         day: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
-                      }).format(entry.createdAt)}
+                      }).format(
+                        entry.createdAt instanceof Date
+                          ? entry.createdAt
+                          : new Date(entry.createdAt)
+                      )}
                     </div>
                   </div>
                 ))}

@@ -1,23 +1,40 @@
-import { Copy, Hash, RefreshCw } from "lucide-react";
-import { toast } from "sonner";
+import { Copy, Eye, EyeOff, Hash, RefreshCw } from "lucide-react";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { usePinGenerator } from "../../hooks/use-pin-generator";
+import type { PasswordHistory, PinSettings } from "../../types";
 
-export function PinGenerator() {
-  const { pin, length, setLength, generatePin } = usePinGenerator();
+interface PinGeneratorProps {
+  settings: PinSettings;
+  onSettingsChange: (settings: PinSettings) => void;
+  onPinGenerated: (pin: string, historyEntry: PasswordHistory) => void;
+  onCopyToClipboard: (text: string) => void;
+}
 
-  const handleCopyToClipboard = () => {
-    if (pin) {
-      navigator.clipboard.writeText(pin);
-      toast.success("PIN copied to clipboard!");
-    } else {
-      toast.error("No PIN generated yet.");
-    }
+export function PinGenerator({
+  settings,
+  onSettingsChange,
+  onPinGenerated,
+  onCopyToClipboard,
+}: PinGeneratorProps) {
+  const [showPin, setShowPin] = useState(true);
+  const { pin, generatePin } = usePinGenerator();
+
+  const handleGenerate = () => {
+    generatePin(settings, (generatedPin, historyEntry) => {
+      onPinGenerated(generatedPin, historyEntry);
+    });
   };
 
   return (
@@ -29,6 +46,9 @@ export function PinGenerator() {
           </div>
           PIN Generator
         </CardTitle>
+        <CardDescription className="text-muted-foreground text-sm leading-relaxed">
+          Generate cryptographically secure numeric PINs.
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-3">
@@ -39,27 +59,35 @@ export function PinGenerator() {
             >
               PIN Length
             </Label>
-            <Badge variant="outline">{length} digits</Badge>
+            <Badge variant="outline">{settings.length} digits</Badge>
           </div>
           <Slider
             className="w-full"
             id="pin-length"
             max={12}
             min={4}
-            onValueChange={(value) => setLength(value[0])}
-            value={[length]}
+            onValueChange={(value) =>
+              onSettingsChange({ ...settings, length: value[0] })
+            }
+            value={[settings.length]}
           />
+          <div className="flex justify-between text-muted-foreground text-xs">
+            <span>4</span>
+            <span>12</span>
+          </div>
         </div>
+
         <Button
           className="w-full"
           data-generate-button
-          onClick={generatePin}
+          onClick={handleGenerate}
           size="lg"
         >
           <RefreshCw className="mr-2 h-4 w-4" />
           Generate PIN
         </Button>
-        {pin && (
+
+        {pin ? (
           <div className="space-y-3 border-2 border-foreground p-4 shadow-brutal">
             <Label className="font-bold text-xs uppercase tracking-widest">
               Output
@@ -68,20 +96,36 @@ export function PinGenerator() {
               <Input
                 className="pr-2 font-bold font-mono text-lg tracking-[0.3em]"
                 readOnly
-                type="text"
+                type={showPin ? "text" : "password"}
                 value={pin}
               />
               <Button
                 className="shrink-0"
-                onClick={handleCopyToClipboard}
+                onClick={() => setShowPin((prev) => !prev)}
+                size="icon"
+                variant="outline"
+              >
+                {showPin ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </Button>
+              <Button
+                className="shrink-0"
+                onClick={() => onCopyToClipboard(pin)}
                 size="icon"
                 variant="outline"
               >
                 <Copy className="h-4 w-4" />
               </Button>
             </div>
+            <div className="border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs">
+              <strong>Combinations:</strong>{" "}
+              {(10 ** settings.length).toLocaleString()}
+            </div>
           </div>
-        )}
+        ) : null}
       </CardContent>
     </Card>
   );
