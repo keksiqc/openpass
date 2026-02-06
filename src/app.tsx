@@ -420,11 +420,11 @@ export default function App() {
         importProfiles={importProfiles}
       />
       {/* Main Content */}
-      <main className="container mx-auto max-w-7xl px-4 py-8">
+      <main className="container mx-auto max-w-7xl px-3 py-4 sm:px-4 sm:py-8">
         {/* Main Grid Layout */}
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
           {/* Main Generator */}
-          <div className="space-y-6 lg:col-span-2">
+          <div className="space-y-4 sm:space-y-6 lg:col-span-2">
             <Tabs
               className="w-full"
               onValueChange={(value: string) =>
@@ -432,22 +432,22 @@ export default function App() {
               }
               value={activeTab}
             >
-              <TabsList className="mb-4 grid h-12 w-full grid-cols-2 sm:grid-cols-4">
+              <TabsList className="mb-4 flex h-11 w-full sm:h-12">
                 <TabsTrigger value="password">
-                  <Key className="mr-2 h-4 w-4" />
-                  Password
+                  <Key className="h-4 w-4" />
+                  <span className="hidden sm:inline">Password</span>
                 </TabsTrigger>
                 <TabsTrigger value="passphrase">
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  Passphrase
+                  <BookOpen className="h-4 w-4" />
+                  <span className="hidden sm:inline">Phrase</span>
                 </TabsTrigger>
                 <TabsTrigger value="format">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Format
+                  <Settings className="h-4 w-4" />
+                  <span className="hidden sm:inline">Format</span>
                 </TabsTrigger>
                 <TabsTrigger value="pin">
-                  <Hash className="mr-2 h-4 w-4" />
-                  PIN
+                  <Hash className="h-4 w-4" />
+                  <span className="hidden sm:inline">PIN</span>
                 </TabsTrigger>
               </TabsList>
 

@@ -101,12 +101,12 @@ export function SettingsDialog({
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2" variant="outline">
+        <Button className="gap-2" size="icon" variant="outline">
           <SettingsIcon className="h-4 w-4" />
-          Settings
+          <span className="sr-only">Settings</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[800px]">
+      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <div className="border-2 border-foreground bg-accent p-1.5">
@@ -119,9 +119,9 @@ export function SettingsDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
           {/* Left Column */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Privacy Settings */}
             <Card className="border-2 shadow-none">
               <CardHeader>
@@ -249,7 +249,7 @@ export function SettingsDialog({
           </div>
 
           {/* Right Column */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Data Management */}
             <Card className="border-2 shadow-none">
               <CardHeader>
@@ -343,7 +343,7 @@ export function SettingsDialog({
         </div>
 
         {/* Dialog Actions */}
-        <div className="flex justify-end gap-3 border-foreground/20 border-t-2 pt-4">
+        <div className="flex justify-end gap-2 border-foreground/20 border-t-2 pt-3 sm:gap-3 sm:pt-4">
           <Button onClick={handleCancel} variant="outline">
             Cancel
           </Button>

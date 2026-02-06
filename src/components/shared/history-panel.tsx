@@ -90,26 +90,26 @@ export function HistoryPanel({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-xl">
+        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <History className="h-4 w-4 text-accent-foreground" />
           </div>
           Password History
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-sm leading-relaxed">
+        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
           Your recently generated passwords and passphrases
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-8">
+      <CardContent className="space-y-5 sm:space-y-8">
         {history.length === 0 ? (
-          <div className="px-6 py-10 text-center text-muted-foreground">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center border-2 border-foreground bg-secondary p-4">
-              <Shield className="h-7 w-7 opacity-50" />
+          <div className="px-4 py-8 text-center text-muted-foreground sm:px-6 sm:py-10">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center border-2 border-foreground bg-secondary p-3 sm:h-16 sm:w-16 sm:p-4">
+              <Shield className="h-6 w-6 opacity-50 sm:h-7 sm:w-7" />
             </div>
-            <p className="mb-2 font-bold text-sm uppercase tracking-wider">
+            <p className="mb-2 font-bold text-xs uppercase tracking-wider sm:text-sm">
               No passwords generated yet
             </p>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
               Your generation history will appear here for easy access
             </p>
           </div>
@@ -123,39 +123,41 @@ export function HistoryPanel({
                 size="sm"
                 variant="outline"
               >
-                <Trash2 className="mr-1.5 h-4 w-4" />
-                Clear All
+                <Trash2 className="mr-1.5 h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Clear All</span>
+                <span className="sm:hidden">Clear</span>
               </Button>
             </div>
-            <ScrollArea className="h-96">
+            <ScrollArea className="h-80 sm:h-96">
               <div className="space-y-3">
                 {history.map((entry) => (
                   <div
-                    className="group flex flex-col gap-3 border-2 border-foreground p-4 transition-colors hover:bg-secondary"
+                    className="group flex flex-col gap-2 border-2 border-foreground p-3 transition-colors hover:bg-secondary sm:gap-3 sm:p-4"
                     key={entry.id}
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <div className="border-2 border-foreground p-1.5">
+                    {/* Top row: type info + actions */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+                        <div className="border-2 border-foreground p-1">
                           {getTypeIcon(entry.type)}
                         </div>
                         <Badge
-                          className={`text-xs ${getTypeBadgeClass(entry.type)}`}
+                          className={`text-[10px] sm:text-xs ${getTypeBadgeClass(entry.type)}`}
                           variant="outline"
                         >
                           {entry.type.toString().charAt(0).toUpperCase() +
                             entry.type.slice(1)}
                         </Badge>
                         <Badge
-                          className={`text-xs ${getStrengthColor(entry.strength.label)}`}
+                          className={`text-[10px] sm:text-xs ${getStrengthColor(entry.strength.label)}`}
                           variant="outline"
                         >
                           {entry.strength.label}
                         </Badge>
                       </div>
-                      <div className="flex items-center gap-1">
+                      <div className="flex shrink-0 items-center gap-1">
                         <Button
-                          className="h-8 w-8 p-0"
+                          className="h-7 w-7 p-0 sm:h-8 sm:w-8"
                           onClick={() => togglePasswordVisibility(entry.id)}
                           size="sm"
                           title={
@@ -166,31 +168,32 @@ export function HistoryPanel({
                           variant="outline"
                         >
                           {showPasswords[entry.id] ? (
-                            <EyeOff className="h-4 w-4" />
+                            <EyeOff className="h-3.5 w-3.5" />
                           ) : (
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-3.5 w-3.5" />
                           )}
                         </Button>
                         <Button
-                          className="h-8 w-8 p-0"
+                          className="h-7 w-7 p-0 sm:h-8 sm:w-8"
                           onClick={() => onCopyToClipboard(entry.password)}
                           size="sm"
                           title="Copy to clipboard"
                           variant="outline"
                         >
-                          <Copy className="h-4 w-4" />
+                          <Copy className="h-3.5 w-3.5" />
                         </Button>
                         <Button
-                          className="h-8 w-8 p-0 text-destructive hover:border-destructive hover:bg-destructive/10 hover:text-destructive"
+                          className="h-7 w-7 p-0 text-destructive hover:border-destructive hover:bg-destructive/10 hover:text-destructive sm:h-8 sm:w-8"
                           onClick={() => onDeleteHistoryEntry(entry.id)}
                           size="sm"
                           title="Delete entry"
                           variant="outline"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
                     </div>
+                    {/* Password display */}
                     <Input
                       className="bg-secondary font-mono text-xs"
                       readOnly
@@ -200,7 +203,8 @@ export function HistoryPanel({
                           : "•".repeat(Math.min(entry.password.length, 20))
                       }
                     />
-                    <div className="flex items-center gap-1 text-muted-foreground text-xs">
+                    {/* Timestamp */}
+                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground sm:text-xs">
                       <Clock className="h-3 w-3" />
                       {new Intl.DateTimeFormat("en-US", {
                         month: "short",

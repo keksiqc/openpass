@@ -40,17 +40,17 @@ export function PinGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-xl">
+        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <Hash className="h-4 w-4 text-accent-foreground" />
           </div>
           PIN Generator
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-sm leading-relaxed">
+        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
           Generate cryptographically secure numeric PINs.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-5 sm:space-y-6">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Label
@@ -88,7 +88,7 @@ export function PinGenerator({
         </Button>
 
         {pin ? (
-          <div className="space-y-3 border-2 border-foreground p-4 shadow-brutal">
+          <div className="space-y-3 border-2 border-foreground p-3 shadow-brutal sm:p-4">
             <Label className="font-bold text-xs uppercase tracking-widest">
               Output
             </Label>

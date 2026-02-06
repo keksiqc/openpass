@@ -92,18 +92,18 @@ export function PassphraseGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-xl">
+        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <BookOpen className="h-4 w-4 text-accent-foreground" />
           </div>
           Passphrase Generator
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-sm leading-relaxed">
+        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
           Create memorable and secure passphrases from random words.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-8">
-        <div className="space-y-6">
+      <CardContent className="space-y-5 sm:space-y-8">
+        <div className="space-y-5 sm:space-y-6">
           {/* Word Count */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -259,7 +259,7 @@ export function PassphraseGenerator({
 
           {/* Generated Passphrase Display */}
           {generatedPassphrase ? (
-            <div className="space-y-4 border-2 border-foreground p-4 shadow-brutal">
+            <div className="space-y-3 border-2 border-foreground p-3 shadow-brutal sm:space-y-4 sm:p-4">
               <div className="flex items-center justify-between">
                 <Label className="font-bold text-xs uppercase tracking-widest">
                   Output

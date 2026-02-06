@@ -78,18 +78,18 @@ export function PasswordGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-xl">
+        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <Key className="h-4 w-4 text-accent-foreground" />
           </div>
           Password Generator
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-sm leading-relaxed">
+        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
           Generate strong, unique passwords with customizable options.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-8">
-        <div className="space-y-6">
+      <CardContent className="space-y-5 sm:space-y-8">
+        <div className="space-y-5 sm:space-y-6">
           {/* Password Length */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -122,10 +122,12 @@ export function PasswordGenerator({
             <Label className="font-bold text-sm uppercase tracking-wider">
               Character Types
             </Label>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="flex items-center justify-between border-2 border-foreground p-3">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              <div className="flex items-center justify-between border-2 border-foreground p-2.5 sm:p-3">
                 <Label className="flex flex-col pr-2" htmlFor="uppercase">
-                  <span className="font-bold text-sm">Uppercase</span>
+                  <span className="font-bold text-xs sm:text-sm">
+                    Uppercase
+                  </span>
                   <span className="font-mono text-muted-foreground text-xs">
                     A-Z
                   </span>
@@ -142,9 +144,11 @@ export function PasswordGenerator({
                 />
               </div>
 
-              <div className="flex items-center justify-between border-2 border-foreground p-3">
+              <div className="flex items-center justify-between border-2 border-foreground p-2.5 sm:p-3">
                 <Label className="flex flex-col pr-2" htmlFor="lowercase">
-                  <span className="font-bold text-sm">Lowercase</span>
+                  <span className="font-bold text-xs sm:text-sm">
+                    Lowercase
+                  </span>
                   <span className="font-mono text-muted-foreground text-xs">
                     a-z
                   </span>
@@ -161,9 +165,9 @@ export function PasswordGenerator({
                 />
               </div>
 
-              <div className="flex items-center justify-between border-2 border-foreground p-3">
+              <div className="flex items-center justify-between border-2 border-foreground p-2.5 sm:p-3">
                 <Label className="flex flex-col pr-2" htmlFor="numbers">
-                  <span className="font-bold text-sm">Numbers</span>
+                  <span className="font-bold text-xs sm:text-sm">Numbers</span>
                   <span className="font-mono text-muted-foreground text-xs">
                     0-9
                   </span>
@@ -180,9 +184,9 @@ export function PasswordGenerator({
                 />
               </div>
 
-              <div className="flex items-center justify-between border-2 border-foreground p-3">
+              <div className="flex items-center justify-between border-2 border-foreground p-2.5 sm:p-3">
                 <Label className="flex flex-col pr-2" htmlFor="symbols">
-                  <span className="font-bold text-sm">Symbols</span>
+                  <span className="font-bold text-xs sm:text-sm">Symbols</span>
                   <span className="font-mono text-muted-foreground text-xs">
                     !@#$%
                   </span>
@@ -375,7 +379,7 @@ export function PasswordGenerator({
 
           {/* Generated Password Display */}
           {generatedPassword && outputStrength ? (
-            <div className="space-y-4 border-2 border-foreground p-4 shadow-brutal">
+            <div className="space-y-3 border-2 border-foreground p-3 shadow-brutal sm:space-y-4 sm:p-4">
               <div className="flex items-center justify-between">
                 <Label className="font-bold text-xs uppercase tracking-widest">
                   Output
