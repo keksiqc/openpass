@@ -40,6 +40,7 @@ import {
   calculatePassphraseStrength,
   getStrengthColor,
   getStrengthDescription,
+  getStrengthTextColor,
 } from "../../utils/strength-helpers";
 
 interface PassphraseGeneratorProps {
@@ -73,7 +74,6 @@ export function PassphraseGenerator({
   const outputInfo = useMemo(() => {
     const strength = calculatePassphraseStrength(settings);
 
-    // Calculate real entropy from word count and dictionary size
     const entropyPerWord = Math.log2(PASSPHRASE_CONSTRAINTS.DICTIONARY_SIZE);
     let entropy = settings.wordCount * entropyPerWord;
     if (settings.includeNumbers) {
@@ -92,14 +92,14 @@ export function PassphraseGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
+        <CardTitle className="flex items-center gap-3">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <BookOpen className="h-4 w-4 text-accent-foreground" />
           </div>
           Passphrase Generator
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
-          Create memorable and secure passphrases from random words.
+        <CardDescription className="text-xs leading-relaxed sm:text-sm">
+          Memorable passphrases from random words. Easy to type, hard to crack.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5 sm:space-y-8">
@@ -204,7 +204,7 @@ export function PassphraseGenerator({
                 <Label className="flex flex-col pr-2" htmlFor="include-numbers">
                   <span className="font-bold text-sm">Add Numbers</span>
                   <span className="text-muted-foreground text-xs">
-                    Include numbers in the passphrase
+                    Include digits in the passphrase
                   </span>
                 </Label>
                 <Switch
@@ -224,9 +224,7 @@ export function PassphraseGenerator({
                     className="flex flex-col pr-2"
                     htmlFor="insert-numbers-randomly"
                   >
-                    <span className="font-bold text-sm">
-                      Insert numbers randomly
-                    </span>
+                    <span className="font-bold text-sm">Random placement</span>
                     <span className="text-muted-foreground text-xs">
                       Distribute numbers within the passphrase
                     </span>
@@ -259,34 +257,29 @@ export function PassphraseGenerator({
 
           {/* Generated Passphrase Display */}
           {generatedPassphrase ? (
-            <div className="space-y-3 border-2 border-foreground p-3 shadow-brutal sm:space-y-4 sm:p-4">
+            <div className="space-y-4 border-2 border-accent bg-accent/5 p-4 shadow-brutal-accent sm:p-5">
               <div className="flex items-center justify-between">
-                <Label className="font-bold text-xs uppercase tracking-widest">
-                  Output
+                <Label className="font-bold font-display text-sm uppercase tracking-tight">
+                  Result
                 </Label>
-                <Badge
-                  className={`text-xs ${outputInfo.strength.color}`}
-                  variant="outline"
+                <span
+                  className={`font-bold text-xs uppercase tracking-wider ${getStrengthTextColor(outputInfo.strength.label)}`}
                 >
                   {outputInfo.strength.label}
-                </Badge>
+                </span>
               </div>
 
-              <div className="h-3 w-full border-2 border-foreground bg-muted">
+              {/* Strength Bar */}
+              <div className="h-2 w-full border border-foreground/20 bg-muted">
                 <div
-                  className={`h-full transition-all ${getStrengthColor(outputInfo.strength.label)}`}
+                  className={`h-full transition-all duration-300 ${getStrengthColor(outputInfo.strength.label)}`}
                   style={{
                     width: `${outputInfo.strength.score * 10}%`,
                   }}
                 />
               </div>
-              <p className="text-muted-foreground text-xs">
-                {getStrengthDescription(
-                  outputInfo.strength.label,
-                  "passphrase"
-                )}
-              </p>
 
+              {/* Passphrase Display */}
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <Input
@@ -318,13 +311,29 @@ export function PassphraseGenerator({
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs sm:grid-cols-2">
-                <div>
-                  <strong>Entropy:</strong> {Math.round(outputInfo.entropy)}{" "}
-                  bits
+              {/* Stats */}
+              <div className="flex items-center gap-4 border-foreground/10 border-t pt-3">
+                <p className="text-muted-foreground text-xs">
+                  {getStrengthDescription(
+                    outputInfo.strength.label,
+                    "passphrase"
+                  )}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="border border-foreground/20 bg-background p-2">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                    Entropy
+                  </div>
+                  <div className="font-bold">
+                    {Math.round(outputInfo.entropy)} bits
+                  </div>
                 </div>
-                <div>
-                  <strong>Time to crack:</strong> {outputInfo.timeToCrack}
+                <div className="border border-foreground/20 bg-background p-2">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                    Time to crack
+                  </div>
+                  <div className="font-bold">{outputInfo.timeToCrack}</div>
                 </div>
               </div>
             </div>

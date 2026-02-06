@@ -40,14 +40,14 @@ export function PinGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
+        <CardTitle className="flex items-center gap-3">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <Hash className="h-4 w-4 text-accent-foreground" />
           </div>
           PIN Generator
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
-          Generate cryptographically secure numeric PINs.
+        <CardDescription className="text-xs leading-relaxed sm:text-sm">
+          Cryptographically secure numeric PINs for banking, devices, and more.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5 sm:space-y-6">
@@ -88,9 +88,9 @@ export function PinGenerator({
         </Button>
 
         {pin ? (
-          <div className="space-y-3 border-2 border-foreground p-3 shadow-brutal sm:p-4">
-            <Label className="font-bold text-xs uppercase tracking-widest">
-              Output
+          <div className="space-y-4 border-2 border-accent bg-accent/5 p-4 shadow-brutal-accent sm:p-5">
+            <Label className="font-bold font-display text-sm uppercase tracking-tight">
+              Result
             </Label>
             <div className="flex items-center gap-2">
               <Input
@@ -120,9 +120,13 @@ export function PinGenerator({
                 <Copy className="h-4 w-4" />
               </Button>
             </div>
-            <div className="border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs">
-              <strong>Combinations:</strong>{" "}
-              {(10 ** settings.length).toLocaleString()}
+            <div className="border border-foreground/20 bg-background p-2 text-xs">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                Possible combinations
+              </div>
+              <div className="font-bold">
+                {(10 ** settings.length).toLocaleString()}
+              </div>
             </div>
           </div>
         ) : null}

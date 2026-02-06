@@ -28,6 +28,7 @@ import {
 import {
   getStrengthColor,
   getStrengthDescription,
+  getStrengthTextColor,
 } from "../../utils/strength-helpers";
 
 interface PasswordGeneratorProps {
@@ -78,14 +79,14 @@ export function PasswordGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
+        <CardTitle className="flex items-center gap-3">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <Key className="h-4 w-4 text-accent-foreground" />
           </div>
           Password Generator
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
-          Generate strong, unique passwords with customizable options.
+        <CardDescription className="text-xs leading-relaxed sm:text-sm">
+          Configure character types and length, then generate.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5 sm:space-y-8">
@@ -94,7 +95,7 @@ export function PasswordGenerator({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="font-bold text-sm uppercase tracking-wider">
-                Password Length
+                Length
               </Label>
               <Badge variant="outline">{settings.length} chars</Badge>
             </div>
@@ -290,19 +291,18 @@ export function PasswordGenerator({
                   className="cursor-pointer text-xs"
                   htmlFor="require-each-type"
                 >
-                  Enforce each selected character type (might increase
-                  generation time)
+                  Enforce each selected character type
                 </Label>
               </div>
 
               {/* Minimum Requirements */}
-              {(settings.includeNumbers || settings.includeSymbols) && (
+              {settings.includeNumbers || settings.includeSymbols ? (
                 <div className="space-y-3 border-foreground/20 border-t-2 pt-3">
                   <div className="font-bold text-muted-foreground text-xs uppercase tracking-wider">
                     Minimum Requirements
                   </div>
 
-                  {settings.includeNumbers && (
+                  {settings.includeNumbers ? (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label className="text-xs">Min Numbers</Label>
@@ -324,9 +324,9 @@ export function PasswordGenerator({
                         value={[settings.minNumbers || 1]}
                       />
                     </div>
-                  )}
+                  ) : null}
 
-                  {settings.includeSymbols && (
+                  {settings.includeSymbols ? (
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label className="text-xs">Min Symbols</Label>
@@ -348,9 +348,9 @@ export function PasswordGenerator({
                         value={[settings.minSymbols || 1]}
                       />
                     </div>
-                  )}
+                  ) : null}
                 </div>
-              )}
+              ) : null}
             </CollapsibleContent>
           </Collapsible>
 
@@ -379,31 +379,29 @@ export function PasswordGenerator({
 
           {/* Generated Password Display */}
           {generatedPassword && outputStrength ? (
-            <div className="space-y-3 border-2 border-foreground p-3 shadow-brutal sm:space-y-4 sm:p-4">
+            <div className="space-y-4 border-2 border-accent bg-accent/5 p-4 shadow-brutal-accent sm:p-5">
               <div className="flex items-center justify-between">
-                <Label className="font-bold text-xs uppercase tracking-widest">
-                  Output
+                <Label className="font-bold font-display text-sm uppercase tracking-tight">
+                  Result
                 </Label>
-                <Badge
-                  className={`text-xs ${outputStrength.color}`}
-                  variant="outline"
+                <span
+                  className={`font-bold text-xs uppercase tracking-wider ${getStrengthTextColor(outputStrength.label)}`}
                 >
                   {outputStrength.label}
-                </Badge>
+                </span>
               </div>
 
-              <div className="h-3 w-full border-2 border-foreground bg-muted">
+              {/* Strength Bar */}
+              <div className="h-2 w-full border border-foreground/20 bg-muted">
                 <div
-                  className={`h-full transition-all ${getStrengthColor(outputStrength.label)}`}
+                  className={`h-full transition-all duration-300 ${getStrengthColor(outputStrength.label)}`}
                   style={{
                     width: `${outputStrength.score * 10}%`,
                   }}
                 />
               </div>
-              <p className="text-muted-foreground text-xs">
-                {getStrengthDescription(outputStrength.label, "password")}
-              </p>
 
+              {/* Password Display */}
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <Input
@@ -435,13 +433,26 @@ export function PasswordGenerator({
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs sm:grid-cols-2">
-                <div>
-                  <strong>Entropy:</strong> {Math.round(outputStrength.entropy)}{" "}
-                  bits
+              {/* Stats */}
+              <div className="flex items-center gap-4 border-foreground/10 border-t pt-3 text-muted-foreground text-xs">
+                <p className="text-muted-foreground text-xs">
+                  {getStrengthDescription(outputStrength.label, "password")}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="border border-foreground/20 bg-background p-2">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                    Entropy
+                  </div>
+                  <div className="font-bold">
+                    {Math.round(outputStrength.entropy)} bits
+                  </div>
                 </div>
-                <div>
-                  <strong>Time to crack:</strong> {outputStrength.timeToCrack}
+                <div className="border border-foreground/20 bg-background p-2">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                    Time to crack
+                  </div>
+                  <div className="font-bold">{outputStrength.timeToCrack}</div>
                 </div>
               </div>
             </div>

@@ -9,7 +9,6 @@ import {
   Type,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -48,6 +47,7 @@ import {
   createStrengthObject,
   getStrengthColor,
   getStrengthDescription,
+  getStrengthTextColor,
 } from "../../utils/strength-helpers";
 
 interface FormatGeneratorProps {
@@ -58,14 +58,14 @@ interface FormatGeneratorProps {
 }
 
 const STRENGTH_ACCENT: Record<ReadableStrength, string> = {
-  easy: "border-yellow-500 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
+  easy: "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-400",
   moderate: "border-blue-500 bg-blue-500/10 text-blue-700 dark:text-blue-400",
   strong: "border-green-500 bg-green-500/10 text-green-700 dark:text-green-400",
-  ultra: "border-accent bg-accent/10 text-accent-foreground",
+  ultra: "border-accent bg-accent/10 text-accent",
 };
 
 const STRENGTH_ACTIVE: Record<ReadableStrength, string> = {
-  easy: "border-yellow-500 bg-yellow-500 text-yellow-950",
+  easy: "border-amber-500 bg-amber-500 text-amber-950",
   moderate: "border-blue-500 bg-blue-500 text-white",
   strong: "border-green-500 bg-green-500 text-green-950",
   ultra: "border-accent bg-accent text-accent-foreground",
@@ -137,14 +137,14 @@ export function FormatGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
+        <CardTitle className="flex items-center gap-3">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <Settings className="h-4 w-4 text-accent-foreground" />
           </div>
           Format Generator
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
-          Generate passwords from readable presets or custom format patterns.
+        <CardDescription className="text-xs leading-relaxed sm:text-sm">
+          Readable presets or custom format patterns for structured passwords.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5 sm:space-y-8">
@@ -372,31 +372,29 @@ export function FormatGenerator({
 
           {/* Generated Format Password Display */}
           {generatedFormat && outputStrength ? (
-            <div className="space-y-3 border-2 border-foreground p-3 shadow-brutal sm:space-y-4 sm:p-4">
+            <div className="space-y-4 border-2 border-accent bg-accent/5 p-4 shadow-brutal-accent sm:p-5">
               <div className="flex items-center justify-between">
-                <Label className="font-bold text-xs uppercase tracking-widest">
-                  Output
+                <Label className="font-bold font-display text-sm uppercase tracking-tight">
+                  Result
                 </Label>
-                <Badge
-                  className={`text-xs ${outputStrength.color}`}
-                  variant="outline"
+                <span
+                  className={`font-bold text-xs uppercase tracking-wider ${getStrengthTextColor(outputStrength.label)}`}
                 >
                   {outputStrength.label}
-                </Badge>
+                </span>
               </div>
 
-              <div className="h-3 w-full border-2 border-foreground bg-muted">
+              {/* Strength Bar */}
+              <div className="h-2 w-full border border-foreground/20 bg-muted">
                 <div
-                  className={`h-full transition-all ${getStrengthColor(outputStrength.label)}`}
+                  className={`h-full transition-all duration-300 ${getStrengthColor(outputStrength.label)}`}
                   style={{
                     width: `${outputStrength.score * 10}%`,
                   }}
                 />
               </div>
-              <p className="text-muted-foreground text-xs">
-                {getStrengthDescription(outputStrength.label, "format")}
-              </p>
 
+              {/* Password Display */}
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <Input
@@ -428,13 +426,26 @@ export function FormatGenerator({
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs sm:grid-cols-2">
-                <div>
-                  <strong>Entropy:</strong> {Math.round(outputStrength.entropy)}{" "}
-                  bits
+              {/* Stats */}
+              <div className="flex items-center gap-4 border-foreground/10 border-t pt-3">
+                <p className="text-muted-foreground text-xs">
+                  {getStrengthDescription(outputStrength.label, "format")}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="border border-foreground/20 bg-background p-2">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                    Entropy
+                  </div>
+                  <div className="font-bold">
+                    {Math.round(outputStrength.entropy)} bits
+                  </div>
                 </div>
-                <div>
-                  <strong>Time to crack:</strong> {outputStrength.timeToCrack}
+                <div className="border border-foreground/20 bg-background p-2">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                    Time to crack
+                  </div>
+                  <div className="font-bold">{outputStrength.timeToCrack}</div>
                 </div>
               </div>
             </div>

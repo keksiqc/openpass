@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { PasswordHistory } from "../../types";
+import { getStrengthTextColor } from "../../utils/strength-helpers";
 
 interface HistoryPanelProps {
   history: PasswordHistory[];
@@ -40,16 +41,6 @@ export function HistoryPanel({
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>(
     {}
   );
-
-  const getTypeBadgeClass = (type: string): string => {
-    if (type === "password") {
-      return "border-foreground text-foreground";
-    }
-    if (type === "passphrase") {
-      return "border-foreground text-foreground";
-    }
-    return "border-foreground text-foreground";
-  };
 
   const togglePasswordVisibility = (entryId: string) => {
     setShowPasswords((prev) => ({
@@ -71,52 +62,40 @@ export function HistoryPanel({
     }
   };
 
-  const getStrengthColor = (strength: string) => {
-    switch (strength.toLowerCase()) {
-      case "weak":
-        return "border-destructive text-destructive";
-      case "fair":
-        return "border-foreground text-muted-foreground";
-      case "good":
-        return "border-foreground text-foreground";
-      case "strong":
-      case "excellent":
-        return "border-accent text-accent-foreground bg-accent";
-      default:
-        return "border-foreground text-muted-foreground";
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
+        <CardTitle className="flex items-center gap-3">
           <div className="border-2 border-foreground bg-accent p-1.5">
             <History className="h-4 w-4 text-accent-foreground" />
           </div>
-          Password History
+          History
+          {history.length > 0 ? (
+            <Badge className="ml-auto" variant="secondary">
+              {history.length}
+            </Badge>
+          ) : null}
         </CardTitle>
-        <CardDescription className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
-          Your recently generated passwords and passphrases
+        <CardDescription className="text-xs leading-relaxed sm:text-sm">
+          Recently generated passwords for quick access.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-5 sm:space-y-8">
+      <CardContent className="space-y-4 sm:space-y-6">
         {history.length === 0 ? (
           <div className="px-4 py-8 text-center text-muted-foreground sm:px-6 sm:py-10">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center border-2 border-foreground bg-secondary p-3 sm:h-16 sm:w-16 sm:p-4">
-              <Shield className="h-6 w-6 opacity-50 sm:h-7 sm:w-7" />
+              <Shield className="h-6 w-6 opacity-40 sm:h-7 sm:w-7" />
             </div>
             <p className="mb-2 font-bold text-xs uppercase tracking-wider sm:text-sm">
-              No passwords generated yet
+              No history yet
             </p>
             <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
-              Your generation history will appear here for easy access
+              Generated passwords will appear here
             </p>
           </div>
         ) : (
           <>
-            <div className="mb-2 flex items-center justify-between">
-              <Badge variant="secondary">{history.length} entries</Badge>
+            <div className="flex items-center justify-end">
               <Button
                 className="text-xs hover:border-destructive hover:bg-destructive/10 hover:text-destructive"
                 onClick={onClearHistory}
@@ -129,31 +108,30 @@ export function HistoryPanel({
               </Button>
             </div>
             <ScrollArea className="h-80 sm:h-96">
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {history.map((entry) => (
                   <div
-                    className="group flex flex-col gap-2 border-2 border-foreground p-3 transition-colors hover:bg-secondary sm:gap-3 sm:p-4"
+                    className="group flex flex-col gap-2 border-2 border-foreground p-3 transition-colors hover:bg-secondary sm:p-4"
                     key={entry.id}
                   >
                     {/* Top row: type info + actions */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
-                        <div className="border-2 border-foreground p-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex min-w-0 flex-1 items-center gap-1.5">
+                        <div className="border border-foreground p-1">
                           {getTypeIcon(entry.type)}
                         </div>
                         <Badge
-                          className={`text-[10px] sm:text-xs ${getTypeBadgeClass(entry.type)}`}
+                          className="text-[10px] sm:text-xs"
                           variant="outline"
                         >
                           {entry.type.toString().charAt(0).toUpperCase() +
                             entry.type.slice(1)}
                         </Badge>
-                        <Badge
-                          className={`text-[10px] sm:text-xs ${getStrengthColor(entry.strength.label)}`}
-                          variant="outline"
+                        <span
+                          className={`font-bold text-[10px] uppercase sm:text-xs ${getStrengthTextColor(entry.strength.label)}`}
                         >
                           {entry.strength.label}
-                        </Badge>
+                        </span>
                       </div>
                       <div className="flex shrink-0 items-center gap-1">
                         <Button

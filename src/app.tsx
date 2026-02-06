@@ -1,6 +1,4 @@
-// filepath: /workspaces/openpass/src/App.tsx
-
-import { BookOpen, Hash, Key, Settings } from "lucide-react";
+import { BookOpen, Github, Hash, Key, Settings, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
@@ -51,7 +49,6 @@ export default function App() {
     DEFAULT_FORMAT_SETTINGS
   );
 
-  // Placeholder for PIN settings
   const [pinSettings, setPinSettings] =
     useState<PinSettings>(DEFAULT_PIN_SETTINGS);
 
@@ -79,10 +76,8 @@ export default function App() {
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Ctrl/Cmd + G to generate password
       if ((event.ctrlKey || event.metaKey) && event.key === "g") {
         event.preventDefault();
-        // Trigger generation based on active tab
         const generateButton = document.querySelector(
           "[data-generate-button]"
         ) as HTMLButtonElement;
@@ -98,7 +93,6 @@ export default function App() {
 
   // Save profiles to localStorage
   const saveProfilesToStorage = (newProfiles: Profile[]) => {
-    // Changed to Profile[]
     saveProfiles(newProfiles);
     setProfiles(newProfiles);
   };
@@ -114,7 +108,7 @@ export default function App() {
     if (!appSettings.historyEnabled) {
       return;
     }
-    const newHistory = [historyEntry, ...passwordHistory].slice(0, 50); // Keep last 50
+    const newHistory = [historyEntry, ...passwordHistory].slice(0, 50);
     saveHistoryToStorage(newHistory);
   };
 
@@ -188,7 +182,6 @@ export default function App() {
       return;
     }
 
-    // Check for duplicate names
     if (
       profiles.some(
         (p) => p.name.toLowerCase() === profileName.trim().toLowerCase()
@@ -199,7 +192,6 @@ export default function App() {
     }
 
     if (editingProfileId) {
-      // Update existing profile
       const updatedProfiles = updateExistingProfile(
         editingProfileId,
         profileName
@@ -208,7 +200,6 @@ export default function App() {
       setEditingProfileId(null);
       toast.success(`Profile "${profileName.trim()}" updated successfully!`);
     } else {
-      // Create new profile
       const newProfile = createNewProfile(profileName);
       const newProfiles = [...profiles, newProfile];
       saveProfilesToStorage(newProfiles);
@@ -219,7 +210,6 @@ export default function App() {
 
   // Load profile
   const loadProfile = (profileToLoad: Profile) => {
-    // Parameter type is Profile
     setActiveTab(profileToLoad.type);
 
     switch (profileToLoad.type) {
@@ -229,19 +219,17 @@ export default function App() {
       case "passphrase":
         setPassphraseSettings(profileToLoad.settings);
         break;
-      case "format": // Formerly 'custom'
+      case "format":
         setFormatSettings(profileToLoad.settings);
         break;
       case "pin":
         setPinSettings(profileToLoad.settings);
         break;
       default:
-        // This should never happen with proper typing, but handle gracefully
         toast.error("Unknown profile type");
         return;
     }
 
-    // Update last used
     const updatedProfile = { ...profileToLoad, lastUsed: new Date() };
     const newProfiles = profiles.map((p) =>
       p.id === profileToLoad.id ? updatedProfile : p
@@ -253,7 +241,6 @@ export default function App() {
 
   // Edit profile
   const handleEditProfile = (profileToEdit: Profile) => {
-    // Parameter type is Profile
     setEditingProfileId(profileToEdit.id);
     setProfileName(profileToEdit.name);
     setActiveTab(profileToEdit.type);
@@ -264,14 +251,13 @@ export default function App() {
       case "passphrase":
         setPassphraseSettings(profileToEdit.settings);
         break;
-      case "format": // Formerly 'custom'
+      case "format":
         setFormatSettings(profileToEdit.settings);
         break;
       case "pin":
         setPinSettings(profileToEdit.settings);
         break;
       default:
-        // This should never happen with proper typing, but handle gracefully
         toast.error("Unknown profile type");
         return;
     }
@@ -317,9 +303,7 @@ export default function App() {
     setAppSettings(newSettings);
     saveSettings(newSettings);
 
-    // If history was disabled, clear it
     if (newSettings.historyEnabled) {
-      // Reload history if it was re-enabled
       setPasswordHistory(loadHistory());
     } else {
       setPasswordHistory([]);
@@ -329,7 +313,7 @@ export default function App() {
 
   // Reset to defaults
   const handleResetToDefaults = () => {
-    clearAllData(); // Clears profiles and history
+    clearAllData();
     setProfiles([]);
     setPasswordHistory([]);
     const defaultSettings = {
@@ -410,7 +394,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <NavBar
         appSettings={appSettings}
         exportProfiles={exportProfiles}
@@ -419,12 +403,13 @@ export default function App() {
         handleSettingsChange={handleSettingsChange}
         importProfiles={importProfiles}
       />
+
       {/* Main Content */}
-      <main className="container mx-auto max-w-7xl px-3 py-4 sm:px-4 sm:py-8">
+      <main className="container mx-auto max-w-7xl flex-1 px-3 py-6 sm:px-4 sm:py-10">
         {/* Main Grid Layout */}
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
-          {/* Main Generator */}
-          <div className="space-y-4 sm:space-y-6 lg:col-span-2">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
+          {/* Main Generator Column */}
+          <div className="space-y-6 sm:space-y-8 lg:col-span-2">
             <Tabs
               className="w-full"
               onValueChange={(value: string) =>
@@ -432,7 +417,7 @@ export default function App() {
               }
               value={activeTab}
             >
-              <TabsList className="mb-4 flex h-11 w-full sm:h-12">
+              <TabsList className="mb-5 flex h-12 w-full sm:mb-6 sm:h-14">
                 <TabsTrigger value="password">
                   <Key className="h-4 w-4" />
                   <span className="hidden sm:inline">Password</span>
@@ -490,20 +475,20 @@ export default function App() {
               </TabsContent>
             </Tabs>
 
-            {/* History Section - Moved under generator */}
-            {appSettings.historyEnabled && (
+            {/* History Section */}
+            {appSettings.historyEnabled ? (
               <HistoryPanel
                 history={passwordHistory}
                 onClearHistory={clearHistory}
                 onCopyToClipboard={copyToClipboard}
                 onDeleteHistoryEntry={handleDeleteHistoryEntry}
               />
-            )}
+            ) : null}
           </div>
 
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24">
+            <div className="sticky top-20">
               <ProfileManager
                 activeTab={activeTab}
                 editingProfileId={editingProfileId}
@@ -512,20 +497,51 @@ export default function App() {
                 onDeleteProfile={deleteProfile}
                 onEditProfile={handleEditProfile}
                 onLoadProfile={loadProfile}
-                onProfileNameChange={setProfileName} // Pass pinSettings
+                onProfileNameChange={setProfileName}
                 onSaveProfile={saveProfile}
                 onToggleFavorite={toggleFavorite}
                 passphraseSettings={passphraseSettings}
                 passwordHistory={passwordHistory}
                 passwordSettings={passwordSettings}
-                pinSettings={pinSettings} // Pass new prop
-                profileName={profileName} // Pass new prop
-                profiles={profiles} // Pass new prop
+                pinSettings={pinSettings}
+                profileName={profileName}
+                profiles={profiles}
               />
             </div>
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="mt-auto border-foreground border-t-2 bg-card">
+        <div className="container mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+            <div className="flex items-center gap-3">
+              <Shield className="h-4 w-4 text-accent" />
+              <p className="text-center text-muted-foreground text-xs sm:text-left">
+                Everything runs locally in your browser. No data leaves your
+                device.
+              </p>
+            </div>
+            <div className="flex items-center gap-4 text-muted-foreground text-xs">
+              <a
+                className="flex items-center gap-1.5 border-transparent border-b transition-colors hover:border-accent hover:text-accent"
+                href="https://github.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <Github className="h-3.5 w-3.5" />
+                Source
+              </a>
+              <span className="text-border">|</span>
+              <span>Open Source</span>
+              <span className="text-border">|</span>
+              <span>v1.0</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+
       <Toaster />
     </div>
   );

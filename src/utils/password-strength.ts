@@ -47,18 +47,18 @@ const applyPatternPenalties = (password: string): number => {
 // Helper function to get strength label and color
 const getStrengthLabel = (score: number): { label: string; color: string } => {
   if (score <= 2) {
-    return { label: "Weak", color: "text-red-600" };
+    return { label: "Weak", color: "text-red-600 dark:text-red-400" };
   }
   if (score <= 4) {
-    return { label: "Fair", color: "text-yellow-600" };
+    return { label: "Fair", color: "text-amber-600 dark:text-amber-400" };
   }
   if (score <= 6) {
-    return { label: "Good", color: "text-blue-600" };
+    return { label: "Good", color: "text-blue-600 dark:text-blue-400" };
   }
   if (score <= 8) {
-    return { label: "Strong", color: "text-green-600" };
+    return { label: "Strong", color: "text-green-600 dark:text-green-400" };
   }
-  return { label: "Excellent", color: "text-green-700" };
+  return { label: "Excellent", color: "text-accent" };
 };
 
 // Password strength calculator
