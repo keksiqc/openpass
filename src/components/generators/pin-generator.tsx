@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { usePinGenerator } from "../../hooks/usePinGenerator";
+import { usePinGenerator } from "../../hooks/use-pin-generator";
 
 export function PinGenerator() {
   const { pin, length, setLength, generatePin } = usePinGenerator();

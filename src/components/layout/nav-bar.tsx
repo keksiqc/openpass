@@ -4,14 +4,14 @@ import type { AppSettings } from "../../types";
 import { ModeToggle } from "../mode-toggle";
 import { SettingsDialog } from "../shared/settings-dialog";
 
-type NavBarProps = {
+interface NavBarProps {
   appSettings: AppSettings;
   handleSettingsChange: (settings: AppSettings) => void;
   handleClearAllData: () => void;
   exportProfiles: () => void;
   importProfiles: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleResetToDefaults: () => void;
-};
+}
 
 export const NavBar: React.FC<NavBarProps> = ({
   appSettings,

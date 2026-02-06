@@ -1,7 +1,22 @@
 import { Slider as SliderPrimitive } from "radix-ui";
-import * as React from "react";
+import { type ComponentProps, useMemo } from "react";
 
 import { cn } from "@/lib/utils";
+
+function resolveValues(
+  value: number[] | undefined,
+  defaultValue: number[] | undefined,
+  min: number,
+  max: number
+): number[] {
+  if (Array.isArray(value)) {
+    return value;
+  }
+  if (Array.isArray(defaultValue)) {
+    return defaultValue;
+  }
+  return [min, max];
+}
 
 function Slider({
   className,
@@ -10,14 +25,9 @@ function Slider({
   min = 0,
   max = 100,
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
-  const _values = React.useMemo(
-    () =>
-      Array.isArray(value)
-        ? value
-        : Array.isArray(defaultValue)
-          ? defaultValue
-          : [min, max],
+}: ComponentProps<typeof SliderPrimitive.Root>) {
+  const _values = useMemo(
+    () => resolveValues(value, defaultValue, min, max),
     [value, defaultValue, min, max]
   );
 
@@ -47,11 +57,11 @@ function Slider({
           data-slot="slider-range"
         />
       </SliderPrimitive.Track>
-      {Array.from({ length: _values.length }, (_, index) => (
+      {_values.map((val) => (
         <SliderPrimitive.Thumb
           className="block size-5 shrink-0 cursor-grab border-2 border-foreground bg-background shadow-brutal-sm ring-accent/50 transition-shadow hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 active:cursor-grabbing disabled:pointer-events-none disabled:opacity-50"
           data-slot="slider-thumb"
-          key={index}
+          key={val}
         />
       ))}
     </SliderPrimitive.Root>

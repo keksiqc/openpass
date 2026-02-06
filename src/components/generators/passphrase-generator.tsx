@@ -33,7 +33,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { TabsContent } from "@/components/ui/tabs";
-import { usePassphraseGenerator } from "../../hooks/usePassphraseGenerator";
+import { usePassphraseGenerator } from "../../hooks/use-passphrase-generator";
 import type { PassphraseSettings, PasswordHistory } from "../../types";
 import { estimateTimeToCrack } from "../../utils/password-strength";
 import {
@@ -42,7 +42,7 @@ import {
   getStrengthDescription,
 } from "../../utils/strength-helpers";
 
-type PassphraseGeneratorProps = {
+interface PassphraseGeneratorProps {
   settings: PassphraseSettings;
   onSettingsChange: (settings: PassphraseSettings) => void;
   onPassphraseGenerated: (
@@ -50,7 +50,7 @@ type PassphraseGeneratorProps = {
     historyEntry: PasswordHistory
   ) => void;
   onCopyToClipboard: (text: string) => void;
-};
+}
 
 export function PassphraseGenerator({
   settings,

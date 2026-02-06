@@ -33,14 +33,14 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 
-type SettingsDialogProps = {
+interface SettingsDialogProps {
   settings: AppSettings;
   onSettingsChange: (settings: AppSettings) => void;
   onClearAllData: () => void;
   onExportData: () => void;
   onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onResetToDefaults: () => void;
-};
+}
 
 export function SettingsDialog({
   settings,

@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { TabsContent } from "@/components/ui/tabs";
-import { usePasswordGenerator } from "../../hooks/usePasswordGenerator";
+import { usePasswordGenerator } from "../../hooks/use-password-generator";
 import type { PasswordHistory, PasswordSettings } from "../../types";
 import {
   calculateEntropy,
@@ -31,7 +31,7 @@ import {
   getStrengthDescription,
 } from "../../utils/strength-helpers";
 
-type PasswordGeneratorProps = {
+interface PasswordGeneratorProps {
   settings: PasswordSettings;
   onSettingsChange: (settings: PasswordSettings) => void;
   onPasswordGenerated: (
@@ -41,7 +41,7 @@ type PasswordGeneratorProps = {
   onCopyToClipboard: (text: string) => void;
   isGenerating: boolean;
   onGeneratingChange: (generating: boolean) => void;
-};
+}
 
 export function PasswordGenerator({
   settings,

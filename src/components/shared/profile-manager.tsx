@@ -50,7 +50,7 @@ import type {
   ProfileType,
 } from "../../types";
 
-type ProfileManagerProps = {
+interface ProfileManagerProps {
   profiles: Profile[];
   profileName: string;
   onProfileNameChange: (name: string) => void;
@@ -67,7 +67,7 @@ type ProfileManagerProps = {
   onEditProfile: (profile: Profile) => void;
   editingProfileId: string | null;
   onCancelEdit: () => void;
-};
+}
 
 export function ProfileManager({
   profiles,

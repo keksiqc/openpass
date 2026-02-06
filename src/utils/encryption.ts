@@ -14,7 +14,7 @@ export function encrypt(text: string, key: string): string {
   const encrypted = new Uint8Array(textBytes.length);
 
   for (let i = 0; i < textBytes.length; i++) {
-    // biome-ignore lint/nursery/noBitwiseOperators: XOR is intentional for encryption
+    // biome-ignore lint/suspicious/noBitwiseOperators: XOR is intentional for encryption
     encrypted[i] = textBytes[i] ^ keyBytes[i % keyBytes.length];
   }
 
@@ -36,7 +36,7 @@ export function decrypt(encryptedText: string, key: string): string {
     const decrypted = new Uint8Array(encryptedBytes.length);
 
     for (let i = 0; i < encryptedBytes.length; i++) {
-      // biome-ignore lint/nursery/noBitwiseOperators: XOR is intentional for encryption
+      // biome-ignore lint/suspicious/noBitwiseOperators: XOR is intentional for encryption
       decrypted[i] = encryptedBytes[i] ^ keyBytes[i % keyBytes.length];
     }
 

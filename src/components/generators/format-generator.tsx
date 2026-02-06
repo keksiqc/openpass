@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useFormatGenerator } from "../../hooks/useFormatGenerator";
+import { useFormatGenerator } from "../../hooks/use-format-generator";
 import type { FormatSettings, PasswordHistory } from "../../types";
 import {
   calculateEntropy,
@@ -42,12 +42,12 @@ import {
   getStrengthDescription,
 } from "../../utils/strength-helpers";
 
-type FormatGeneratorProps = {
+interface FormatGeneratorProps {
   settings: FormatSettings;
   onSettingsChange: (settings: FormatSettings) => void;
   onFormatGenerated: (format: string, historyEntry: PasswordHistory) => void;
   onCopyToClipboard: (text: string) => void;
-};
+}
 
 export function FormatGenerator({
   settings,

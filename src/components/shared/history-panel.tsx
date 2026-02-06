@@ -24,12 +24,12 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { PasswordHistory } from "../../types";
 
-type HistoryPanelProps = {
+interface HistoryPanelProps {
   history: PasswordHistory[];
   onCopyToClipboard: (text: string) => void;
   onClearHistory: () => void;
   onDeleteHistoryEntry: (id: string) => void;
-};
+}
 
 export function HistoryPanel({
   history,
