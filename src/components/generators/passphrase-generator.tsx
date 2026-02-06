@@ -1,5 +1,4 @@
 import {
-  BookOpen,
   ChevronDown,
   Copy,
   Eye,
@@ -9,13 +8,6 @@ import {
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
@@ -70,10 +62,8 @@ export function PassphraseGenerator({
     });
   };
 
-  // Derive strength and entropy once
   const outputInfo = useMemo(() => {
     const strength = calculatePassphraseStrength(settings);
-
     const entropyPerWord = Math.log2(PASSPHRASE_CONSTRAINTS.DICTIONARY_SIZE);
     let entropy = settings.wordCount * entropyPerWord;
     if (settings.includeNumbers) {
@@ -84,72 +74,57 @@ export function PassphraseGenerator({
     if (settings.wordCase !== "lowercase") {
       entropy += settings.wordCount * Math.log2(1.5);
     }
-
     const timeToCrack = estimateTimeToCrack(entropy);
     return { strength, entropy, timeToCrack };
   }, [settings]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-3">
-          <div className="border-2 border-foreground bg-accent p-1.5">
-            <BookOpen className="h-4 w-4 text-accent-foreground" />
-          </div>
-          Passphrase Generator
-        </CardTitle>
-        <CardDescription className="text-xs leading-relaxed sm:text-sm">
-          Memorable passphrases from random words. Easy to type, hard to crack.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-5 sm:space-y-8">
-        <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-6">
+      {/* Configuration */}
+      <div className="border-2 border-foreground bg-card shadow-brutal">
+        <div className="border-foreground border-b-2 px-4 py-3 sm:px-5">
+          <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em]">
+            Configuration
+          </span>
+        </div>
+        <div className="space-y-5 p-4 sm:space-y-6 sm:p-5">
           {/* Word Count */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="font-bold text-sm uppercase tracking-wider">
+              <Label className="font-bold text-xs uppercase tracking-wider">
                 Word Count
               </Label>
-              <Badge variant="outline">{settings.wordCount} words</Badge>
+              <div className="border-2 border-foreground bg-background px-2.5 py-0.5 text-center font-bold font-mono text-sm tabular-nums">
+                {settings.wordCount}
+              </div>
             </div>
             <Slider
               className="w-full"
               max={8}
               min={2}
               onValueChange={(value) =>
-                onSettingsChange({
-                  ...settings,
-                  wordCount: value[0],
-                })
+                onSettingsChange({ ...settings, wordCount: value[0] })
               }
               step={1}
               value={[settings.wordCount]}
             />
-            <div className="flex justify-between text-muted-foreground text-xs">
-              <span>2</span>
-              <span>8</span>
+            <div className="flex justify-between text-[10px] text-muted-foreground uppercase tracking-wider">
+              <span>Min: 2</span>
+              <span>Max: 8</span>
             </div>
           </div>
 
-          {/* Separator and Case Options */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {/* Separator and Case */}
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label
-                className="font-bold text-sm uppercase tracking-wider"
-                htmlFor="separator"
-              >
+              <Label className="font-bold text-xs uppercase tracking-wider" htmlFor="separator">
                 Separator
               </Label>
               <Select
-                onValueChange={(value) =>
-                  onSettingsChange({
-                    ...settings,
-                    separator: value,
-                  })
-                }
+                onValueChange={(value) => onSettingsChange({ ...settings, separator: value })}
                 value={settings.separator}
               >
-                <SelectTrigger className="w-full bg-card">
+                <SelectTrigger className="w-full bg-background">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -161,24 +136,17 @@ export function PassphraseGenerator({
                 </SelectContent>
               </Select>
             </div>
-
             <div className="space-y-2">
-              <Label
-                className="font-bold text-sm uppercase tracking-wider"
-                htmlFor="word-case"
-              >
+              <Label className="font-bold text-xs uppercase tracking-wider" htmlFor="word-case">
                 Word Case
               </Label>
               <Select
                 onValueChange={(value) =>
-                  onSettingsChange({
-                    ...settings,
-                    wordCase: value as PassphraseSettings["wordCase"],
-                  })
+                  onSettingsChange({ ...settings, wordCase: value as PassphraseSettings["wordCase"] })
                 }
                 value={settings.wordCase}
               >
-                <SelectTrigger className="w-full bg-card">
+                <SelectTrigger className="w-full bg-background">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -193,153 +161,122 @@ export function PassphraseGenerator({
 
           {/* Additional Options */}
           <Collapsible>
-            <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
-              <span className="font-bold text-sm uppercase tracking-wider">
+            <CollapsibleTrigger className="group flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
+              <span className="font-bold text-xs uppercase tracking-wider">
                 Additional Options
               </span>
-              <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+              <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </CollapsibleTrigger>
-            <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
-              <div className="flex items-center justify-between border-2 border-foreground p-3">
+            <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-card p-4">
+              <div className="flex items-center justify-between border-2 border-foreground bg-background p-2.5">
                 <Label className="flex flex-col pr-2" htmlFor="include-numbers">
-                  <span className="font-bold text-sm">Add Numbers</span>
-                  <span className="text-muted-foreground text-xs">
-                    Include digits in the passphrase
-                  </span>
+                  <span className="font-bold text-xs">Add Numbers</span>
+                  <span className="text-[10px] text-muted-foreground">Include digits in passphrase</span>
                 </Label>
                 <Switch
                   checked={settings.includeNumbers}
                   id="include-numbers"
                   onCheckedChange={(checked) =>
-                    onSettingsChange({
-                      ...settings,
-                      includeNumbers: !!checked,
-                    })
+                    onSettingsChange({ ...settings, includeNumbers: !!checked })
                   }
                 />
               </div>
               {settings.includeNumbers ? (
-                <div className="mt-2 ml-0 flex items-center justify-between border-2 border-foreground p-3">
-                  <Label
-                    className="flex flex-col pr-2"
-                    htmlFor="insert-numbers-randomly"
-                  >
-                    <span className="font-bold text-sm">Random placement</span>
-                    <span className="text-muted-foreground text-xs">
-                      Distribute numbers within the passphrase
-                    </span>
+                <div className="flex items-center justify-between border-2 border-foreground bg-background p-2.5">
+                  <Label className="flex flex-col pr-2" htmlFor="insert-numbers-randomly">
+                    <span className="font-bold text-xs">Random Placement</span>
+                    <span className="text-[10px] text-muted-foreground">Distribute numbers randomly</span>
                   </Label>
                   <Switch
                     checked={settings.insertNumbersRandomly}
                     id="insert-numbers-randomly"
                     onCheckedChange={(checked) =>
-                      onSettingsChange({
-                        ...settings,
-                        insertNumbersRandomly: !!checked,
-                      })
+                      onSettingsChange({ ...settings, insertNumbersRandomly: !!checked })
                     }
                   />
                 </div>
               ) : null}
             </CollapsibleContent>
           </Collapsible>
+        </div>
+      </div>
 
-          {/* Generate Button */}
-          <Button
-            className="w-full"
-            data-generate-button
-            onClick={handleGenerate}
-            size="lg"
-          >
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Generate Passphrase
-          </Button>
+      {/* Generate Button */}
+      <Button className="w-full" data-generate-button onClick={handleGenerate} size="lg">
+        <RefreshCw className="mr-2 h-4 w-4" />
+        Generate Passphrase
+      </Button>
 
-          {/* Generated Passphrase Display */}
-          {generatedPassphrase ? (
-            <div className="space-y-4 border-2 border-accent bg-accent/5 p-4 shadow-brutal-accent sm:p-5">
-              <div className="flex items-center justify-between">
-                <Label className="font-bold font-display text-sm uppercase tracking-tight">
-                  Result
-                </Label>
-                <span
-                  className={`font-bold text-xs uppercase tracking-wider ${getStrengthTextColor(outputInfo.strength.label)}`}
-                >
-                  {outputInfo.strength.label}
-                </span>
-              </div>
+      {/* Result */}
+      {generatedPassphrase ? (
+        <div className="border-2 border-foreground bg-card shadow-brutal">
+          <div className="flex items-center justify-between border-foreground border-b-2 px-4 py-3 sm:px-5">
+            <span className="text-[10px] text-muted-foreground uppercase tracking-[0.2em]">
+              Output
+            </span>
+            <span
+              className={`font-bold text-[10px] uppercase tracking-wider ${getStrengthTextColor(outputInfo.strength.label)}`}
+            >
+              {outputInfo.strength.label}
+            </span>
+          </div>
+          <div className="space-y-4 p-4 sm:p-5">
+            <div className="h-1.5 w-full bg-muted">
+              <div
+                className={`h-full transition-all duration-500 ${getStrengthColor(outputInfo.strength.label)}`}
+                style={{ width: `${outputInfo.strength.score * 10}%` }}
+              />
+            </div>
 
-              {/* Strength Bar */}
-              <div className="h-2 w-full border border-foreground/20 bg-muted">
-                <div
-                  className={`h-full transition-all duration-300 ${getStrengthColor(outputInfo.strength.label)}`}
-                  style={{
-                    width: `${outputInfo.strength.score * 10}%`,
-                  }}
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Input
+                  className="pr-2 font-bold font-mono text-sm"
+                  readOnly
+                  type={showPassword ? "text" : "password"}
+                  value={generatedPassphrase}
                 />
               </div>
+              <Button
+                className="shrink-0"
+                onClick={() => setShowPassword((prev) => !prev)}
+                size="icon"
+                variant="outline"
+                aria-label={showPassword ? "Hide" : "Show"}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+              <Button
+                className="shrink-0"
+                onClick={() => onCopyToClipboard(generatedPassphrase)}
+                size="icon"
+                variant="outline"
+                aria-label="Copy"
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
 
-              {/* Passphrase Display */}
-              <div className="flex items-center gap-2">
-                <div className="relative flex-1">
-                  <Input
-                    className="pr-2 font-bold font-mono text-sm"
-                    readOnly
-                    type={showPassword ? "text" : "password"}
-                    value={generatedPassphrase}
-                  />
-                </div>
-                <Button
-                  className="shrink-0"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  size="icon"
-                  variant="outline"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </Button>
-                <Button
-                  className="shrink-0"
-                  onClick={() => onCopyToClipboard(generatedPassphrase)}
-                  size="icon"
-                  variant="outline"
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </div>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              {getStrengthDescription(outputInfo.strength.label, "passphrase")}
+            </p>
 
-              {/* Stats */}
-              <div className="flex items-center gap-4 border-foreground/10 border-t pt-3">
-                <p className="text-muted-foreground text-xs">
-                  {getStrengthDescription(
-                    outputInfo.strength.label,
-                    "passphrase"
-                  )}
-                </p>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="border-2 border-foreground bg-background p-2.5">
+                <div className="text-[9px] text-muted-foreground uppercase tracking-widest">Entropy</div>
+                <div className="font-bold font-mono text-sm">
+                  {Math.round(outputInfo.entropy)}
+                  <span className="ml-0.5 text-[10px] text-muted-foreground font-normal">bits</span>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="border border-foreground/20 bg-background p-2">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                    Entropy
-                  </div>
-                  <div className="font-bold">
-                    {Math.round(outputInfo.entropy)} bits
-                  </div>
-                </div>
-                <div className="border border-foreground/20 bg-background p-2">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                    Time to crack
-                  </div>
-                  <div className="font-bold">{outputInfo.timeToCrack}</div>
-                </div>
+              <div className="border-2 border-foreground bg-background p-2.5">
+                <div className="text-[9px] text-muted-foreground uppercase tracking-widest">Crack Time</div>
+                <div className="font-bold font-mono text-sm">{outputInfo.timeToCrack}</div>
               </div>
             </div>
-          ) : null}
+          </div>
         </div>
-      </CardContent>
-    </Card>
+      ) : null}
+    </div>
   );
 }

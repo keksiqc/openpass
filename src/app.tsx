@@ -1,4 +1,4 @@
-import { BookOpen, Github, Hash, Key, Settings, Shield } from "lucide-react";
+import { BookOpen, Hash, Key, PanelRightOpen, Settings, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
@@ -393,6 +393,8 @@ export default function App() {
     reader.readAsText(file);
   };
 
+  const [showProfiles, setShowProfiles] = useState(false);
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <NavBar
@@ -405,11 +407,30 @@ export default function App() {
       />
 
       {/* Main Content */}
-      <main className="container mx-auto max-w-7xl flex-1 px-3 py-6 sm:px-4 sm:py-10">
-        {/* Main Grid Layout */}
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
-          {/* Main Generator Column */}
-          <div className="space-y-6 sm:space-y-8 lg:col-span-2">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-10">
+        <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+          {/* Generator Column */}
+          <div className="flex-1 space-y-6">
+            {/* Section Header */}
+            <div className="flex items-end justify-between border-foreground border-b-2 pb-3">
+              <div>
+                <span className="text-[10px] text-accent font-bold uppercase tracking-[0.3em]">
+                  Generator
+                </span>
+                <h2 className="font-display font-extrabold text-2xl uppercase tracking-tight sm:text-3xl">
+                  Create
+                </h2>
+              </div>
+              <button
+                className="flex items-center gap-1.5 border-2 border-foreground bg-card px-3 py-1.5 text-[10px] uppercase tracking-widest transition-colors hover:bg-accent hover:text-accent-foreground lg:hidden"
+                onClick={() => setShowProfiles(!showProfiles)}
+                type="button"
+              >
+                <PanelRightOpen className="h-3 w-3" />
+                Profiles
+              </button>
+            </div>
+
             <Tabs
               className="w-full"
               onValueChange={(value: string) =>
@@ -417,21 +438,21 @@ export default function App() {
               }
               value={activeTab}
             >
-              <TabsList className="mb-5 flex h-12 w-full sm:mb-6 sm:h-14">
+              <TabsList className="mb-4 flex h-11 w-full sm:mb-5 sm:h-12">
                 <TabsTrigger value="password">
-                  <Key className="h-4 w-4" />
+                  <Key className="h-3.5 w-3.5" />
                   <span className="hidden sm:inline">Password</span>
                 </TabsTrigger>
                 <TabsTrigger value="passphrase">
-                  <BookOpen className="h-4 w-4" />
+                  <BookOpen className="h-3.5 w-3.5" />
                   <span className="hidden sm:inline">Phrase</span>
                 </TabsTrigger>
                 <TabsTrigger value="format">
-                  <Settings className="h-4 w-4" />
+                  <Settings className="h-3.5 w-3.5" />
                   <span className="hidden sm:inline">Format</span>
                 </TabsTrigger>
                 <TabsTrigger value="pin">
-                  <Hash className="h-4 w-4" />
+                  <Hash className="h-3.5 w-3.5" />
                   <span className="hidden sm:inline">PIN</span>
                 </TabsTrigger>
               </TabsList>
@@ -487,8 +508,19 @@ export default function App() {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-20">
+          <aside className={`w-full shrink-0 lg:w-80 xl:w-96 ${showProfiles ? "block" : "hidden lg:block"}`}>
+            <div className="sticky top-28">
+              {/* Section Header */}
+              <div className="mb-6 flex items-end justify-between border-foreground border-b-2 pb-3">
+                <div>
+                  <span className="text-[10px] text-accent font-bold uppercase tracking-[0.3em]">
+                    Saved
+                  </span>
+                  <h2 className="font-display font-extrabold text-2xl uppercase tracking-tight sm:text-3xl">
+                    Profiles
+                  </h2>
+                </div>
+              </div>
               <ProfileManager
                 activeTab={activeTab}
                 editingProfileId={editingProfileId}
@@ -508,35 +540,26 @@ export default function App() {
                 profiles={profiles}
               />
             </div>
-          </div>
+          </aside>
         </div>
       </main>
 
       {/* Footer */}
       <footer className="mt-auto border-foreground border-t-2 bg-card">
-        <div className="container mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8">
+        <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-6">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
             <div className="flex items-center gap-3">
-              <Shield className="h-4 w-4 text-accent" />
-              <p className="text-center text-muted-foreground text-xs sm:text-left">
-                Everything runs locally in your browser. No data leaves your
-                device.
+              <div className="border-2 border-foreground bg-foreground p-1">
+                <Shield className="h-3 w-3 text-background" />
+              </div>
+              <p className="text-center text-muted-foreground text-[11px] uppercase tracking-wider sm:text-left">
+                100% local. Zero tracking. Your data stays on your device.
               </p>
             </div>
-            <div className="flex items-center gap-4 text-muted-foreground text-xs">
-              <a
-                className="flex items-center gap-1.5 border-transparent border-b transition-colors hover:border-accent hover:text-accent"
-                href="https://github.com"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <Github className="h-3.5 w-3.5" />
-                Source
-              </a>
-              <span className="text-border">|</span>
-              <span>Open Source</span>
-              <span className="text-border">|</span>
-              <span>v1.0</span>
+            <div className="flex items-center gap-3 text-[10px] text-muted-foreground uppercase tracking-widest">
+              <span>MIT License</span>
+              <span className="text-accent font-bold">{"///"}</span>
+              <span>v1.0.0-beta</span>
             </div>
           </div>
         </div>
