@@ -24,12 +24,12 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { PasswordHistory } from '../../types';
 
-interface HistoryPanelProps {
+type HistoryPanelProps = {
   history: PasswordHistory[];
   onCopyToClipboard: (text: string) => void;
   onClearHistory: () => void;
-  onDeleteHistoryEntry: (id: string) => void; // New prop for deleting individual entries
-}
+  onDeleteHistoryEntry: (id: string) => void;
+};
 
 export function HistoryPanel({
   history,
@@ -41,35 +41,14 @@ export function HistoryPanel({
     {}
   );
 
-  // Helper functions to avoid nested ternaries
-  const getTypeBackgroundClass = (type: string): string => {
-    if (type === 'password') {
-      return 'bg-blue-100 dark:bg-blue-900/30';
-    }
-    if (type === 'passphrase') {
-      return 'bg-green-100 dark:bg-green-900/30';
-    }
-    return 'bg-purple-100 dark:bg-purple-900/30';
-  };
-
-  const getTypeTextClass = (type: string): string => {
-    if (type === 'password') {
-      return 'text-blue-600 dark:text-blue-400';
-    }
-    if (type === 'passphrase') {
-      return 'text-green-600 dark:text-green-400';
-    }
-    return 'text-purple-600 dark:text-purple-400';
-  };
-
   const getTypeBadgeClass = (type: string): string => {
     if (type === 'password') {
-      return 'border-blue-200 text-blue-600 dark:border-blue-800 dark:text-blue-400';
+      return 'border-foreground text-foreground';
     }
     if (type === 'passphrase') {
-      return 'border-green-200 text-green-600 dark:border-green-800 dark:text-green-400';
+      return 'border-foreground text-foreground';
     }
-    return 'border-purple-200 text-purple-600 dark:border-purple-800 dark:text-purple-400';
+    return 'border-foreground text-foreground';
   };
 
   const togglePasswordVisibility = (entryId: string) => {
@@ -95,25 +74,25 @@ export function HistoryPanel({
   const getStrengthColor = (strength: string) => {
     switch (strength.toLowerCase()) {
       case 'weak':
-        return 'text-red-600 border-red-200 dark:text-red-400 dark:border-red-800';
+        return 'border-destructive text-destructive';
       case 'fair':
-        return 'text-yellow-600 border-yellow-200 dark:text-yellow-400 dark:border-yellow-800';
+        return 'border-foreground text-muted-foreground';
       case 'good':
-        return 'text-blue-600 border-blue-200 dark:text-blue-400 dark:border-blue-800';
+        return 'border-foreground text-foreground';
       case 'strong':
       case 'excellent':
-        return 'text-green-600 border-green-200 dark:text-green-400 dark:border-green-800';
+        return 'border-accent text-accent-foreground bg-accent';
       default:
-        return 'text-muted-foreground border-border';
+        return 'border-foreground text-muted-foreground';
     }
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
-            <History className="h-4 w-4 text-primary" />
+        <CardTitle className="flex items-center gap-3 text-xl">
+          <div className="border-2 border-foreground bg-accent p-1.5">
+            <History className="h-4 w-4 text-accent-foreground" />
           </div>
           Password History
         </CardTitle>
@@ -124,27 +103,22 @@ export function HistoryPanel({
       <CardContent className="space-y-8">
         {history.length === 0 ? (
           <div className="px-6 py-10 text-center text-muted-foreground">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted/30 p-4">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center border-2 border-foreground bg-secondary p-4">
               <Shield className="h-7 w-7 opacity-50" />
             </div>
-            <p className="mb-2 font-medium text-base">
+            <p className="mb-2 font-bold text-sm uppercase tracking-wider">
               No passwords generated yet
             </p>
-            <p className="text-muted-foreground/80 text-sm leading-relaxed">
+            <p className="text-muted-foreground text-sm leading-relaxed">
               Your generation history will appear here for easy access
             </p>
           </div>
         ) : (
           <>
             <div className="mb-2 flex items-center justify-between">
-              <Badge
-                className="px-2.5 py-1 font-medium text-xs"
-                variant="secondary"
-              >
-                {history.length} entries
-              </Badge>
+              <Badge variant="secondary">{history.length} entries</Badge>
               <Button
-                className="text-xs hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive"
+                className="text-xs hover:border-destructive hover:bg-destructive/10 hover:text-destructive"
                 onClick={onClearHistory}
                 size="sm"
                 variant="outline"
@@ -157,27 +131,23 @@ export function HistoryPanel({
               <div className="space-y-3">
                 {history.map((entry) => (
                   <div
-                    className="group flex flex-col gap-3 rounded-lg border border-border/50 bg-muted/30 p-4 transition-colors hover:bg-muted/50"
+                    className="group flex flex-col gap-3 border-2 border-foreground p-4 transition-colors hover:bg-secondary"
                     key={entry.id}
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <div
-                          className={`rounded-md p-1.5 ${getTypeBackgroundClass(entry.type)}`}
-                        >
-                          <div className={getTypeTextClass(entry.type)}>
-                            {getTypeIcon(entry.type)}
-                          </div>
+                        <div className="border-2 border-foreground p-1.5">
+                          {getTypeIcon(entry.type)}
                         </div>
                         <Badge
-                          className={`font-medium text-xs ${getTypeBadgeClass(entry.type)}`}
+                          className={`text-xs ${getTypeBadgeClass(entry.type)}`}
                           variant="outline"
                         >
                           {entry.type.toString().charAt(0).toUpperCase() +
                             entry.type.slice(1)}
                         </Badge>
                         <Badge
-                          className={`font-medium text-xs ${getStrengthColor(entry.strength.label)}`}
+                          className={`text-xs ${getStrengthColor(entry.strength.label)}`}
                           variant="outline"
                         >
                           {entry.strength.label}
@@ -211,7 +181,7 @@ export function HistoryPanel({
                           <Copy className="h-4 w-4" />
                         </Button>
                         <Button
-                          className="h-8 w-8 p-0 text-destructive hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive"
+                          className="h-8 w-8 p-0 text-destructive hover:border-destructive hover:bg-destructive/10 hover:text-destructive"
                           onClick={() => onDeleteHistoryEntry(entry.id)}
                           size="sm"
                           title="Delete entry"
@@ -222,7 +192,7 @@ export function HistoryPanel({
                       </div>
                     </div>
                     <Input
-                      className="bg-muted/30 font-mono text-xs"
+                      className="bg-secondary font-mono text-xs"
                       readOnly
                       value={
                         showPasswords[entry.id]

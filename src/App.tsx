@@ -409,9 +409,9 @@ export default function App() {
       {/* Main Content */}
       <main className="container mx-auto max-w-7xl px-4 py-8">
         {/* Main Grid Layout */}
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
           {/* Main Generator */}
-          <div className="space-y-8 lg:col-span-2">
+          <div className="space-y-6 lg:col-span-2">
             <Tabs
               className="w-full"
               onValueChange={(value: string) =>
@@ -419,7 +419,7 @@ export default function App() {
               }
               value={activeTab}
             >
-              <TabsList className="mb-4 grid h-12 w-full grid-cols-2 rounded-xl sm:grid-cols-4">
+              <TabsList className="mb-4 grid h-12 w-full grid-cols-2 sm:grid-cols-4">
                 <TabsTrigger value="password">
                   <Key className="mr-2 h-4 w-4" />
                   Password

@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch'; // Import Switch
+import { Switch } from '@/components/ui/switch';
 import { TabsContent } from '@/components/ui/tabs';
 import { usePasswordGenerator } from '../../hooks/usePasswordGenerator';
 import type { PasswordHistory, PasswordSettings } from '../../types';
@@ -31,7 +31,7 @@ import {
   getStrengthDescription,
 } from '../../utils/strength-helpers';
 
-interface PasswordGeneratorProps {
+type PasswordGeneratorProps = {
   settings: PasswordSettings;
   onSettingsChange: (settings: PasswordSettings) => void;
   onPasswordGenerated: (
@@ -41,7 +41,7 @@ interface PasswordGeneratorProps {
   onCopyToClipboard: (text: string) => void;
   isGenerating: boolean;
   onGeneratingChange: (generating: boolean) => void;
-}
+};
 
 export function PasswordGenerator({
   settings,
@@ -67,9 +67,9 @@ export function PasswordGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
-            <Key className="h-4 w-4 text-primary" />
+        <CardTitle className="flex items-center gap-3 text-xl">
+          <div className="border-2 border-foreground bg-accent p-1.5">
+            <Key className="h-4 w-4 text-accent-foreground" />
           </div>
           Password Generator
         </CardTitle>
@@ -82,10 +82,10 @@ export function PasswordGenerator({
           {/* Password Length */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="font-medium text-base">Password Length</Label>
-              <Badge className="text-sm" variant="outline">
-                {settings.length} characters
-              </Badge>
+              <Label className="font-bold text-sm uppercase tracking-wider">
+                Password Length
+              </Label>
+              <Badge variant="outline">{settings.length} chars</Badge>
             </div>
             <Slider
               className="w-full"
@@ -108,12 +108,14 @@ export function PasswordGenerator({
 
           {/* Character Types */}
           <div className="space-y-3">
-            <Label className="font-medium text-base">Character Types</Label>
+            <Label className="font-bold text-sm uppercase tracking-wider">
+              Character Types
+            </Label>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {/* Uppercase Option - New Structure */}
-              <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+              {/* Uppercase Option */}
+              <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="uppercase">
-                  <span className="font-medium">Uppercase</span>
+                  <span className="font-bold text-sm">Uppercase</span>
                   <span className="font-mono text-muted-foreground text-xs">
                     A-Z
                   </span>
@@ -130,10 +132,10 @@ export function PasswordGenerator({
                 />
               </div>
 
-              {/* Lowercase Option - New Structure */}
-              <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+              {/* Lowercase Option */}
+              <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="lowercase">
-                  <span className="font-medium">Lowercase</span>
+                  <span className="font-bold text-sm">Lowercase</span>
                   <span className="font-mono text-muted-foreground text-xs">
                     a-z
                   </span>
@@ -150,10 +152,10 @@ export function PasswordGenerator({
                 />
               </div>
 
-              {/* Numbers Option - New Structure */}
-              <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+              {/* Numbers Option */}
+              <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="numbers">
-                  <span className="font-medium">Numbers</span>
+                  <span className="font-bold text-sm">Numbers</span>
                   <span className="font-mono text-muted-foreground text-xs">
                     0-9
                   </span>
@@ -170,10 +172,10 @@ export function PasswordGenerator({
                 />
               </div>
 
-              {/* Symbols Option - New Structure */}
-              <div className="flex items-center justify-between rounded-md border p-3 shadow-sm">
+              {/* Symbols Option */}
+              <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="symbols">
-                  <span className="font-medium">Symbols</span>
+                  <span className="font-bold text-sm">Symbols</span>
                   <span className="font-mono text-muted-foreground text-xs">
                     !@#$%
                   </span>
@@ -194,14 +196,16 @@ export function PasswordGenerator({
 
           {/* Advanced Options */}
           <Collapsible>
-            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border bg-muted/30 p-3 text-left transition-colors hover:bg-muted/50">
-              <span className="font-medium text-sm">Advanced Options</span>
+            <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
+              <span className="font-bold text-sm uppercase tracking-wider">
+                Advanced Options
+              </span>
               <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </CollapsibleTrigger>
-            <CollapsibleContent className="mt-2 space-y-3 rounded-lg border bg-muted/20 p-4">
+            <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
               <div>
                 <Label
-                  className="text-muted-foreground text-xs"
+                  className="text-muted-foreground text-xs uppercase tracking-wider"
                   htmlFor="custom"
                 >
                   Custom Characters
@@ -260,7 +264,7 @@ export function PasswordGenerator({
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2 border-t pt-3">
+              <div className="flex items-center space-x-2 border-foreground/20 border-t-2 pt-3">
                 <Switch
                   checked={settings.requireEachCharacterType}
                   id="require-each-type"
@@ -282,8 +286,8 @@ export function PasswordGenerator({
 
               {/* Minimum Requirements */}
               {(settings.includeNumbers || settings.includeSymbols) && (
-                <div className="space-y-3 border-t pt-3">
-                  <div className="font-medium text-muted-foreground text-xs">
+                <div className="space-y-3 border-foreground/20 border-t-2 pt-3">
+                  <div className="font-bold text-muted-foreground text-xs uppercase tracking-wider">
                     Minimum Requirements
                   </div>
 
@@ -291,7 +295,7 @@ export function PasswordGenerator({
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label className="text-xs">Min Numbers</Label>
-                        <Badge className="text-xs" variant="outline">
+                        <Badge variant="outline">
                           {settings.minNumbers || 1}
                         </Badge>
                       </div>
@@ -315,7 +319,7 @@ export function PasswordGenerator({
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label className="text-xs">Min Symbols</Label>
-                        <Badge className="text-xs" variant="outline">
+                        <Badge variant="outline">
                           {settings.minSymbols || 1}
                         </Badge>
                       </div>
@@ -362,10 +366,10 @@ export function PasswordGenerator({
 
           {/* Generated Password Display */}
           {generatedPassword && (
-            <div className="space-y-3 rounded-lg border bg-muted/50 p-4">
+            <div className="space-y-4 border-2 border-foreground p-4 shadow-brutal">
               <div className="flex items-center justify-between">
-                <Label className="font-medium text-sm">
-                  Generated Password
+                <Label className="font-bold text-xs uppercase tracking-widest">
+                  Output
                 </Label>
                 {(() => {
                   const strength = calculateStrength(generatedPassword);
@@ -380,9 +384,9 @@ export function PasswordGenerator({
                 })()}
               </div>
 
-              <div className="mb-2 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
+              <div className="h-3 w-full border-2 border-foreground bg-muted">
                 <div
-                  className={`h-2.5 rounded-full ${getStrengthColor(
+                  className={`h-full ${getStrengthColor(
                     calculateStrength(generatedPassword).label
                   )}`}
                   style={{
@@ -400,7 +404,7 @@ export function PasswordGenerator({
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <Input
-                    className="pr-2 font-mono text-sm"
+                    className="pr-2 font-bold font-mono text-sm"
                     readOnly
                     type={showPassword ? 'text' : 'password'}
                     value={generatedPassword}
@@ -428,7 +432,7 @@ export function PasswordGenerator({
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 gap-2 text-muted-foreground text-xs sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs">
                 <div>
                   <strong>Entropy:</strong>{' '}
                   {Math.round(

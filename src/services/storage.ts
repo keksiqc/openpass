@@ -2,7 +2,7 @@ import type { AppSettings, PasswordHistory, Profile } from '../types'; // Change
 import { decrypt, encrypt } from '../utils/encryption';
 
 // Internal interfaces for parsed JSON data
-interface ParsedProfile {
+type ParsedProfile = {
   id: string;
   name: string;
   type: string;
@@ -10,15 +10,15 @@ interface ParsedProfile {
   createdAt: string;
   lastUsed?: string;
   isFavorite?: boolean;
-}
+};
 
-interface ParsedHistoryEntry {
+type ParsedHistoryEntry = {
   id: string;
   password: string;
   type: string;
   createdAt: string;
   strength: { score: number; label: string };
-}
+};
 
 const PROFILES_KEY = 'openpass-profiles';
 const HISTORY_KEY = 'openpass-history';

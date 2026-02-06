@@ -1,5 +1,6 @@
-import { Copy, Hash, RefreshCw } from 'lucide-react'; // Added RefreshCw
+import { Copy, Hash, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -22,20 +23,24 @@ export function PinGenerator() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-2xl">
-          <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
-            <Hash className="h-4 w-4 text-primary" />
+        <CardTitle className="flex items-center gap-3 text-xl">
+          <div className="border-2 border-foreground bg-accent p-1.5">
+            <Hash className="h-4 w-4 text-accent-foreground" />
           </div>
           PIN Generator
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {' '}
-        {/* Changed from space-y-8 to space-y-6 */}
         <div className="space-y-3">
-          <Label className="font-medium text-base" htmlFor="pin-length">
-            PIN Length: {length}
-          </Label>
+          <div className="flex items-center justify-between">
+            <Label
+              className="font-bold text-sm uppercase tracking-wider"
+              htmlFor="pin-length"
+            >
+              PIN Length
+            </Label>
+            <Badge variant="outline">{length} digits</Badge>
+          </div>
           <Slider
             className="w-full"
             id="pin-length"
@@ -55,11 +60,13 @@ export function PinGenerator() {
           Generate PIN
         </Button>
         {pin && (
-          <div className="space-y-3 rounded-lg border bg-muted/50 p-4">
-            <Label className="font-medium text-sm">Generated PIN</Label>
+          <div className="space-y-3 border-2 border-foreground p-4 shadow-brutal">
+            <Label className="font-bold text-xs uppercase tracking-widest">
+              Output
+            </Label>
             <div className="flex items-center gap-2">
               <Input
-                className="pr-2 font-mono text-sm"
+                className="pr-2 font-bold font-mono text-lg tracking-[0.3em]"
                 readOnly
                 type="text"
                 value={pin}

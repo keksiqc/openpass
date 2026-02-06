@@ -33,14 +33,14 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Switch } from '../ui/switch';
 
-interface SettingsDialogProps {
+type SettingsDialogProps = {
   settings: AppSettings;
   onSettingsChange: (settings: AppSettings) => void;
   onClearAllData: () => void;
   onExportData: () => void;
   onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onResetToDefaults: () => void; // New prop for resetting settings
-}
+  onResetToDefaults: () => void;
+};
 
 export function SettingsDialog({
   settings,
@@ -48,13 +48,13 @@ export function SettingsDialog({
   onClearAllData,
   onExportData,
   onImportData,
-  onResetToDefaults, // Destructure new prop
+  onResetToDefaults,
 }: SettingsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [localSettings, setLocalSettings] = useState<AppSettings>(settings);
   const [showEncryptionKey, setShowEncryptionKey] = useState(false);
   const [showClearDataConfirm, setShowClearDataConfirm] = useState(false);
-  const [showResetConfirm, setShowResetConfirm] = useState(false); // New state for reset confirmation
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handleSave = () => {
     onSettingsChange(localSettings);
@@ -109,8 +109,8 @@ export function SettingsDialog({
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <div className="rounded-lg border border-primary/10 bg-gradient-to-br from-primary/10 to-primary/5 p-2">
-              <SettingsIcon className="h-4 w-4 text-primary" />
+            <div className="border-2 border-foreground bg-accent p-1.5">
+              <SettingsIcon className="h-4 w-4 text-accent-foreground" />
             </div>
             Application Settings
           </DialogTitle>
@@ -119,13 +119,13 @@ export function SettingsDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Left Column */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Privacy Settings */}
-            <Card>
+            <Card className="border-2 shadow-none">
               <CardHeader>
-                <CardTitle className="text-base">Privacy Settings</CardTitle>
+                <CardTitle className="text-sm">Privacy Settings</CardTitle>
                 <CardDescription className="text-sm">
                   Control what data is stored locally
                 </CardDescription>
@@ -134,7 +134,7 @@ export function SettingsDialog({
                 <div className="flex items-center justify-between">
                   <div>
                     <Label
-                      className="font-medium text-sm"
+                      className="font-bold text-sm"
                       htmlFor="historyEnabled"
                     >
                       Enable Password History
@@ -158,9 +158,9 @@ export function SettingsDialog({
             </Card>
 
             {/* Security Settings */}
-            <Card>
+            <Card className="border-2 shadow-none">
               <CardHeader>
-                <CardTitle className="text-base">Security Settings</CardTitle>
+                <CardTitle className="text-sm">Security Settings</CardTitle>
                 <CardDescription className="text-sm">
                   Encrypt your locally stored data
                 </CardDescription>
@@ -169,7 +169,7 @@ export function SettingsDialog({
                 <div className="flex items-center justify-between">
                   <div>
                     <Label
-                      className="font-medium text-sm"
+                      className="font-bold text-sm"
                       htmlFor="encryptionEnabled"
                     >
                       Enable Local Data Encryption
@@ -192,7 +192,7 @@ export function SettingsDialog({
                 {localSettings.encryptionEnabled && (
                   <div className="space-y-3 pl-2">
                     <Label
-                      className="font-medium text-sm"
+                      className="font-bold text-sm"
                       htmlFor="encryptionKey"
                     >
                       Encryption Key
@@ -251,9 +251,9 @@ export function SettingsDialog({
           {/* Right Column */}
           <div className="space-y-6">
             {/* Data Management */}
-            <Card>
+            <Card className="border-2 shadow-none">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
+                <CardTitle className="flex items-center gap-2 text-sm">
                   <Download className="h-4 w-4" />
                   Data Management
                 </CardTitle>
@@ -289,9 +289,9 @@ export function SettingsDialog({
             </Card>
 
             {/* Danger Zone */}
-            <Card className="border-destructive/20">
+            <Card className="border-2 border-destructive/50 shadow-none">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base text-destructive">
+                <CardTitle className="flex items-center gap-2 text-destructive text-sm">
                   <AlertTriangle className="h-4 w-4" />
                   Danger Zone
                 </CardTitle>
@@ -343,7 +343,7 @@ export function SettingsDialog({
         </div>
 
         {/* Dialog Actions */}
-        <div className="flex justify-end gap-3 border-t pt-4">
+        <div className="flex justify-end gap-3 border-foreground/20 border-t-2 pt-4">
           <Button onClick={handleCancel} variant="outline">
             Cancel
           </Button>
