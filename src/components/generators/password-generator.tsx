@@ -1,35 +1,35 @@
-import { ChevronDown, Copy, Eye, EyeOff, Key, RefreshCw } from 'lucide-react';
-import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { ChevronDown, Copy, Eye, EyeOff, Key, RefreshCw } from "lucide-react";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
-import { TabsContent } from '@/components/ui/tabs';
-import { usePasswordGenerator } from '../../hooks/usePasswordGenerator';
-import type { PasswordHistory, PasswordSettings } from '../../types';
+} from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { TabsContent } from "@/components/ui/tabs";
+import { usePasswordGenerator } from "../../hooks/usePasswordGenerator";
+import type { PasswordHistory, PasswordSettings } from "../../types";
 import {
   calculateEntropy,
   calculateStrength,
   estimateTimeToCrack,
-} from '../../utils/password-strength';
+} from "../../utils/password-strength";
 import {
   getStrengthColor,
   getStrengthDescription,
-} from '../../utils/strength-helpers';
+} from "../../utils/strength-helpers";
 
 type PasswordGeneratorProps = {
   settings: PasswordSettings;
@@ -51,7 +51,7 @@ export function PasswordGenerator({
   isGenerating,
   onGeneratingChange,
 }: PasswordGeneratorProps) {
-  const [generatedPassword, setGeneratedPassword] = useState('');
+  const [generatedPassword, setGeneratedPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const { generatePassword, getCharacterSet } = usePasswordGenerator();
 
@@ -397,7 +397,7 @@ export function PasswordGenerator({
               <p className="text-muted-foreground text-xs">
                 {getStrengthDescription(
                   calculateStrength(generatedPassword).label,
-                  'password'
+                  "password"
                 )}
               </p>
 
@@ -406,7 +406,7 @@ export function PasswordGenerator({
                   <Input
                     className="pr-2 font-bold font-mono text-sm"
                     readOnly
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     value={generatedPassword}
                   />
                 </div>
@@ -434,17 +434,17 @@ export function PasswordGenerator({
 
               <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs">
                 <div>
-                  <strong>Entropy:</strong>{' '}
+                  <strong>Entropy:</strong>{" "}
                   {Math.round(
                     calculateEntropy(
                       generatedPassword,
                       getCharacterSet(settings)
                     )
-                  )}{' '}
+                  )}{" "}
                   bits
                 </div>
                 <div>
-                  <strong>Time to crack:</strong>{' '}
+                  <strong>Time to crack:</strong>{" "}
                   {estimateTimeToCrack(
                     calculateEntropy(
                       generatedPassword,

@@ -1,44 +1,44 @@
 import {
   PASSPHRASE_CONSTRAINTS,
   STRENGTH_THRESHOLDS,
-} from '../constants/generator';
-import type { PasswordStrength } from '../types';
+} from "../constants/generator";
+import type { PasswordStrength } from "../types";
 
 /**
  * Gets strength description based on strength label
  */
 export function getStrengthDescription(
   strengthLabel: string,
-  type: 'password' | 'passphrase' | 'format' = 'password'
+  type: "password" | "passphrase" | "format" = "password"
 ): string {
   const descriptions = {
     password: {
-      Weak: 'This password is easy to guess. Consider increasing length and character variety.',
-      Fair: 'This password is moderately secure. Adding more character types or length would improve it.',
-      Good: 'A good password! For even better security, try increasing its length.',
-      Strong: 'Excellent password! Very difficult to crack.',
-      Excellent: 'Outstanding! This password offers maximum protection.',
+      Weak: "This password is easy to guess. Consider increasing length and character variety.",
+      Fair: "This password is moderately secure. Adding more character types or length would improve it.",
+      Good: "A good password! For even better security, try increasing its length.",
+      Strong: "Excellent password! Very difficult to crack.",
+      Excellent: "Outstanding! This password offers maximum protection.",
     },
     passphrase: {
-      Weak: 'This passphrase is easy to guess. Consider increasing word count or adding numbers.',
-      Fair: 'This passphrase is moderately secure. Adding more words or numbers would improve it.',
-      Good: 'A good passphrase! For even better security, try increasing its length.',
-      Strong: 'Excellent passphrase! Very difficult to crack.',
-      Excellent: 'Outstanding! This passphrase offers maximum protection.',
+      Weak: "This passphrase is easy to guess. Consider increasing word count or adding numbers.",
+      Fair: "This passphrase is moderately secure. Adding more words or numbers would improve it.",
+      Good: "A good passphrase! For even better security, try increasing its length.",
+      Strong: "Excellent passphrase! Very difficult to crack.",
+      Excellent: "Outstanding! This passphrase offers maximum protection.",
     },
     format: {
-      Weak: 'This password is easy to guess. Consider increasing length or character variety in your format.',
-      Fair: 'This password is moderately secure. Adjusting the format for more complexity would improve it.',
-      Good: 'A good format password! For even better security, try increasing its length or character types.',
-      Strong: 'Excellent format password! Very difficult to crack.',
-      Excellent: 'Outstanding! This format password offers maximum protection.',
+      Weak: "This password is easy to guess. Consider increasing length or character variety in your format.",
+      Fair: "This password is moderately secure. Adjusting the format for more complexity would improve it.",
+      Good: "A good format password! For even better security, try increasing its length or character types.",
+      Strong: "Excellent format password! Very difficult to crack.",
+      Excellent: "Outstanding! This format password offers maximum protection.",
     },
   };
 
   return (
     descriptions[type][
       strengthLabel as keyof (typeof descriptions)[typeof type]
-    ] || ''
+    ] || ""
   );
 }
 
@@ -47,18 +47,18 @@ export function getStrengthDescription(
  */
 export function getStrengthColor(strengthLabel: string): string {
   switch (strengthLabel) {
-    case 'Weak':
-      return 'bg-red-600';
-    case 'Fair':
-      return 'bg-yellow-600';
-    case 'Good':
-      return 'bg-blue-600';
-    case 'Strong':
-      return 'bg-green-600';
-    case 'Excellent':
-      return 'bg-green-700';
+    case "Weak":
+      return "bg-red-600";
+    case "Fair":
+      return "bg-yellow-600";
+    case "Good":
+      return "bg-blue-600";
+    case "Strong":
+      return "bg-green-600";
+    case "Excellent":
+      return "bg-green-700";
     default:
-      return 'bg-gray-400';
+      return "bg-gray-400";
   }
 }
 
@@ -67,18 +67,18 @@ export function getStrengthColor(strengthLabel: string): string {
  */
 export function createStrengthObject(entropy: number): PasswordStrength {
   if (entropy < STRENGTH_THRESHOLDS.WEAK) {
-    return { label: 'Weak', color: 'text-red-600', score: 2 };
+    return { label: "Weak", color: "text-red-600", score: 2 };
   }
   if (entropy < STRENGTH_THRESHOLDS.FAIR) {
-    return { label: 'Fair', color: 'text-yellow-600', score: 4 };
+    return { label: "Fair", color: "text-yellow-600", score: 4 };
   }
   if (entropy < STRENGTH_THRESHOLDS.GOOD) {
-    return { label: 'Good', color: 'text-blue-600', score: 6 };
+    return { label: "Good", color: "text-blue-600", score: 6 };
   }
   if (entropy < STRENGTH_THRESHOLDS.STRONG) {
-    return { label: 'Strong', color: 'text-green-600', score: 8 };
+    return { label: "Strong", color: "text-green-600", score: 8 };
   }
-  return { label: 'Excellent', color: 'text-green-700', score: 10 };
+  return { label: "Excellent", color: "text-green-700", score: 10 };
 }
 
 /**
@@ -100,7 +100,7 @@ export function calculatePassphraseStrength(settings: {
   }
 
   // Adjust score based on wordCase
-  if (settings.wordCase !== 'lowercase') {
+  if (settings.wordCase !== "lowercase") {
     entropy += settings.wordCount * Math.log2(1.5);
   }
 

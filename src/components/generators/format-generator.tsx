@@ -5,42 +5,42 @@ import {
   EyeOff,
   RefreshCw,
   Settings,
-} from 'lucide-react';
-import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { useFormatGenerator } from '../../hooks/useFormatGenerator';
-import type { FormatSettings, PasswordHistory } from '../../types';
+} from "@/components/ui/select";
+import { useFormatGenerator } from "../../hooks/useFormatGenerator";
+import type { FormatSettings, PasswordHistory } from "../../types";
 import {
   calculateEntropy,
   estimateTimeToCrack,
-} from '../../utils/password-strength';
+} from "../../utils/password-strength";
 import {
   createStrengthObject,
   getStrengthColor,
   getStrengthDescription,
-} from '../../utils/strength-helpers';
+} from "../../utils/strength-helpers";
 
 type FormatGeneratorProps = {
   settings: FormatSettings;
@@ -55,7 +55,7 @@ export function FormatGenerator({
   onFormatGenerated,
   onCopyToClipboard,
 }: FormatGeneratorProps) {
-  const [generatedFormat, setGeneratedFormat] = useState('');
+  const [generatedFormat, setGeneratedFormat] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const { generateFormatPassword, getCharacterSetFromFormat } =
     useFormatGenerator();
@@ -111,14 +111,14 @@ export function FormatGenerator({
             <div className="space-y-1 text-muted-foreground text-xs">
               <p>
                 <strong>Format:</strong> Nu (uppercase), Nl (lowercase), Nd
-                (digits), N{'{chars}'} (custom)
+                (digits), N{"{chars}"} (custom)
               </p>
               <p>
-                <strong>Example:</strong>{' '}
+                <strong>Example:</strong>{" "}
                 <code className="border border-foreground/30 bg-secondary px-1 font-mono">
                   3u2l4d
-                </code>{' '}
-                →{' '}
+                </code>{" "}
+                →{" "}
                 <code className="border border-foreground/30 bg-secondary px-1 font-mono">
                   ABCde1234
                 </code>
@@ -189,7 +189,7 @@ export function FormatGenerator({
                 </div>
                 <div className="flex items-center gap-2">
                   <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
-                    2{'{#$%}'}
+                    2{"{#$%}"}
                   </code>
                   <span className="text-muted-foreground">
                     2 from custom set
@@ -206,7 +206,7 @@ export function FormatGenerator({
                     alphanumeric (12 chars)
                   </div>
                   <div>
-                    <code className="font-mono">2u6l2d2{'{!@#}'}</code> →
+                    <code className="font-mono">2u6l2d2{"{!@#}"}</code> →
                     Complex mixed (12 chars)
                   </div>
                   <div>
@@ -260,7 +260,7 @@ export function FormatGenerator({
               <p className="text-muted-foreground text-xs">
                 {getStrengthDescription(
                   getFormatStrength(generatedFormat).label,
-                  'format'
+                  "format"
                 )}
               </p>
 
@@ -269,7 +269,7 @@ export function FormatGenerator({
                   <Input
                     className="pr-2 font-bold font-mono text-sm"
                     readOnly
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     value={generatedFormat}
                   />
                 </div>
@@ -297,17 +297,17 @@ export function FormatGenerator({
 
               <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs sm:grid-cols-2">
                 <div>
-                  <strong>Entropy:</strong>{' '}
+                  <strong>Entropy:</strong>{" "}
                   {Math.round(
                     calculateEntropy(
                       generatedFormat,
                       getCharacterSetFromFormat(settings.format)
                     )
-                  )}{' '}
+                  )}{" "}
                   bits
                 </div>
                 <div>
-                  <strong>Time to crack:</strong>{' '}
+                  <strong>Time to crack:</strong>{" "}
                   {estimateTimeToCrack(
                     calculateEntropy(
                       generatedFormat,

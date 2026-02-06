@@ -18,7 +18,7 @@ export type PassphraseSettings = {
   separator: string;
   includeNumbers: boolean;
   customWords?: string[];
-  wordCase: 'lowercase' | 'uppercase' | 'capitalize' | 'mixed';
+  wordCase: "lowercase" | "uppercase" | "capitalize" | "mixed";
   insertNumbersRandomly?: boolean;
 };
 
@@ -40,7 +40,7 @@ export interface FormatProfileSettings extends FormatSettings {} // For "Custom"
 export interface PinProfileSettings extends PinSettings {}
 
 // Discriminated Union for Profiles
-export type ProfileType = 'password' | 'passphrase' | 'format' | 'pin';
+export type ProfileType = "password" | "passphrase" | "format" | "pin";
 
 export type BaseProfile = {
   id: string;
@@ -52,23 +52,23 @@ export type BaseProfile = {
 };
 
 export interface PasswordProfile extends BaseProfile {
-  type: 'password';
+  type: "password";
   settings: PasswordProfileSettings;
 }
 
 export interface PassphraseProfile extends BaseProfile {
-  type: 'passphrase';
+  type: "passphrase";
   settings: PassphraseProfileSettings;
 }
 
 export interface FormatProfile extends BaseProfile {
   // Renamed from CustomProfile
-  type: 'format';
+  type: "format";
   settings: FormatProfileSettings;
 }
 
 export interface PinProfile extends BaseProfile {
-  type: 'pin';
+  type: "pin";
   settings: PinProfileSettings;
 }
 
@@ -83,7 +83,7 @@ export type Profile =
 export type PasswordHistory = {
   id: string;
   password: string;
-  type: ProfileType | 'format'; // 'format' might still be used in old history data
+  type: ProfileType | "format"; // 'format' might still be used in old history data
   createdAt: Date;
   strength: { score: number; label: string };
 };

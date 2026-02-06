@@ -1,8 +1,8 @@
-import { RotateCcwKey } from 'lucide-react';
-import type React from 'react';
-import type { AppSettings } from '../../types';
-import { ModeToggle } from '../mode-toggle';
-import { SettingsDialog } from '../shared/settings-dialog';
+import { RotateCcwKey } from "lucide-react";
+import type React from "react";
+import type { AppSettings } from "../../types";
+import { ModeToggle } from "../mode-toggle";
+import { SettingsDialog } from "../shared/settings-dialog";
 
 type NavBarProps = {
   appSettings: AppSettings;

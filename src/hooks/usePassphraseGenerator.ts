@@ -1,9 +1,9 @@
-import { useCallback } from 'react';
-import { toast } from 'sonner';
-import type { PassphraseSettings, PasswordHistory } from '../types';
-import { getSecureRandom } from '../utils/crypto';
-import { calculateStrength } from '../utils/password-strength';
-import { COMMON_WORDS } from '../utils/words';
+import { useCallback } from "react";
+import { toast } from "sonner";
+import type { PassphraseSettings, PasswordHistory } from "../types";
+import { getSecureRandom } from "../utils/crypto";
+import { calculateStrength } from "../utils/password-strength";
+import { COMMON_WORDS } from "../utils/words";
 
 export const usePassphraseGenerator = () => {
   const generatePassphrase = useCallback(
@@ -22,13 +22,13 @@ export const usePassphraseGenerator = () => {
           let word = wordSource[getSecureRandom(wordSource.length)];
 
           switch (settings.wordCase) {
-            case 'uppercase':
+            case "uppercase":
               word = word.toUpperCase();
               break;
-            case 'capitalize':
+            case "capitalize":
               word = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
               break;
-            case 'mixed':
+            case "mixed":
               word =
                 Math.random() > 0.5 ? word.toUpperCase() : word.toLowerCase();
               break;
@@ -39,7 +39,7 @@ export const usePassphraseGenerator = () => {
           words.push(word);
         }
 
-        let passphrase = '';
+        let passphrase = "";
 
         if (settings.includeNumbers && settings.insertNumbersRandomly) {
           const numberCount = 1 + getSecureRandom(2); // 1-2 numbers for random insertion
@@ -64,11 +64,11 @@ export const usePassphraseGenerator = () => {
             }
           }
           passphrase = wordsWithNumbers.join(
-            settings.separator === 'none' ? '' : settings.separator
+            settings.separator === "none" ? "" : settings.separator
           );
         } else {
           passphrase = words.join(
-            settings.separator === 'none' ? '' : settings.separator
+            settings.separator === "none" ? "" : settings.separator
           );
           if (settings.includeNumbers) {
             const numberCount = 2 + getSecureRandom(3); // 2-4 numbers appended
@@ -85,7 +85,7 @@ export const usePassphraseGenerator = () => {
         const historyEntry: PasswordHistory = {
           id: Date.now().toString(),
           password: passphrase,
-          type: 'passphrase',
+          type: "passphrase",
           createdAt: new Date(),
           strength: { score: strength.score, label: strength.label },
         };
@@ -96,7 +96,7 @@ export const usePassphraseGenerator = () => {
           `${strength.label} passphrase generated! (${Math.round(entropy)} bits entropy)`
         );
       } catch {
-        toast.error('Failed to generate passphrase');
+        toast.error("Failed to generate passphrase");
       }
     },
     []

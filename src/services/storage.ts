@@ -1,5 +1,5 @@
-import type { AppSettings, PasswordHistory, Profile } from '../types'; // Changed PasswordProfile to Profile
-import { decrypt, encrypt } from '../utils/encryption';
+import type { AppSettings, PasswordHistory, Profile } from "../types"; // Changed PasswordProfile to Profile
+import { decrypt, encrypt } from "../utils/encryption";
 
 // Internal interfaces for parsed JSON data
 type ParsedProfile = {
@@ -20,15 +20,15 @@ type ParsedHistoryEntry = {
   strength: { score: number; label: string };
 };
 
-const PROFILES_KEY = 'openpass-profiles';
-const HISTORY_KEY = 'openpass-history';
-const SETTINGS_KEY = 'openpass-settings';
+const PROFILES_KEY = "openpass-profiles";
+const HISTORY_KEY = "openpass-history";
+const SETTINGS_KEY = "openpass-settings";
 
 // Default settings
 const DEFAULT_SETTINGS: AppSettings = {
   historyEnabled: true,
   encryptionEnabled: false,
-  encryptionKey: '',
+  encryptionKey: "",
 };
 
 let currentSettings: AppSettings = { ...DEFAULT_SETTINGS };

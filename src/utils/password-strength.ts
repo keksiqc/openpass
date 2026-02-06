@@ -1,5 +1,5 @@
-import { GENERATION_LIMITS } from '../constants/generator';
-import type { PasswordStrength } from '../types';
+import { GENERATION_LIMITS } from "../constants/generator";
+import type { PasswordStrength } from "../types";
 
 // Regex patterns for password strength analysis (moved to top-level for performance)
 const LOWERCASE_REGEX = /[a-z]/;
@@ -47,18 +47,18 @@ const applyPatternPenalties = (password: string): number => {
 // Helper function to get strength label and color
 const getStrengthLabel = (score: number): { label: string; color: string } => {
   if (score <= 2) {
-    return { label: 'Weak', color: 'text-red-600' };
+    return { label: "Weak", color: "text-red-600" };
   }
   if (score <= 4) {
-    return { label: 'Fair', color: 'text-yellow-600' };
+    return { label: "Fair", color: "text-yellow-600" };
   }
   if (score <= 6) {
-    return { label: 'Good', color: 'text-blue-600' };
+    return { label: "Good", color: "text-blue-600" };
   }
   if (score <= 8) {
-    return { label: 'Strong', color: 'text-green-600' };
+    return { label: "Strong", color: "text-green-600" };
   }
-  return { label: 'Excellent', color: 'text-green-700' };
+  return { label: "Excellent", color: "text-green-700" };
 };
 
 // Password strength calculator
@@ -113,7 +113,7 @@ export const estimateTimeToCrack = (entropy: number): string => {
     2 ** (entropy - 1) / GENERATION_LIMITS.GUESSES_PER_SECOND;
 
   if (secondsToCrack < 60) {
-    return 'Instantly';
+    return "Instantly";
   }
   if (secondsToCrack < 3600) {
     return `${Math.round(secondsToCrack / 60)} minutes`;
@@ -127,5 +127,5 @@ export const estimateTimeToCrack = (entropy: number): string => {
   if (secondsToCrack < 31_536_000_000) {
     return `${Math.round(secondsToCrack / 31_536_000)} years`;
   }
-  return 'Centuries';
+  return "Centuries";
 };

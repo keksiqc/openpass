@@ -16,12 +16,12 @@ export const PASSPHRASE_CONSTRAINTS = {
 
 // Character sets
 export const CHARACTER_SETS = {
-  UPPERCASE: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  LOWERCASE: 'abcdefghijklmnopqrstuvwxyz',
-  NUMBERS: '0123456789',
-  SYMBOLS: '!@#$%^&*()_+-=[]{}|;:,.<>?',
-  SIMILAR: '0O1lI',
-  AMBIGUOUS: '{}[]()\\/\'"~,;.<>',
+  UPPERCASE: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  LOWERCASE: "abcdefghijklmnopqrstuvwxyz",
+  NUMBERS: "0123456789",
+  SYMBOLS: "!@#$%^&*()_+-=[]{}|;:,.<>?",
+  SIMILAR: "0O1lI",
+  AMBIGUOUS: "{}[]()\\/'\"~,;.<>",
 } as const;
 
 // Default settings
@@ -31,7 +31,7 @@ export const DEFAULT_PASSWORD_SETTINGS = {
   includeLowercase: true,
   includeNumbers: true,
   includeSymbols: true,
-  customCharacters: '',
+  customCharacters: "",
   excludeSimilar: false,
   excludeAmbiguous: false,
   minNumbers: 1,
@@ -41,21 +41,21 @@ export const DEFAULT_PASSWORD_SETTINGS = {
 
 export const DEFAULT_PASSPHRASE_SETTINGS = {
   wordCount: 4,
-  separator: '-',
+  separator: "-",
   includeNumbers: false,
   customWords: [] as string[],
-  wordCase: 'lowercase' as const,
+  wordCase: "lowercase" as const,
   insertNumbersRandomly: false,
 };
 
 export const DEFAULT_FORMAT_SETTINGS = {
-  format: '2u4l2d2{#$%}',
+  format: "2u4l2d2{#$%}",
   templates: [
-    { name: 'Strong Mixed', pattern: '2u4l2d2{#$%}' },
-    { name: 'Alphanumeric', pattern: '3u3l4d' },
-    { name: 'Complex', pattern: '1u6l1{@#$}3d1{!%&}' },
-    { name: 'Simple', pattern: '4l4d' },
-    { name: 'Memorable', pattern: '1u4l1{#$%}4d' },
+    { name: "Strong Mixed", pattern: "2u4l2d2{#$%}" },
+    { name: "Alphanumeric", pattern: "3u3l4d" },
+    { name: "Complex", pattern: "1u6l1{@#$}3d1{!%&}" },
+    { name: "Simple", pattern: "4l4d" },
+    { name: "Memorable", pattern: "1u4l1{#$%}4d" },
   ],
 };
 

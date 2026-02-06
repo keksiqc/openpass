@@ -5,42 +5,42 @@ import {
   Eye,
   EyeOff,
   RefreshCw,
-} from 'lucide-react';
-import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Switch } from '@/components/ui/switch';
-import { TabsContent } from '@/components/ui/tabs';
-import { usePassphraseGenerator } from '../../hooks/usePassphraseGenerator';
-import type { PassphraseSettings, PasswordHistory } from '../../types';
-import { estimateTimeToCrack } from '../../utils/password-strength';
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { TabsContent } from "@/components/ui/tabs";
+import { usePassphraseGenerator } from "../../hooks/usePassphraseGenerator";
+import type { PassphraseSettings, PasswordHistory } from "../../types";
+import { estimateTimeToCrack } from "../../utils/password-strength";
 import {
   calculatePassphraseStrength,
   getStrengthColor,
   getStrengthDescription,
-} from '../../utils/strength-helpers';
+} from "../../utils/strength-helpers";
 
 type PassphraseGeneratorProps = {
   settings: PassphraseSettings;
@@ -58,7 +58,7 @@ export function PassphraseGenerator({
   onPassphraseGenerated,
   onCopyToClipboard,
 }: PassphraseGeneratorProps) {
-  const [generatedPassphrase, setGeneratedPassphrase] = useState('');
+  const [generatedPassphrase, setGeneratedPassphrase] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const { generatePassphrase } = usePassphraseGenerator();
 
@@ -157,7 +157,7 @@ export function PassphraseGenerator({
                 onValueChange={(value) =>
                   onSettingsChange({
                     ...settings,
-                    wordCase: value as PassphraseSettings['wordCase'],
+                    wordCase: value as PassphraseSettings["wordCase"],
                   })
                 }
                 value={settings.wordCase}
@@ -273,7 +273,7 @@ export function PassphraseGenerator({
               <p className="text-muted-foreground text-xs">
                 {getStrengthDescription(
                   getPassphraseStrength().label,
-                  'passphrase'
+                  "passphrase"
                 )}
               </p>
 
@@ -282,7 +282,7 @@ export function PassphraseGenerator({
                   <Input
                     className="pr-2 font-bold font-mono text-sm"
                     readOnly
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     value={generatedPassphrase}
                   />
                 </div>
@@ -310,14 +310,14 @@ export function PassphraseGenerator({
 
               <div className="grid grid-cols-1 gap-2 border-foreground/20 border-t-2 pt-3 text-muted-foreground text-xs sm:grid-cols-2">
                 <div>
-                  <strong>Estimated Entropy:</strong>{' '}
+                  <strong>Estimated Entropy:</strong>{" "}
                   {Math.round(getPassphraseStrength().score * 1.2)} bits
                 </div>
                 <div>
-                  <strong>Time to crack:</strong>{' '}
+                  <strong>Time to crack:</strong>{" "}
                   {estimateTimeToCrack(
                     getPassphraseStrength().score * 1.2
-                  )}{' '}
+                  )}{" "}
                 </div>
               </div>
             </div>

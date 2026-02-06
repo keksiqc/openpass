@@ -12,34 +12,34 @@ import {
   User,
   Users,
   Zap,
-} from 'lucide-react';
-import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import type {
   FormatSettings,
   PassphraseSettings,
@@ -48,7 +48,7 @@ import type {
   PinSettings,
   Profile,
   ProfileType,
-} from '../../types';
+} from "../../types";
 
 type ProfileManagerProps = {
   profiles: Profile[];
@@ -81,20 +81,20 @@ export function ProfileManager({
   editingProfileId,
   onCancelEdit,
 }: ProfileManagerProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<ProfileType | 'all'>(
-    'all'
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState<ProfileType | "all">(
+    "all"
   );
 
   const getTypeIcon = (type: ProfileType) => {
     switch (type) {
-      case 'password':
+      case "password":
         return <Zap className="h-4 w-4" />;
-      case 'passphrase':
+      case "passphrase":
         return <BookOpen className="h-4 w-4" />;
-      case 'format':
+      case "format":
         return <FileText className="h-4 w-4" />;
-      case 'pin':
+      case "pin":
         return <Shield className="h-4 w-4" />;
       default:
         return <Settings className="h-4 w-4" />;
@@ -107,7 +107,7 @@ export function ProfileManager({
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
       const matchesFilter =
-        selectedFilter === 'all' || profile.type === selectedFilter;
+        selectedFilter === "all" || profile.type === selectedFilter;
       return matchesSearch && matchesFilter;
     })
     .sort((a, b) => {
@@ -166,7 +166,7 @@ export function ProfileManager({
               onClick={onSaveProfile}
             >
               <Save className="h-4 w-4" />
-              {editingProfileId ? 'Update Profile' : 'Save Settings'}
+              {editingProfileId ? "Update Profile" : "Save Settings"}
             </Button>
             {editingProfileId && (
               <Button
@@ -186,7 +186,7 @@ export function ProfileManager({
             <div className="mb-2 flex items-center justify-between">
               <Badge variant="secondary">{profiles.length} profiles</Badge>
               <Select
-                onValueChange={(value: ProfileType | 'all') =>
+                onValueChange={(value: ProfileType | "all") =>
                   setSelectedFilter(value)
                 }
                 value={selectedFilter}
@@ -204,7 +204,7 @@ export function ProfileManager({
               </Select>
             </div>
             <div className="relative mb-2">
-              <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-muted-foreground" />
+              <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
               <Input
                 className="h-10 pl-10"
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -218,7 +218,7 @@ export function ProfileManager({
                   {filteredProfiles.map((profile) => (
                     <div
                       className={`group flex flex-col gap-3 border-2 border-foreground p-4 transition-colors hover:bg-secondary ${
-                        profile.isFavorite ? 'border-accent bg-accent/5' : ''
+                        profile.isFavorite ? "border-accent bg-accent/5" : ""
                       }`}
                       key={profile.id}
                     >
@@ -244,16 +244,16 @@ export function ProfileManager({
                             size="sm"
                             title={
                               profile.isFavorite
-                                ? 'Remove from favorites'
-                                : 'Add to favorites'
+                                ? "Remove from favorites"
+                                : "Add to favorites"
                             }
                             variant="outline"
                           >
                             <Star
                               className={`h-4 w-4 transition-colors ${
                                 profile.isFavorite
-                                  ? 'fill-accent text-accent'
-                                  : 'text-muted-foreground hover:text-accent'
+                                  ? "fill-accent text-accent"
+                                  : "text-muted-foreground hover:text-accent"
                               }`}
                             />
                           </Button>
@@ -282,8 +282,8 @@ export function ProfileManager({
                                 onClick={() => onToggleFavorite(profile.id)}
                               >
                                 {profile.isFavorite
-                                  ? 'Remove from Favorites'
-                                  : 'Add to Favorites'}
+                                  ? "Remove from Favorites"
+                                  : "Add to Favorites"}
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
@@ -357,7 +357,7 @@ export function ProfileManager({
             <div className="mx-auto max-w-md border-2 border-foreground bg-secondary p-4 text-xs">
               <strong className="font-bold uppercase tracking-wider">
                 Tip:
-              </strong>{' '}
+              </strong>{" "}
               Profiles let you quickly switch between different password
               configurations for work, personal use, or specific requirements
             </div>

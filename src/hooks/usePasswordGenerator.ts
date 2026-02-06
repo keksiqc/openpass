@@ -1,17 +1,17 @@
-import { useCallback } from 'react';
-import { toast } from 'sonner';
-import { CHARACTER_SETS, GENERATION_LIMITS } from '../constants/generator';
-import type { PasswordHistory, PasswordSettings } from '../types';
-import { getSecureRandom } from '../utils/crypto';
+import { useCallback } from "react";
+import { toast } from "sonner";
+import { CHARACTER_SETS, GENERATION_LIMITS } from "../constants/generator";
+import type { PasswordHistory, PasswordSettings } from "../types";
+import { getSecureRandom } from "../utils/crypto";
 import {
   calculateEntropy,
   calculateStrength,
-} from '../utils/password-strength';
+} from "../utils/password-strength";
 
 export const usePasswordGenerator = () => {
   // Enhanced character sets with better exclusions
   const getCharacterSet = useCallback((settings: PasswordSettings): string => {
-    let charset = '';
+    let charset = "";
 
     if (settings.includeUppercase) {
       charset += CHARACTER_SETS.UPPERCASE;
@@ -30,16 +30,16 @@ export const usePasswordGenerator = () => {
     }
 
     if (settings.excludeSimilar) {
-      const similarRegex = new RegExp(`[${CHARACTER_SETS.SIMILAR}]`, 'g');
-      charset = charset.replace(similarRegex, '');
+      const similarRegex = new RegExp(`[${CHARACTER_SETS.SIMILAR}]`, "g");
+      charset = charset.replace(similarRegex, "");
     }
 
     if (settings.excludeAmbiguous) {
       const ambiguousRegex = new RegExp(
-        `[${CHARACTER_SETS.AMBIGUOUS.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`,
-        'g'
+        `[${CHARACTER_SETS.AMBIGUOUS.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}]`,
+        "g"
       );
-      charset = charset.replace(ambiguousRegex, '');
+      charset = charset.replace(ambiguousRegex, "");
     }
 
     return charset;
@@ -53,11 +53,11 @@ export const usePasswordGenerator = () => {
       try {
         const charset = getCharacterSet(settings);
         if (!charset) {
-          toast.error('Please select at least one character type');
+          toast.error("Please select at least one character type");
           return;
         }
 
-        let password = '';
+        let password = "";
         const maxAttempts = GENERATION_LIMITS.MAX_ATTEMPTS; // General attempts for basic generation
         let meetsCriteria = false;
         const maxRetryForEnforcement =
@@ -68,7 +68,7 @@ export const usePasswordGenerator = () => {
           // Inner loop for basic generation with minNumbers and minSymbols
           let generationAttempts = 0;
           do {
-            password = '';
+            password = "";
             for (let i = 0; i < settings.length; i++) {
               password += charset[getSecureRandom(charset.length)];
             }
@@ -82,8 +82,8 @@ export const usePasswordGenerator = () => {
                 (
                   password.match(
                     new RegExp(
-                      `[${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`,
-                      'g'
+                      `[${settings.includeSymbols ? "!@#$%^&*()_+-=[]{}|;:,.<>?" : ""}${settings.customCharacters?.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}]`,
+                      "g"
                     )
                   ) || []
                 ).length < (settings.minSymbols || 0)))
@@ -102,9 +102,9 @@ export const usePasswordGenerator = () => {
             }
             // Check for symbols from the actual symbol set used
             const symbolCharset =
-              `${settings.includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : ''}${settings.customCharacters || ''}`.replace(
+              `${settings.includeSymbols ? "!@#$%^&*()_+-=[]{}|;:,.<>?" : ""}${settings.customCharacters || ""}`.replace(
                 /[.*+?^${}()|[\]\\]/g,
-                '\\$&'
+                "\\$&"
               );
             if (
               settings.includeSymbols &&
@@ -126,7 +126,7 @@ export const usePasswordGenerator = () => {
 
         if (settings.requireEachCharacterType && !meetsCriteria) {
           toast.warning(
-            'Could not enforce all character types. Try increasing length or reducing restrictions.',
+            "Could not enforce all character types. Try increasing length or reducing restrictions.",
             { duration: 5000 }
           );
           // Proceed with the last generated password even if not all types are enforced
@@ -139,7 +139,7 @@ export const usePasswordGenerator = () => {
         const historyEntry: PasswordHistory = {
           id: Date.now().toString(),
           password,
-          type: 'password',
+          type: "password",
           createdAt: new Date(),
           strength: { score: strength.score, label: strength.label },
         };
@@ -150,7 +150,7 @@ export const usePasswordGenerator = () => {
           `${strength.label} password generated! (${Math.round(entropy)} bits entropy)`
         );
       } catch {
-        toast.error('Failed to generate password');
+        toast.error("Failed to generate password");
       }
     },
     [getCharacterSet]

@@ -9,20 +9,20 @@ import {
   Shield,
   Trash2,
   Zap,
-} from 'lucide-react';
-import { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import type { PasswordHistory } from '../../types';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import type { PasswordHistory } from "../../types";
 
 type HistoryPanelProps = {
   history: PasswordHistory[];
@@ -42,13 +42,13 @@ export function HistoryPanel({
   );
 
   const getTypeBadgeClass = (type: string): string => {
-    if (type === 'password') {
-      return 'border-foreground text-foreground';
+    if (type === "password") {
+      return "border-foreground text-foreground";
     }
-    if (type === 'passphrase') {
-      return 'border-foreground text-foreground';
+    if (type === "passphrase") {
+      return "border-foreground text-foreground";
     }
-    return 'border-foreground text-foreground';
+    return "border-foreground text-foreground";
   };
 
   const togglePasswordVisibility = (entryId: string) => {
@@ -60,11 +60,11 @@ export function HistoryPanel({
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'password':
+      case "password":
         return <Zap className="h-3 w-3" />;
-      case 'passphrase':
+      case "passphrase":
         return <BookOpen className="h-3 w-3" />;
-      case 'format':
+      case "format":
         return <Settings className="h-3 w-3" />;
       default:
         return <Shield className="h-3 w-3" />;
@@ -73,17 +73,17 @@ export function HistoryPanel({
 
   const getStrengthColor = (strength: string) => {
     switch (strength.toLowerCase()) {
-      case 'weak':
-        return 'border-destructive text-destructive';
-      case 'fair':
-        return 'border-foreground text-muted-foreground';
-      case 'good':
-        return 'border-foreground text-foreground';
-      case 'strong':
-      case 'excellent':
-        return 'border-accent text-accent-foreground bg-accent';
+      case "weak":
+        return "border-destructive text-destructive";
+      case "fair":
+        return "border-foreground text-muted-foreground";
+      case "good":
+        return "border-foreground text-foreground";
+      case "strong":
+      case "excellent":
+        return "border-accent text-accent-foreground bg-accent";
       default:
-        return 'border-foreground text-muted-foreground';
+        return "border-foreground text-muted-foreground";
     }
   };
 
@@ -160,8 +160,8 @@ export function HistoryPanel({
                           size="sm"
                           title={
                             showPasswords[entry.id]
-                              ? 'Hide password'
-                              : 'Show password'
+                              ? "Hide password"
+                              : "Show password"
                           }
                           variant="outline"
                         >
@@ -197,16 +197,16 @@ export function HistoryPanel({
                       value={
                         showPasswords[entry.id]
                           ? entry.password
-                          : '•'.repeat(Math.min(entry.password.length, 20))
+                          : "•".repeat(Math.min(entry.password.length, 20))
                       }
                     />
                     <div className="flex items-center gap-1 text-muted-foreground text-xs">
                       <Clock className="h-3 w-3" />
-                      {new Intl.DateTimeFormat('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
+                      {new Intl.DateTimeFormat("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
                       }).format(entry.createdAt)}
                     </div>
                   </div>

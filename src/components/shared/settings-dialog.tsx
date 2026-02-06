@@ -8,19 +8,19 @@ import {
   Settings as SettingsIcon,
   Trash2,
   Upload,
-} from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import type { AppSettings } from '../../types';
-import { generateKey } from '../../utils/encryption';
-import { Button } from '../ui/button';
+} from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import type { AppSettings } from "../../types";
+import { generateKey } from "../../utils/encryption";
+import { Button } from "../ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card';
+} from "../ui/card";
 import {
   Dialog,
   DialogContent,
@@ -28,10 +28,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../ui/dialog';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
-import { Switch } from '../ui/switch';
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 
 type SettingsDialogProps = {
   settings: AppSettings;
@@ -59,7 +59,7 @@ export function SettingsDialog({
   const handleSave = () => {
     onSettingsChange(localSettings);
     setIsOpen(false);
-    toast.success('Settings saved successfully!');
+    toast.success("Settings saved successfully!");
   };
 
   const handleCancel = () => {
@@ -73,7 +73,7 @@ export function SettingsDialog({
       ...prev,
       encryptionKey: newKey,
     }));
-    toast.success('New encryption key generated!');
+    toast.success("New encryption key generated!");
   };
 
   const handleClearAllData = () => {
@@ -81,7 +81,7 @@ export function SettingsDialog({
       onClearAllData();
       setShowClearDataConfirm(false);
       setIsOpen(false);
-      toast.success('All data cleared successfully!');
+      toast.success("All data cleared successfully!");
     } else {
       setShowClearDataConfirm(true);
     }
@@ -92,7 +92,7 @@ export function SettingsDialog({
       onResetToDefaults();
       setShowResetConfirm(false);
       setIsOpen(false);
-      toast.success('All settings reset to defaults!');
+      toast.success("All settings reset to defaults!");
     } else {
       setShowResetConfirm(true);
     }
@@ -209,7 +209,7 @@ export function SettingsDialog({
                             }))
                           }
                           placeholder="Enter encryption key..."
-                          type={showEncryptionKey ? 'text' : 'password'}
+                          type={showEncryptionKey ? "text" : "password"}
                           value={localSettings.encryptionKey}
                         />
                         <Button
@@ -304,12 +304,12 @@ export function SettingsDialog({
                   <Button
                     className="gap-2"
                     onClick={handleClearAllData}
-                    variant={showClearDataConfirm ? 'destructive' : 'outline'}
+                    variant={showClearDataConfirm ? "destructive" : "outline"}
                   >
                     <Trash2 className="h-4 w-4" />
                     {showClearDataConfirm
-                      ? 'Confirm: Clear All Data'
-                      : 'Clear All Data'}
+                      ? "Confirm: Clear All Data"
+                      : "Clear All Data"}
                   </Button>
                   {showClearDataConfirm && (
                     <p className="text-muted-foreground text-xs">
@@ -322,12 +322,12 @@ export function SettingsDialog({
                   <Button
                     className="gap-2"
                     onClick={handleResetToDefaults}
-                    variant={showResetConfirm ? 'destructive' : 'outline'}
+                    variant={showResetConfirm ? "destructive" : "outline"}
                   >
                     <RefreshCw className="h-4 w-4" />
                     {showResetConfirm
-                      ? 'Confirm: Reset All Settings'
-                      : 'Reset All Settings'}
+                      ? "Confirm: Reset All Settings"
+                      : "Reset All Settings"}
                   </Button>
                   {showResetConfirm && (
                     <p className="text-muted-foreground text-xs">

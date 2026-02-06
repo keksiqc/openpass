@@ -1,23 +1,23 @@
 // filepath: /workspaces/openpass/src/App.tsx
 
-import { BookOpen, Hash, Key, Settings } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { Toaster } from '@/components/ui/sonner';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FormatGenerator } from './components/generators/format-generator';
-import { PassphraseGenerator } from './components/generators/passphrase-generator';
-import { PasswordGenerator } from './components/generators/password-generator';
-import { PinGenerator } from './components/generators/pin-generator';
-import { NavBar } from './components/layout/nav-bar';
-import { HistoryPanel } from './components/shared/history-panel';
-import { ProfileManager } from './components/shared/profile-manager';
+import { BookOpen, Hash, Key, Settings } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FormatGenerator } from "./components/generators/format-generator";
+import { PassphraseGenerator } from "./components/generators/passphrase-generator";
+import { PasswordGenerator } from "./components/generators/password-generator";
+import { PinGenerator } from "./components/generators/pin-generator";
+import { NavBar } from "./components/layout/nav-bar";
+import { HistoryPanel } from "./components/shared/history-panel";
+import { ProfileManager } from "./components/shared/profile-manager";
 import {
   DEFAULT_FORMAT_SETTINGS,
   DEFAULT_PASSPHRASE_SETTINGS,
   DEFAULT_PASSWORD_SETTINGS,
   DEFAULT_PIN_SETTINGS,
-} from './constants/generator';
+} from "./constants/generator";
 import {
   clearAllData,
   loadHistory,
@@ -26,7 +26,7 @@ import {
   saveHistory,
   saveProfiles,
   saveSettings,
-} from './services/storage';
+} from "./services/storage";
 import type {
   AppSettings,
   FormatSettings,
@@ -36,7 +36,7 @@ import type {
   PinSettings,
   Profile,
   ProfileType,
-} from './types';
+} from "./types";
 
 export default function App() {
   // Settings states with enhanced defaults
@@ -57,15 +57,15 @@ export default function App() {
 
   // UI states
   const [isGenerating, setIsGenerating] = useState(false);
-  const [activeTab, setActiveTab] = useState<ProfileType>('password');
+  const [activeTab, setActiveTab] = useState<ProfileType>("password");
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [profileName, setProfileName] = useState('');
+  const [profileName, setProfileName] = useState("");
   const [passwordHistory, setPasswordHistory] = useState<PasswordHistory[]>([]);
   const [editingProfileId, setEditingProfileId] = useState<string | null>(null);
   const [appSettings, setAppSettings] = useState<AppSettings>({
     historyEnabled: true,
     encryptionEnabled: false,
-    encryptionKey: '',
+    encryptionKey: "",
   });
 
   // Load data from localStorage on mount
@@ -80,11 +80,11 @@ export default function App() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Ctrl/Cmd + G to generate password
-      if ((event.ctrlKey || event.metaKey) && event.key === 'g') {
+      if ((event.ctrlKey || event.metaKey) && event.key === "g") {
         event.preventDefault();
         // Trigger generation based on active tab
         const generateButton = document.querySelector(
-          '[data-generate-button]'
+          "[data-generate-button]"
         ) as HTMLButtonElement;
         if (generateButton) {
           generateButton.click();
@@ -92,8 +92,8 @@ export default function App() {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   // Save profiles to localStorage
@@ -122,21 +122,21 @@ export default function App() {
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success('Copied to clipboard!');
+      toast.success("Copied to clipboard!");
     } catch {
-      toast.error('Failed to copy to clipboard');
+      toast.error("Failed to copy to clipboard");
     }
   };
 
   // Helper function to get current settings based on active tab
   const getCurrentSettings = () => {
-    if (activeTab === 'password') {
+    if (activeTab === "password") {
       return passwordSettings;
     }
-    if (activeTab === 'passphrase') {
+    if (activeTab === "passphrase") {
       return passphraseSettings;
     }
-    if (activeTab === 'format') {
+    if (activeTab === "format") {
       return formatSettings;
     }
     return pinSettings;
@@ -151,20 +151,20 @@ export default function App() {
       isFavorite: false,
     };
 
-    if (activeTab === 'password') {
-      return { ...baseProfile, type: 'password', settings: passwordSettings };
+    if (activeTab === "password") {
+      return { ...baseProfile, type: "password", settings: passwordSettings };
     }
-    if (activeTab === 'passphrase') {
+    if (activeTab === "passphrase") {
       return {
         ...baseProfile,
-        type: 'passphrase',
+        type: "passphrase",
         settings: passphraseSettings,
       };
     }
-    if (activeTab === 'format') {
-      return { ...baseProfile, type: 'format', settings: formatSettings };
+    if (activeTab === "format") {
+      return { ...baseProfile, type: "format", settings: formatSettings };
     }
-    return { ...baseProfile, type: 'pin', settings: pinSettings };
+    return { ...baseProfile, type: "pin", settings: pinSettings };
   };
 
   // Helper function to update existing profile
@@ -184,7 +184,7 @@ export default function App() {
   // Save profile
   const saveProfile = () => {
     if (!profileName.trim()) {
-      toast.error('Please enter a profile name');
+      toast.error("Please enter a profile name");
       return;
     }
 
@@ -194,7 +194,7 @@ export default function App() {
         (p) => p.name.toLowerCase() === profileName.trim().toLowerCase()
       )
     ) {
-      toast.error('A profile with this name already exists');
+      toast.error("A profile with this name already exists");
       return;
     }
 
@@ -214,7 +214,7 @@ export default function App() {
       saveProfilesToStorage(newProfiles);
       toast.success(`Profile "${newProfile.name}" saved successfully!`);
     }
-    setProfileName('');
+    setProfileName("");
   };
 
   // Load profile
@@ -223,21 +223,21 @@ export default function App() {
     setActiveTab(profileToLoad.type);
 
     switch (profileToLoad.type) {
-      case 'password':
+      case "password":
         setPasswordSettings(profileToLoad.settings);
         break;
-      case 'passphrase':
+      case "passphrase":
         setPassphraseSettings(profileToLoad.settings);
         break;
-      case 'format': // Formerly 'custom'
+      case "format": // Formerly 'custom'
         setFormatSettings(profileToLoad.settings);
         break;
-      case 'pin':
+      case "pin":
         setPinSettings(profileToLoad.settings);
         break;
       default:
         // This should never happen with proper typing, but handle gracefully
-        toast.error('Unknown profile type');
+        toast.error("Unknown profile type");
         return;
     }
 
@@ -258,21 +258,21 @@ export default function App() {
     setProfileName(profileToEdit.name);
     setActiveTab(profileToEdit.type);
     switch (profileToEdit.type) {
-      case 'password':
+      case "password":
         setPasswordSettings(profileToEdit.settings);
         break;
-      case 'passphrase':
+      case "passphrase":
         setPassphraseSettings(profileToEdit.settings);
         break;
-      case 'format': // Formerly 'custom'
+      case "format": // Formerly 'custom'
         setFormatSettings(profileToEdit.settings);
         break;
-      case 'pin':
+      case "pin":
         setPinSettings(profileToEdit.settings);
         break;
       default:
         // This should never happen with proper typing, but handle gracefully
-        toast.error('Unknown profile type');
+        toast.error("Unknown profile type");
         return;
     }
   };
@@ -280,7 +280,7 @@ export default function App() {
   // Cancel edit
   const handleCancelEdit = () => {
     setEditingProfileId(null);
-    setProfileName('');
+    setProfileName("");
   };
 
   // Toggle favorite profile
@@ -303,13 +303,13 @@ export default function App() {
   const handleDeleteHistoryEntry = (id: string) => {
     const newHistory = passwordHistory.filter((entry) => entry.id !== id);
     saveHistoryToStorage(newHistory);
-    toast.success('History entry deleted!');
+    toast.success("History entry deleted!");
   };
 
   // Clear history
   const clearHistory = () => {
     saveHistoryToStorage([]);
-    toast.success('History cleared!');
+    toast.success("History cleared!");
   };
 
   // Settings management
@@ -335,11 +335,11 @@ export default function App() {
     const defaultSettings = {
       historyEnabled: true,
       encryptionEnabled: false,
-      encryptionKey: '',
+      encryptionKey: "",
     };
     setAppSettings(defaultSettings);
     saveSettings(defaultSettings);
-    toast.success('All settings reset to defaults!');
+    toast.success("All settings reset to defaults!");
   };
 
   // Clear all data
@@ -350,26 +350,26 @@ export default function App() {
     setAppSettings({
       historyEnabled: true,
       encryptionEnabled: false,
-      encryptionKey: '',
+      encryptionKey: "",
     });
     saveSettings({
       historyEnabled: true,
       encryptionEnabled: false,
-      encryptionKey: '',
+      encryptionKey: "",
     });
   };
 
   // Export/Import functions
   const exportProfiles = () => {
     const dataStr = JSON.stringify({ profiles, passwordHistory }, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'openpass-backup.json';
+    link.download = "openpass-backup.json";
     link.click();
     URL.revokeObjectURL(url);
-    toast.success('Data exported successfully!');
+    toast.success("Data exported successfully!");
   };
 
   const importProfiles = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -388,9 +388,9 @@ export default function App() {
         if (data.passwordHistory) {
           saveHistoryToStorage([...passwordHistory, ...data.passwordHistory]);
         }
-        toast.success('Data imported successfully!');
+        toast.success("Data imported successfully!");
       } catch {
-        toast.error('Invalid backup file');
+        toast.error("Invalid backup file");
       }
     };
     reader.readAsText(file);

@@ -1,16 +1,16 @@
-import { useCallback } from 'react';
-import { toast } from 'sonner';
-import type { FormatSettings, PasswordHistory } from '../types';
-import { getSecureRandom } from '../utils/crypto';
-import { calculateStrength } from '../utils/password-strength';
+import { useCallback } from "react";
+import { toast } from "sonner";
+import type { FormatSettings, PasswordHistory } from "../types";
+import { getSecureRandom } from "../utils/crypto";
+import { calculateStrength } from "../utils/password-strength";
 
 export const useFormatGenerator = () => {
   const getCharacterSetFromFormat = useCallback((format: string): string => {
-    let charset = '';
+    let charset = "";
     let i = 0;
     while (i < format.length) {
       if (/\d/.test(format[i])) {
-        let _numStr = '';
+        let _numStr = "";
         while (i < format.length && /\d/.test(format[i])) {
           _numStr += format[i];
           i++;
@@ -23,19 +23,19 @@ export const useFormatGenerator = () => {
 
         const type = format[i];
         switch (type) {
-          case 'u':
-            charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          case "u":
+            charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             break;
-          case 'l':
-            charset += 'abcdefghijklmnopqrstuvwxyz';
+          case "l":
+            charset += "abcdefghijklmnopqrstuvwxyz";
             break;
-          case 'd':
-            charset += '0123456789';
+          case "d":
+            charset += "0123456789";
             break;
-          case '{': {
+          case "{": {
             i++; // skip '{'
-            let customSet = '';
-            while (i < format.length && format[i] !== '}') {
+            let customSet = "";
+            while (i < format.length && format[i] !== "}") {
               customSet += format[i];
               i++;
             }
@@ -46,7 +46,7 @@ export const useFormatGenerator = () => {
       }
       i++;
     }
-    return Array.from(new Set(charset)).join(''); // Return unique characters
+    return Array.from(new Set(charset)).join(""); // Return unique characters
   }, []);
 
   const generateFormatPassword = useCallback(
@@ -55,14 +55,14 @@ export const useFormatGenerator = () => {
       onSuccess: (password: string, historyEntry: PasswordHistory) => void
     ) => {
       const format = settings.format;
-      let result = '';
+      let result = "";
       let i = 0;
 
       try {
         while (i < format.length) {
           if (/\d/.test(format[i])) {
             // Parse number
-            let numStr = '';
+            let numStr = "";
             while (i < format.length && /\d/.test(format[i])) {
               numStr += format[i];
               i++;
@@ -74,23 +74,23 @@ export const useFormatGenerator = () => {
             }
 
             const type = format[i];
-            let charset = '';
+            let charset = "";
 
             switch (type) {
-              case 'u':
-                charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+              case "u":
+                charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 break;
-              case 'l':
-                charset = 'abcdefghijklmnopqrstuvwxyz';
+              case "l":
+                charset = "abcdefghijklmnopqrstuvwxyz";
                 break;
-              case 'd':
-                charset = '0123456789';
+              case "d":
+                charset = "0123456789";
                 break;
-              case '{': {
+              case "{": {
                 // Parse custom character set
                 i++; // skip '{'
-                let customSet = '';
-                while (i < format.length && format[i] !== '}') {
+                let customSet = "";
+                while (i < format.length && format[i] !== "}") {
                   customSet += format[i];
                   i++;
                 }
@@ -117,7 +117,7 @@ export const useFormatGenerator = () => {
         const historyEntry: PasswordHistory = {
           id: Date.now().toString(),
           password: result,
-          type: 'format',
+          type: "format",
           createdAt: new Date(),
           strength: { score: strength.score, label: strength.label },
         };
@@ -126,7 +126,7 @@ export const useFormatGenerator = () => {
         toast.success(`${strength.label} format password generated!`);
       } catch {
         toast.error(
-          'Invalid format. Use: Nu (uppercase), Nl (lowercase), Nd (digits), N{chars} (custom)'
+          "Invalid format. Use: Nu (uppercase), Nl (lowercase), Nd (digits), N{chars} (custom)"
         );
       }
     },

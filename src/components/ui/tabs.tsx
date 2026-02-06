@@ -1,7 +1,7 @@
-import { Tabs as TabsPrimitive } from 'radix-ui';
-import type * as React from 'react';
+import { Tabs as TabsPrimitive } from "radix-ui";
+import type * as React from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 function Tabs({
   className,
@@ -9,7 +9,7 @@ function Tabs({
 }: React.ComponentProps<typeof TabsPrimitive.Root>) {
   return (
     <TabsPrimitive.Root
-      className={cn('flex flex-col gap-2', className)}
+      className={cn("flex flex-col gap-2", className)}
       data-slot="tabs"
       {...props}
     />
@@ -23,7 +23,7 @@ function TabsList({
   return (
     <TabsPrimitive.List
       className={cn(
-        'inline-flex h-12 w-fit items-center gap-0 border-2 border-foreground bg-background p-0 text-foreground shadow-brutal-sm',
+        "inline-flex h-12 w-fit items-center gap-0 border-2 border-foreground bg-background p-0 text-foreground shadow-brutal-sm",
         className
       )}
       data-slot="tabs-list"
@@ -54,7 +54,7 @@ function TabsContent({
 }: React.ComponentProps<typeof TabsPrimitive.Content>) {
   return (
     <TabsPrimitive.Content
-      className={cn('flex-1 outline-none', className)}
+      className={cn("flex-1 outline-none", className)}
       data-slot="tabs-content"
       {...props}
     />
