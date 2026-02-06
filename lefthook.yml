@@ -1,6 +1,6 @@
 pre-commit:
   jobs:
-    - run: npx ultracite format
+    - run: bun x ultracite fix
       glob: 
         - "*.js"
         - "*.jsx"
