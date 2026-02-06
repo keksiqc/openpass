@@ -10,7 +10,7 @@
     "up": "taze major -I",
     "check": "ultracite check",
     "fix": "ultracite fix",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install || true"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
