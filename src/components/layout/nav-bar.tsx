@@ -6,11 +6,11 @@ import { SettingsDialog } from "../shared/settings-dialog";
 
 interface NavBarProps {
   appSettings: AppSettings;
-  handleSettingsChange: (settings: AppSettings) => void;
-  handleClearAllData: () => void;
   exportProfiles: () => void;
-  importProfiles: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleClearAllData: () => void;
   handleResetToDefaults: () => void;
+  handleSettingsChange: (settings: AppSettings) => void;
+  importProfiles: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const NavBar: React.FC<NavBarProps> = ({

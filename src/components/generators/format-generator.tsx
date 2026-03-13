@@ -51,10 +51,10 @@ import {
 } from "../../utils/strength-helpers";
 
 interface FormatGeneratorProps {
-  settings: FormatSettings;
-  onSettingsChange: (settings: FormatSettings) => void;
-  onFormatGenerated: (format: string, historyEntry: PasswordHistory) => void;
   onCopyToClipboard: (text: string) => void;
+  onFormatGenerated: (format: string, historyEntry: PasswordHistory) => void;
+  onSettingsChange: (settings: FormatSettings) => void;
+  settings: FormatSettings;
 }
 
 const STRENGTH_ACCENT: Record<ReadableStrength, string> = {

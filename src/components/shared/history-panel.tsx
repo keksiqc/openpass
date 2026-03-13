@@ -27,8 +27,8 @@ import { getStrengthTextColor } from "../../utils/strength-helpers";
 
 interface HistoryPanelProps {
   history: PasswordHistory[];
-  onCopyToClipboard: (text: string) => void;
   onClearHistory: () => void;
+  onCopyToClipboard: (text: string) => void;
   onDeleteHistoryEntry: (id: string) => void;
 }
 

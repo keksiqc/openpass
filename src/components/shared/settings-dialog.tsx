@@ -34,12 +34,12 @@ import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 
 interface SettingsDialogProps {
-  settings: AppSettings;
-  onSettingsChange: (settings: AppSettings) => void;
   onClearAllData: () => void;
   onExportData: () => void;
   onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onResetToDefaults: () => void;
+  onSettingsChange: (settings: AppSettings) => void;
+  settings: AppSettings;
 }
 
 export function SettingsDialog({

@@ -120,23 +120,23 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
     font-family: "Martian Mono", ui-monospace, monospace;
     font-size: 13px;
     line-height: 1.6;
+    @apply bg-background text-foreground;
   }
 }
 
 /* ─── Grain Texture Overlay ─── */
 body::after {
-  content: "";
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.025;
+  content: "";
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 256px 256px;
+  opacity: 0.025;
 }
 
 /* ─── Brutalist Shadows ─── */
@@ -169,15 +169,15 @@ body::after {
     box-shadow 0.1s ease;
 }
 .hover-brutal:hover {
-  transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 0 var(--foreground);
+  transform: translate(-2px, -2px);
 }
 .dark .hover-brutal:hover {
   box-shadow: 6px 6px 0 0 var(--border);
 }
 .hover-brutal:active {
-  transform: translate(2px, 2px);
   box-shadow: 0 0 0 0 transparent;
+  transform: translate(2px, 2px);
 }
 
 /* ─── Accent Strip (decorative) ─── */
@@ -193,12 +193,12 @@ body::after {
 
 /* ─── Brutalist Sonner Toasts ─── */
 [data-sonner-toaster] [data-sonner-toast] {
-  border-width: 2px !important;
-  border-color: var(--foreground) !important;
-  border-radius: 0 !important;
-  box-shadow: 3px 3px 0 0 var(--foreground) !important;
   font-family: "Martian Mono", ui-monospace, monospace !important;
   font-size: 12px !important;
+  border-color: var(--foreground) !important;
+  border-width: 2px !important;
+  border-radius: 0 !important;
+  box-shadow: 3px 3px 0 0 var(--foreground) !important;
 }
 .dark [data-sonner-toaster] [data-sonner-toast] {
   border-color: var(--border) !important;
@@ -207,8 +207,8 @@ body::after {
 
 /* ─── Selection ─── */
 ::selection {
-  background: var(--accent);
   color: var(--accent-foreground);
+  background: var(--accent);
 }
 
 /* ─── Strength Bar Colors ─── */

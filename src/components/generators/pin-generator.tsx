@@ -16,10 +16,10 @@ import { usePinGenerator } from "../../hooks/use-pin-generator";
 import type { PasswordHistory, PinSettings } from "../../types";
 
 interface PinGeneratorProps {
-  settings: PinSettings;
-  onSettingsChange: (settings: PinSettings) => void;
-  onPinGenerated: (pin: string, historyEntry: PasswordHistory) => void;
   onCopyToClipboard: (text: string) => void;
+  onPinGenerated: (pin: string, historyEntry: PasswordHistory) => void;
+  onSettingsChange: (settings: PinSettings) => void;
+  settings: PinSettings;
 }
 
 export function PinGenerator({

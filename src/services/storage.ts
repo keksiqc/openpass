@@ -3,21 +3,21 @@ import { decrypt, encrypt } from "../utils/encryption";
 
 // Internal interfaces for parsed JSON data
 interface ParsedProfile {
-  id: string;
-  name: string;
-  type: string;
-  settings: unknown;
   createdAt: string;
-  lastUsed?: string;
+  id: string;
   isFavorite?: boolean;
+  lastUsed?: string;
+  name: string;
+  settings: unknown;
+  type: string;
 }
 
 interface ParsedHistoryEntry {
+  createdAt: string;
   id: string;
   password: string;
-  type: string;
-  createdAt: string;
   strength: { score: number; label: string };
+  type: string;
 }
 
 const PROFILES_KEY = "openpass-profiles";

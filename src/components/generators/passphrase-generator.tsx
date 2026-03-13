@@ -44,13 +44,13 @@ import {
 } from "../../utils/strength-helpers";
 
 interface PassphraseGeneratorProps {
-  settings: PassphraseSettings;
-  onSettingsChange: (settings: PassphraseSettings) => void;
+  onCopyToClipboard: (text: string) => void;
   onPassphraseGenerated: (
     passphrase: string,
     historyEntry: PasswordHistory
   ) => void;
-  onCopyToClipboard: (text: string) => void;
+  onSettingsChange: (settings: PassphraseSettings) => void;
+  settings: PassphraseSettings;
 }
 
 export function PassphraseGenerator({

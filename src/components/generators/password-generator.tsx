@@ -32,15 +32,15 @@ import {
 } from "../../utils/strength-helpers";
 
 interface PasswordGeneratorProps {
-  settings: PasswordSettings;
-  onSettingsChange: (settings: PasswordSettings) => void;
+  isGenerating: boolean;
+  onCopyToClipboard: (text: string) => void;
+  onGeneratingChange: (generating: boolean) => void;
   onPasswordGenerated: (
     password: string,
     historyEntry: PasswordHistory
   ) => void;
-  onCopyToClipboard: (text: string) => void;
-  isGenerating: boolean;
-  onGeneratingChange: (generating: boolean) => void;
+  onSettingsChange: (settings: PasswordSettings) => void;
+  settings: PasswordSettings;
 }
 
 export function PasswordGenerator({

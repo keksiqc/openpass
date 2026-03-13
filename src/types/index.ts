@@ -1,42 +1,42 @@
 // Base settings types used by components/hooks
 export interface PasswordSettings {
-  length: number;
-  includeUppercase: boolean;
+  customCharacters: string;
+  excludeAmbiguous: boolean;
+  excludeSimilar: boolean;
   includeLowercase: boolean;
   includeNumbers: boolean;
   includeSymbols: boolean;
-  customCharacters: string;
-  excludeSimilar: boolean;
-  excludeAmbiguous: boolean;
+  includeUppercase: boolean;
+  length: number;
   minNumbers?: number;
   minSymbols?: number;
   requireEachCharacterType?: boolean;
 }
 
 export interface PassphraseSettings {
-  wordCount: number;
-  separator: string;
-  includeNumbers: boolean;
   customWords?: string[];
-  wordCase: "lowercase" | "uppercase" | "capitalize" | "mixed";
+  includeNumbers: boolean;
   insertNumbersRandomly?: boolean;
+  separator: string;
+  wordCase: "lowercase" | "uppercase" | "capitalize" | "mixed";
+  wordCount: number;
 }
 
 export type ReadableStrength = "easy" | "moderate" | "strong" | "ultra";
 export type FormatMode = "custom" | "readable";
 
 export interface ReadablePreset {
-  strength: ReadableStrength;
-  label: string;
   description: string;
+  label: string;
   pattern: string;
+  strength: ReadableStrength;
 }
 
 export interface FormatSettings {
-  mode: FormatMode;
   format: string;
-  templates: Array<{ name: string; pattern: string }>;
+  mode: FormatMode;
   readableStrength: ReadableStrength;
+  templates: Array<{ name: string; pattern: string }>;
 }
 
 export interface PinSettings {
@@ -54,33 +54,33 @@ export interface PinProfileSettings extends PinSettings {}
 export type ProfileType = "password" | "passphrase" | "format" | "pin";
 
 export interface BaseProfile {
+  createdAt: Date;
   id: string;
+  isFavorite?: boolean;
+  lastUsed?: Date;
   name: string;
   type: ProfileType;
-  createdAt: Date;
-  lastUsed?: Date;
-  isFavorite?: boolean;
 }
 
 export interface PasswordProfile extends BaseProfile {
-  type: "password";
   settings: PasswordProfileSettings;
+  type: "password";
 }
 
 export interface PassphraseProfile extends BaseProfile {
-  type: "passphrase";
   settings: PassphraseProfileSettings;
+  type: "passphrase";
 }
 
 export interface FormatProfile extends BaseProfile {
+  settings: FormatProfileSettings;
   // Renamed from CustomProfile
   type: "format";
-  settings: FormatProfileSettings;
 }
 
 export interface PinProfile extends BaseProfile {
-  type: "pin";
   settings: PinProfileSettings;
+  type: "pin";
 }
 
 export type Profile =
@@ -92,21 +92,21 @@ export type Profile =
 // PinSettings defined above with other base settings types
 
 export interface PasswordHistory {
+  createdAt: Date;
   id: string;
   password: string;
-  type: ProfileType | "format"; // 'format' might still be used in old history data
-  createdAt: Date;
   strength: { score: number; label: string };
+  type: ProfileType | "format"; // 'format' might still be used in old history data
 }
 
 export interface PasswordStrength {
-  score: number;
-  label: string;
   color: string;
+  label: string;
+  score: number;
 }
 
 export interface AppSettings {
-  historyEnabled: boolean;
   encryptionEnabled: boolean;
   encryptionKey: string;
+  historyEnabled: boolean;
 }

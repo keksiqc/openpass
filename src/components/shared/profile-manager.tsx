@@ -51,22 +51,22 @@ import type {
 } from "../../types";
 
 interface ProfileManagerProps {
-  profiles: Profile[];
-  profileName: string;
-  onProfileNameChange: (name: string) => void;
   activeTab: ProfileType;
-  passwordSettings: PasswordSettings;
-  passphraseSettings: PassphraseSettings;
+  editingProfileId: string | null;
   formatSettings: FormatSettings;
-  pinSettings?: PinSettings;
-  passwordHistory: PasswordHistory[];
-  onSaveProfile: () => void;
-  onLoadProfile: (profile: Profile) => void;
-  onToggleFavorite: (profileId: string) => void;
+  onCancelEdit: () => void;
   onDeleteProfile: (profileId: string) => void;
   onEditProfile: (profile: Profile) => void;
-  editingProfileId: string | null;
-  onCancelEdit: () => void;
+  onLoadProfile: (profile: Profile) => void;
+  onProfileNameChange: (name: string) => void;
+  onSaveProfile: () => void;
+  onToggleFavorite: (profileId: string) => void;
+  passphraseSettings: PassphraseSettings;
+  passwordHistory: PasswordHistory[];
+  passwordSettings: PasswordSettings;
+  pinSettings?: PinSettings;
+  profileName: string;
+  profiles: Profile[];
 }
 
 export function ProfileManager({
