@@ -9,7 +9,7 @@
     "preview": "vp preview",
     "check": "vp check",
     "check:fix": "vp check --fix",
-    "up": "taze major -I",
+    "up": "taze major -lI",
     "prepare": "vp config"
   },
   "dependencies": {
