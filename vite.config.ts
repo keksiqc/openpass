@@ -8,7 +8,16 @@ export default defineConfig({
   staged: {
     "*": "vp check --fix",
   },
-  fmt: {},
+  fmt: {
+    sortTailwindcss: {
+      stylesheet: "./src/index.css",
+      functions: ["clsx", "cn"],
+      preserveWhitespace: true,
+    },
+  },
+  lint: {
+    plugins: ["eslint", "typescript", "unicorn", "react", "react-perf", "oxc", "import"],
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
