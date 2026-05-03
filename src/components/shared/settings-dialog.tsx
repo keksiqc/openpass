@@ -125,10 +125,10 @@ export function SettingsDialog({
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="font-bold text-sm" htmlFor="historyEnabled">
+                    <Label className="text-sm font-bold" htmlFor="historyEnabled">
                       Enable Password History
                     </Label>
-                    <p className="mt-1 max-w-xs text-muted-foreground text-xs">
+                    <p className="mt-1 max-w-xs text-xs text-muted-foreground">
                       Store generated passwords in local history for easy access
                     </p>
                   </div>
@@ -157,10 +157,10 @@ export function SettingsDialog({
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="font-bold text-sm" htmlFor="encryptionEnabled">
+                    <Label className="text-sm font-bold" htmlFor="encryptionEnabled">
                       Enable Local Data Encryption
                     </Label>
-                    <p className="mt-1 max-w-xs text-muted-foreground text-xs">
+                    <p className="mt-1 max-w-xs text-xs text-muted-foreground">
                       Encrypt profiles and history with a custom key
                     </p>
                   </div>
@@ -177,7 +177,7 @@ export function SettingsDialog({
                 </div>
                 {localSettings.encryptionEnabled && (
                   <div className="space-y-3 pl-2">
-                    <Label className="font-bold text-sm" htmlFor="encryptionKey">
+                    <Label className="text-sm font-bold" htmlFor="encryptionKey">
                       Encryption Key
                     </Label>
                     <div className="flex gap-2">
@@ -220,7 +220,7 @@ export function SettingsDialog({
                         Generate
                       </Button>
                     </div>
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-xs text-muted-foreground">
                       Keep this key safe! You'll need it to decrypt your data.
                     </p>
                   </div>
@@ -265,7 +265,7 @@ export function SettingsDialog({
             {/* Danger Zone */}
             <Card className="border-2 border-destructive/50 shadow-none">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-destructive text-sm">
+                <CardTitle className="flex items-center gap-2 text-sm text-destructive">
                   <AlertTriangle className="h-4 w-4" />
                   Danger Zone
                 </CardTitle>
@@ -284,7 +284,7 @@ export function SettingsDialog({
                     {showClearDataConfirm ? "Confirm: Clear All Data" : "Clear All Data"}
                   </Button>
                   {showClearDataConfirm && (
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-xs text-muted-foreground">
                       Click again to permanently delete all profiles, history, and settings.
                     </p>
                   )}
@@ -299,7 +299,7 @@ export function SettingsDialog({
                     {showResetConfirm ? "Confirm: Reset All Settings" : "Reset All Settings"}
                   </Button>
                   {showResetConfirm && (
-                    <p className="text-muted-foreground text-xs">
+                    <p className="text-xs text-muted-foreground">
                       Click again to reset all application settings to their default values. This
                       will also clear all profiles and history.
                     </p>
@@ -311,7 +311,7 @@ export function SettingsDialog({
         </div>
 
         {/* Dialog Actions */}
-        <div className="flex justify-end gap-2 border-foreground/20 border-t-2 pt-3 sm:gap-3 sm:pt-4">
+        <div className="flex justify-end gap-2 border-t-2 border-foreground/20 pt-3 sm:gap-3 sm:pt-4">
           <Button onClick={handleCancel} variant="outline">
             Cancel
           </Button>

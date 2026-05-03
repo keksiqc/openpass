@@ -78,10 +78,10 @@ export function HistoryPanel({
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center border-2 border-foreground bg-secondary p-3 sm:h-16 sm:w-16 sm:p-4">
               <Shield className="h-6 w-6 opacity-40 sm:h-7 sm:w-7" />
             </div>
-            <p className="mb-2 font-bold text-xs uppercase tracking-wider sm:text-sm">
+            <p className="mb-2 text-xs font-bold tracking-wider uppercase sm:text-sm">
               No history yet
             </p>
-            <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
+            <p className="text-xs leading-relaxed text-muted-foreground sm:text-sm">
               Generated passwords will appear here
             </p>
           </div>
@@ -116,7 +116,7 @@ export function HistoryPanel({
                           {entry.type.toString().charAt(0).toUpperCase() + entry.type.slice(1)}
                         </Badge>
                         <span
-                          className={`font-bold text-[10px] uppercase sm:text-xs ${getStrengthTextColor(entry.strength.label)}`}
+                          className={`text-[10px] font-bold uppercase sm:text-xs ${getStrengthTextColor(entry.strength.label)}`}
                         >
                           {entry.strength.label}
                         </span>

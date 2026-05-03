@@ -87,7 +87,7 @@ export function PassphraseGenerator({
           {/* Word Count */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="font-bold text-sm uppercase tracking-wider">Word Count</Label>
+              <Label className="text-sm font-bold tracking-wider uppercase">Word Count</Label>
               <Badge variant="outline">{settings.wordCount} words</Badge>
             </div>
             <Slider
@@ -103,7 +103,7 @@ export function PassphraseGenerator({
               step={1}
               value={[settings.wordCount]}
             />
-            <div className="flex justify-between text-muted-foreground text-xs">
+            <div className="flex justify-between text-xs text-muted-foreground">
               <span>2</span>
               <span>8</span>
             </div>
@@ -112,7 +112,7 @@ export function PassphraseGenerator({
           {/* Separator and Case Options */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label className="font-bold text-sm uppercase tracking-wider" htmlFor="separator">
+              <Label className="text-sm font-bold tracking-wider uppercase" htmlFor="separator">
                 Separator
               </Label>
               <Select
@@ -138,7 +138,7 @@ export function PassphraseGenerator({
             </div>
 
             <div className="space-y-2">
-              <Label className="font-bold text-sm uppercase tracking-wider" htmlFor="word-case">
+              <Label className="text-sm font-bold tracking-wider uppercase" htmlFor="word-case">
                 Word Case
               </Label>
               <Select
@@ -166,14 +166,14 @@ export function PassphraseGenerator({
           {/* Additional Options */}
           <Collapsible>
             <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
-              <span className="font-bold text-sm uppercase tracking-wider">Additional Options</span>
+              <span className="text-sm font-bold tracking-wider uppercase">Additional Options</span>
               <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </CollapsibleTrigger>
-            <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
+            <CollapsibleContent className="mt-0 space-y-3 border-2 border-t-0 border-foreground bg-secondary/50 p-4">
               <div className="flex items-center justify-between border-2 border-foreground p-3">
                 <Label className="flex flex-col pr-2" htmlFor="include-numbers">
-                  <span className="font-bold text-sm">Add Numbers</span>
-                  <span className="text-muted-foreground text-xs">
+                  <span className="text-sm font-bold">Add Numbers</span>
+                  <span className="text-xs text-muted-foreground">
                     Include digits in the passphrase
                   </span>
                 </Label>
@@ -191,8 +191,8 @@ export function PassphraseGenerator({
               {settings.includeNumbers ? (
                 <div className="mt-2 ml-0 flex items-center justify-between border-2 border-foreground p-3">
                   <Label className="flex flex-col pr-2" htmlFor="insert-numbers-randomly">
-                    <span className="font-bold text-sm">Random placement</span>
-                    <span className="text-muted-foreground text-xs">
+                    <span className="text-sm font-bold">Random placement</span>
+                    <span className="text-xs text-muted-foreground">
                       Distribute numbers within the passphrase
                     </span>
                   </Label>
@@ -219,13 +219,13 @@ export function PassphraseGenerator({
 
           {/* Generated Passphrase Display */}
           {generatedPassphrase ? (
-            <div className="space-y-4 border-2 border-accent bg-accent/5 p-4 shadow-brutal-accent sm:p-5">
+            <div className="shadow-brutal-accent space-y-4 border-2 border-accent bg-accent/5 p-4 sm:p-5">
               <div className="flex items-center justify-between">
-                <Label className="font-bold font-display text-sm uppercase tracking-tight">
+                <Label className="font-display text-sm font-bold tracking-tight uppercase">
                   Result
                 </Label>
                 <span
-                  className={`font-bold text-xs uppercase tracking-wider ${getStrengthTextColor(outputInfo.strength.label)}`}
+                  className={`text-xs font-bold tracking-wider uppercase ${getStrengthTextColor(outputInfo.strength.label)}`}
                 >
                   {outputInfo.strength.label}
                 </span>
@@ -245,7 +245,7 @@ export function PassphraseGenerator({
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <Input
-                    className="pr-2 font-bold font-mono text-sm"
+                    className="pr-2 font-mono text-sm font-bold"
                     readOnly
                     type={showPassword ? "text" : "password"}
                     value={generatedPassphrase}
@@ -270,20 +270,20 @@ export function PassphraseGenerator({
               </div>
 
               {/* Stats */}
-              <div className="flex items-center gap-4 border-foreground/10 border-t pt-3">
-                <p className="text-muted-foreground text-xs">
+              <div className="flex items-center gap-4 border-t border-foreground/10 pt-3">
+                <p className="text-xs text-muted-foreground">
                   {getStrengthDescription(outputInfo.strength.label, "passphrase")}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="border border-foreground/20 bg-background p-2">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                  <div className="text-[10px] tracking-wider text-muted-foreground uppercase">
                     Entropy
                   </div>
                   <div className="font-bold">{Math.round(outputInfo.entropy)} bits</div>
                 </div>
                 <div className="border border-foreground/20 bg-background p-2">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                  <div className="text-[10px] tracking-wider text-muted-foreground uppercase">
                     Time to crack
                   </div>
                   <div className="font-bold">{outputInfo.timeToCrack}</div>

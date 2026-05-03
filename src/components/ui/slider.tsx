@@ -34,7 +34,7 @@ function Slider({
   return (
     <SliderPrimitive.Root
       className={cn(
-        "relative flex w-full touch-none select-none items-center data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col data-[disabled]:opacity-50",
+        "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
         className,
       )}
       data-slot="slider"
@@ -46,7 +46,7 @@ function Slider({
     >
       <SliderPrimitive.Track
         className={cn(
-          "relative grow overflow-hidden border-2 border-foreground bg-muted data-[orientation=horizontal]:h-3 data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-3",
+          "relative grow overflow-hidden border-2 border-foreground bg-muted data-[orientation=horizontal]:h-3 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-3",
         )}
         data-slot="slider-track"
       >
@@ -59,7 +59,7 @@ function Slider({
       </SliderPrimitive.Track>
       {_values.map((val) => (
         <SliderPrimitive.Thumb
-          className="block size-5 shrink-0 cursor-grab border-2 border-foreground bg-background shadow-brutal-sm ring-accent/50 transition-shadow hover:ring-4 focus-visible:outline-hidden focus-visible:ring-4 active:cursor-grabbing disabled:pointer-events-none disabled:opacity-50"
+          className="shadow-brutal-sm block size-5 shrink-0 cursor-grab border-2 border-foreground bg-background ring-accent/50 transition-shadow hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden active:cursor-grabbing disabled:pointer-events-none disabled:opacity-50"
           data-slot="slider-thumb"
           key={val}
         />

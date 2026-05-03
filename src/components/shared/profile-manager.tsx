@@ -135,7 +135,7 @@ export function ProfileManager({
         {/* Save Profile Section */}
         <div className="space-y-3">
           <Label
-            className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider"
+            className="flex items-center gap-2 text-xs font-bold tracking-wider uppercase"
             htmlFor="profile-name"
           >
             <User className="h-3.5 w-3.5" />
@@ -211,7 +211,7 @@ export function ProfileManager({
                             {getTypeIcon(profile.type)}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <h3 className="truncate font-bold text-xs uppercase tracking-wider">
+                            <h3 className="truncate text-xs font-bold tracking-wider uppercase">
                               {profile.name}
                             </h3>
                             <span className="text-[10px] text-muted-foreground">
@@ -302,7 +302,7 @@ export function ProfileManager({
                   <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center border-2 border-foreground p-2 sm:h-12 sm:w-12 sm:p-3">
                     <Search className="h-4 w-4 text-muted-foreground/50 sm:h-5 sm:w-5" />
                   </div>
-                  <p className="mb-1 font-bold text-xs uppercase tracking-wider sm:text-sm">
+                  <p className="mb-1 text-xs font-bold tracking-wider uppercase sm:text-sm">
                     No profiles found
                   </p>
                   <p className="text-[10px] text-muted-foreground sm:text-xs">
@@ -317,14 +317,14 @@ export function ProfileManager({
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center border-2 border-foreground bg-secondary p-3 sm:mb-5 sm:h-16 sm:w-16 sm:p-4">
               <Users className="h-6 w-6 text-muted-foreground/40 sm:h-7 sm:w-7" />
             </div>
-            <h3 className="mb-2 font-bold text-xs uppercase tracking-wider sm:text-sm">
+            <h3 className="mb-2 text-xs font-bold tracking-wider uppercase sm:text-sm">
               No saved profiles
             </h3>
-            <p className="mx-auto mb-4 max-w-sm text-muted-foreground text-xs leading-relaxed">
+            <p className="mx-auto mb-4 max-w-sm text-xs leading-relaxed text-muted-foreground">
               Save your current settings as a profile for quick access later
             </p>
             <div className="mx-auto max-w-md border border-foreground/30 bg-secondary/50 p-3 text-[10px] sm:text-xs">
-              <strong className="font-bold uppercase tracking-wider">Tip:</strong> Profiles let you
+              <strong className="font-bold tracking-wider uppercase">Tip:</strong> Profiles let you
               switch between configurations instantly
             </div>
           </div>

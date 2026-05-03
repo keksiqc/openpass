@@ -47,7 +47,7 @@ export function PinGenerator({
       <CardContent className="space-y-5 sm:space-y-6">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label className="font-bold text-sm uppercase tracking-wider" htmlFor="pin-length">
+            <Label className="text-sm font-bold tracking-wider uppercase" htmlFor="pin-length">
               PIN Length
             </Label>
             <Badge variant="outline">{settings.length} digits</Badge>
@@ -60,7 +60,7 @@ export function PinGenerator({
             onValueChange={(value) => onSettingsChange({ ...settings, length: value[0] })}
             value={[settings.length]}
           />
-          <div className="flex justify-between text-muted-foreground text-xs">
+          <div className="flex justify-between text-xs text-muted-foreground">
             <span>4</span>
             <span>12</span>
           </div>
@@ -72,13 +72,13 @@ export function PinGenerator({
         </Button>
 
         {pin ? (
-          <div className="space-y-4 border-2 border-accent bg-accent/5 p-4 shadow-brutal-accent sm:p-5">
-            <Label className="font-bold font-display text-sm uppercase tracking-tight">
+          <div className="shadow-brutal-accent space-y-4 border-2 border-accent bg-accent/5 p-4 sm:p-5">
+            <Label className="font-display text-sm font-bold tracking-tight uppercase">
               Result
             </Label>
             <div className="flex items-center gap-2">
               <Input
-                className="pr-2 font-bold font-mono text-lg tracking-[0.3em]"
+                className="pr-2 font-mono text-lg font-bold tracking-[0.3em]"
                 readOnly
                 type={showPin ? "text" : "password"}
                 value={pin}
@@ -101,7 +101,7 @@ export function PinGenerator({
               </Button>
             </div>
             <div className="border border-foreground/20 bg-background p-2 text-xs">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+              <div className="text-[10px] tracking-wider text-muted-foreground uppercase">
                 Possible combinations
               </div>
               <div className="font-bold">{(10 ** settings.length).toLocaleString()}</div>

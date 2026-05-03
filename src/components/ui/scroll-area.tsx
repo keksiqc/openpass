@@ -15,7 +15,7 @@ function ScrollArea({
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
-        className="size-full outline-none transition-[color,box-shadow] focus-visible:outline-1 focus-visible:ring-2 focus-visible:ring-accent/50"
+        className="size-full transition-[color,box-shadow] outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:outline-1"
         data-slot="scroll-area-viewport"
       >
         {children}
@@ -34,7 +34,7 @@ function ScrollBar({
   return (
     <ScrollAreaPrimitive.ScrollAreaScrollbar
       className={cn(
-        "flex touch-none select-none p-px transition-colors",
+        "flex touch-none p-px transition-colors select-none",
         orientation === "vertical" && "h-full w-2.5 border-l-2 border-l-foreground/10",
         orientation === "horizontal" && "h-2.5 flex-col border-t-2 border-t-foreground/10",
         className,

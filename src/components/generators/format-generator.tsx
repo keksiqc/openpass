@@ -121,10 +121,10 @@ export function FormatGenerator({
         <div className="space-y-5 sm:space-y-6">
           {/* Mode Toggle */}
           <div className="space-y-3">
-            <Label className="font-bold text-sm uppercase tracking-wider">Mode</Label>
+            <Label className="text-sm font-bold tracking-wider uppercase">Mode</Label>
             <div className="grid grid-cols-2 gap-0 border-2 border-foreground">
               <button
-                className={`flex items-center justify-center gap-2 border-foreground border-r p-3 font-bold text-sm uppercase tracking-wider transition-colors ${
+                className={`flex items-center justify-center gap-2 border-r border-foreground p-3 text-sm font-bold tracking-wider uppercase transition-colors ${
                   settings.mode === "readable"
                     ? "bg-accent text-accent-foreground"
                     : "bg-card hover:bg-secondary"
@@ -136,7 +136,7 @@ export function FormatGenerator({
                 Readable
               </button>
               <button
-                className={`flex items-center justify-center gap-2 p-3 font-bold text-sm uppercase tracking-wider transition-colors ${
+                className={`flex items-center justify-center gap-2 p-3 text-sm font-bold tracking-wider uppercase transition-colors ${
                   settings.mode === "custom"
                     ? "bg-accent text-accent-foreground"
                     : "bg-card hover:bg-secondary"
@@ -153,7 +153,7 @@ export function FormatGenerator({
           {/* Readable Presets */}
           {settings.mode === "readable" ? (
             <div className="space-y-3">
-              <Label className="font-bold text-sm uppercase tracking-wider">Strength Level</Label>
+              <Label className="text-sm font-bold tracking-wider uppercase">Strength Level</Label>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 {READABLE_PRESETS.map((preset) => {
                   const isActive = settings.readableStrength === preset.strength;
@@ -168,7 +168,7 @@ export function FormatGenerator({
                       onClick={() => handleStrengthChange(preset.strength)}
                       type="button"
                     >
-                      <div className="font-bold text-xs uppercase tracking-wider sm:text-sm">
+                      <div className="text-xs font-bold tracking-wider uppercase sm:text-sm">
                         {preset.label}
                       </div>
                       <div
@@ -181,7 +181,7 @@ export function FormatGenerator({
                 })}
               </div>
               <div className="border-2 border-foreground/30 bg-secondary/50 p-3">
-                <div className="mb-1 font-bold text-[10px] text-muted-foreground uppercase tracking-wider">
+                <div className="mb-1 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
                   Active Pattern
                 </div>
                 <code className="font-mono text-xs">{activePattern}</code>
@@ -191,7 +191,7 @@ export function FormatGenerator({
             <>
               {/* Custom Format Pattern Input */}
               <div className="space-y-3">
-                <Label className="font-bold text-sm uppercase tracking-wider" htmlFor="format">
+                <Label className="text-sm font-bold tracking-wider uppercase" htmlFor="format">
                   Format Pattern
                 </Label>
                 <Input
@@ -206,7 +206,7 @@ export function FormatGenerator({
                   placeholder="e.g., 2u4l2d2{#$%}"
                   value={settings.format}
                 />
-                <div className="space-y-1 text-muted-foreground text-xs">
+                <div className="space-y-1 text-xs text-muted-foreground">
                   <p>
                     <strong>Format:</strong> Nu (uppercase), Nl (lowercase), Nd (digits), N
                     {"{chars}"} (custom)
@@ -226,7 +226,7 @@ export function FormatGenerator({
 
               {/* Quick Templates */}
               <div className="space-y-3">
-                <Label className="font-bold text-sm uppercase tracking-wider">
+                <Label className="text-sm font-bold tracking-wider uppercase">
                   Quick Templates
                 </Label>
                 <Select
@@ -245,7 +245,7 @@ export function FormatGenerator({
                       <SelectItem key={template.name} value={template.pattern}>
                         <div className="flex flex-col">
                           <span className="font-bold">{template.name}</span>
-                          <span className="font-mono text-muted-foreground text-xs">
+                          <span className="font-mono text-xs text-muted-foreground">
                             {template.pattern}
                           </span>
                         </div>
@@ -258,10 +258,10 @@ export function FormatGenerator({
               {/* Format Guide */}
               <Collapsible>
                 <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
-                  <span className="font-bold text-sm uppercase tracking-wider">Format Guide</span>
+                  <span className="text-sm font-bold tracking-wider uppercase">Format Guide</span>
                   <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
+                <CollapsibleContent className="mt-0 space-y-3 border-2 border-t-0 border-foreground bg-secondary/50 p-4">
                   <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
                     <div className="flex items-center gap-2">
                       <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
@@ -289,7 +289,7 @@ export function FormatGenerator({
                     </div>
                   </div>
                   <div className="mt-4 border-2 border-foreground bg-background p-3">
-                    <div className="mb-2 font-bold text-muted-foreground text-xs uppercase tracking-wider">
+                    <div className="mb-2 text-xs font-bold tracking-wider text-muted-foreground uppercase">
                       Popular Patterns:
                     </div>
                     <div className="space-y-1 text-xs">
@@ -318,13 +318,13 @@ export function FormatGenerator({
 
           {/* Generated Format Password Display */}
           {generatedFormat && outputStrength ? (
-            <div className="space-y-4 border-2 border-accent bg-accent/5 p-4 shadow-brutal-accent sm:p-5">
+            <div className="shadow-brutal-accent space-y-4 border-2 border-accent bg-accent/5 p-4 sm:p-5">
               <div className="flex items-center justify-between">
-                <Label className="font-bold font-display text-sm uppercase tracking-tight">
+                <Label className="font-display text-sm font-bold tracking-tight uppercase">
                   Result
                 </Label>
                 <span
-                  className={`font-bold text-xs uppercase tracking-wider ${getStrengthTextColor(outputStrength.label)}`}
+                  className={`text-xs font-bold tracking-wider uppercase ${getStrengthTextColor(outputStrength.label)}`}
                 >
                   {outputStrength.label}
                 </span>
@@ -344,7 +344,7 @@ export function FormatGenerator({
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <Input
-                    className="pr-2 font-bold font-mono text-sm"
+                    className="pr-2 font-mono text-sm font-bold"
                     readOnly
                     type={showPassword ? "text" : "password"}
                     value={generatedFormat}
@@ -369,20 +369,20 @@ export function FormatGenerator({
               </div>
 
               {/* Stats */}
-              <div className="flex items-center gap-4 border-foreground/10 border-t pt-3">
-                <p className="text-muted-foreground text-xs">
+              <div className="flex items-center gap-4 border-t border-foreground/10 pt-3">
+                <p className="text-xs text-muted-foreground">
                   {getStrengthDescription(outputStrength.label, "format")}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="border border-foreground/20 bg-background p-2">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                  <div className="text-[10px] tracking-wider text-muted-foreground uppercase">
                     Entropy
                   </div>
                   <div className="font-bold">{Math.round(outputStrength.entropy)} bits</div>
                 </div>
                 <div className="border border-foreground/20 bg-background p-2">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                  <div className="text-[10px] tracking-wider text-muted-foreground uppercase">
                     Time to crack
                   </div>
                   <div className="font-bold">{outputStrength.timeToCrack}</div>

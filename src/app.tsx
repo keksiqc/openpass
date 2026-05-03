@@ -495,18 +495,18 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-foreground border-t-2 bg-card">
+      <footer className="mt-auto border-t-2 border-foreground bg-card">
         <div className="container mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
             <div className="flex items-center gap-3">
               <Shield className="h-4 w-4 text-accent" />
-              <p className="text-center text-muted-foreground text-xs sm:text-left">
+              <p className="text-center text-xs text-muted-foreground sm:text-left">
                 Everything runs locally in your browser. No data leaves your device.
               </p>
             </div>
-            <div className="flex items-center gap-4 text-muted-foreground text-xs">
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
               <a
-                className="flex items-center gap-1.5 border-transparent border-b transition-colors hover:border-accent hover:text-accent"
+                className="flex items-center gap-1.5 border-b border-transparent transition-colors hover:border-accent hover:text-accent"
                 href="https://github.com"
                 rel="noopener noreferrer"
                 target="_blank"
