@@ -41,7 +41,7 @@ export function decrypt(encryptedText: string, key: string): string {
     }
 
     return decoder.decode(decrypted);
-  } catch (_error) {
+  } catch {
     return encryptedText;
   }
 }

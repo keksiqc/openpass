@@ -44,7 +44,7 @@ export const loadSettings = (): AppSettings => {
   try {
     currentSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
     return currentSettings;
-  } catch (_error) {
+  } catch {
     currentSettings = { ...DEFAULT_SETTINGS };
     return currentSettings;
   }
@@ -85,7 +85,7 @@ export const loadProfiles = (): Profile[] => {
       createdAt: new Date(p.createdAt),
       lastUsed: p.lastUsed ? new Date(p.lastUsed) : undefined,
     })) as Profile[];
-  } catch (_error) {
+  } catch {
     return [];
   }
 };
@@ -114,7 +114,7 @@ export const loadHistory = (): PasswordHistory[] => {
       ...h,
       createdAt: new Date(h.createdAt),
     })) as PasswordHistory[];
-  } catch (_error) {
+  } catch {
     return [];
   }
 };
