@@ -16,8 +16,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 import type { PasswordHistory } from "../../types";
 import { getStrengthTextColor } from "../../utils/strength-helpers";
+
+const ALL_TYPES = ["password", "passphrase", "pin", "format"] as const;
+type HistoryType = (typeof ALL_TYPES)[number];
 
 interface HistoryPanelProps {
   history: PasswordHistory[];
@@ -33,6 +37,24 @@ export function HistoryPanel({
   onDeleteHistoryEntry,
 }: HistoryPanelProps) {
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
+  const [activeTypes, setActiveTypes] = useState<Set<HistoryType>>(new Set());
+
+  const toggleType = (type: HistoryType) => {
+    setActiveTypes((prev) => {
+      const next = new Set(prev);
+      if (next.has(type)) {
+        next.delete(type);
+      } else {
+        next.add(type);
+      }
+      return next;
+    });
+  };
+
+  const filteredHistory =
+    activeTypes.size === 0
+      ? history
+      : history.filter((e) => activeTypes.has(e.type as HistoryType));
 
   const togglePasswordVisibility = (entryId: string) => {
     setShowPasswords((prev) => ({ ...prev, [entryId]: !prev[entryId] }));
@@ -77,9 +99,30 @@ export function HistoryPanel({
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-end">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-1 flex-wrap gap-1.5">
+                {ALL_TYPES.map((type) => {
+                  const active = activeTypes.has(type);
+                  return (
+                    <button
+                      className={cn(
+                        "flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors",
+                        active
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-border bg-transparent text-muted-foreground hover:border-accent/50 hover:text-foreground",
+                      )}
+                      key={type}
+                      onClick={() => toggleType(type)}
+                      type="button"
+                    >
+                      {getTypeIcon(type)}
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </button>
+                  );
+                })}
+              </div>
               <Button
-                className="text-xs text-muted-foreground hover:text-destructive"
+                className="shrink-0 text-xs text-muted-foreground hover:text-destructive"
                 onClick={onClearHistory}
                 size="sm"
                 variant="ghost"
@@ -90,7 +133,12 @@ export function HistoryPanel({
             </div>
             <ScrollArea className="h-80 sm:h-96">
               <div className="space-y-2 pr-2">
-                {history.map((entry) => (
+                {filteredHistory.length === 0 ? (
+                  <div className="flex flex-col items-center px-4 py-8 text-center">
+                    <p className="text-sm text-muted-foreground">No entries match the filter</p>
+                  </div>
+                ) : null}
+                {filteredHistory.map((entry) => (
                   <div
                     className="flex flex-col gap-2 rounded-lg border border-border bg-muted/20 p-3 transition-colors hover:bg-muted/40"
                     key={entry.id}
