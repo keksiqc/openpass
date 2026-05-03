@@ -1,4 +1,4 @@
-import { BookOpen, Github, Hash, Key, Settings, Shield } from "lucide-react";
+import { BookOpen, GitBranch, Hash, Key, Settings, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
@@ -511,7 +511,7 @@ export default function App() {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <Github className="h-3.5 w-3.5" />
+                <GitBranch className="h-3.5 w-3.5" />
                 Source
               </a>
               <span className="text-border">|</span>
