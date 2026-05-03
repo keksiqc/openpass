@@ -389,7 +389,7 @@ export default function App() {
       />
 
       {/* Main Content */}
-      <main className="container mx-auto max-w-7xl flex-1 px-3 py-6 sm:px-4 sm:py-10">
+      <main className="container mx-auto max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
         {/* Main Grid Layout */}
         <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
           {/* Main Generator Column */}
@@ -399,7 +399,7 @@ export default function App() {
               onValueChange={(value: string) => setActiveTab(value as ProfileType)}
               value={activeTab}
             >
-              <TabsList className="mb-5 flex h-12 w-full sm:mb-6 sm:h-14">
+              <TabsList className="mb-5 flex h-10 w-full sm:mb-6">
                 <TabsTrigger value="password">
                   <Key className="h-4 w-4" />
                   <span className="hidden sm:inline">Password</span>
@@ -495,28 +495,28 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t-2 border-foreground bg-card">
-        <div className="container mx-auto max-w-7xl px-3 py-6 sm:px-4 sm:py-8">
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-            <div className="flex items-center gap-3">
-              <Shield className="h-4 w-4 text-accent" />
-              <p className="text-center text-xs text-muted-foreground sm:text-left">
-                Everything runs locally in your browser. No data leaves your device.
+      <footer className="mt-auto border-t border-border">
+        <div className="container mx-auto max-w-7xl px-4 py-5 sm:px-6">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+            <div className="flex items-center gap-2">
+              <Shield className="h-3.5 w-3.5 text-accent" />
+              <p className="text-xs text-muted-foreground">
+                Runs entirely in your browser. No data leaves your device.
               </p>
             </div>
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <a
-                className="flex items-center gap-1.5 border-b border-transparent transition-colors hover:border-accent hover:text-accent"
+                className="flex items-center gap-1 transition-colors hover:text-foreground"
                 href="https://github.com"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                <GitBranch className="h-3.5 w-3.5" />
+                <GitBranch className="h-3 w-3" />
                 Source
               </a>
-              <span className="text-border">|</span>
+              <span className="text-border">·</span>
               <span>Open Source</span>
-              <span className="text-border">|</span>
+              <span className="text-border">·</span>
               <span>v1.0</span>
             </div>
           </div>

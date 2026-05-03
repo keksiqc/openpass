@@ -21,45 +21,40 @@ export const NavBar: React.FC<NavBarProps> = ({
   importProfiles,
   handleResetToDefaults,
 }) => (
-  <header className="sticky top-0 z-50 w-full bg-background">
-    {/* Diagonal accent strip */}
-    <div className="accent-strip h-1.5 w-full" />
-    <div className="border-b-2 border-foreground">
-      <div className="container mx-auto max-w-7xl px-3 sm:px-4">
-        <div className="flex h-14 items-center justify-between sm:h-16">
-          {/* Logo and Brand */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="shadow-brutal-sm border-2 border-foreground bg-accent p-1.5 sm:p-2">
-              <RotateCcwKey className="h-5 w-5 text-accent-foreground sm:h-6 sm:w-6" />
-            </div>
-            <div className="flex flex-col">
-              <h1 className="font-display text-lg font-extrabold tracking-tight uppercase sm:text-2xl">
-                OpenPass
-              </h1>
-              <span className="hidden text-[10px] tracking-[0.15em] text-muted-foreground uppercase sm:block">
-                Password Generator
-              </span>
-            </div>
+  <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
+    <div className="container mx-auto max-w-7xl px-4 sm:px-6">
+      <div className="flex h-14 items-center justify-between">
+        {/* Logo and Brand */}
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+            <RotateCcwKey className="h-4 w-4" />
           </div>
-          {/* Navigation and Actions */}
-          <nav className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden items-center md:flex">
-              <div className="border-2 border-foreground bg-secondary px-3 py-1.5 text-[10px] tracking-widest uppercase">
-                <kbd className="font-bold">Ctrl+G</kbd>{" "}
-                <span className="text-muted-foreground">Generate</span>
-              </div>
-            </div>
-            <SettingsDialog
-              onClearAllData={handleClearAllData}
-              onExportData={exportProfiles}
-              onImportData={importProfiles}
-              onResetToDefaults={handleResetToDefaults}
-              onSettingsChange={handleSettingsChange}
-              settings={appSettings}
-            />
-            <ModeToggle />
-          </nav>
+          <div className="flex items-baseline gap-2">
+            <span className="font-display text-lg font-semibold tracking-tight">OpenPass</span>
+            <span className="hidden text-xs text-muted-foreground sm:block">
+              Password Generator
+            </span>
+          </div>
         </div>
+
+        {/* Navigation and Actions */}
+        <nav className="flex items-center gap-2">
+          <div className="hidden items-center md:flex">
+            <span className="rounded-md bg-muted px-2.5 py-1.5 text-xs text-muted-foreground">
+              <kbd className="font-mono font-medium">⌘G</kbd>
+              <span className="ml-1.5">Generate</span>
+            </span>
+          </div>
+          <SettingsDialog
+            onClearAllData={handleClearAllData}
+            onExportData={exportProfiles}
+            onImportData={importProfiles}
+            onResetToDefaults={handleResetToDefaults}
+            onSettingsChange={handleSettingsChange}
+            settings={appSettings}
+          />
+          <ModeToggle />
+        </nav>
       </div>
     </div>
   </header>

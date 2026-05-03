@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { PasswordHistory } from "../../types";
@@ -35,10 +35,7 @@ export function HistoryPanel({
   const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
 
   const togglePasswordVisibility = (entryId: string) => {
-    setShowPasswords((prev) => ({
-      ...prev,
-      [entryId]: !prev[entryId],
-    }));
+    setShowPasswords((prev) => ({ ...prev, [entryId]: !prev[entryId] }));
   };
 
   const getTypeIcon = (type: string) => {
@@ -57,10 +54,8 @@ export function HistoryPanel({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3">
-          <div className="border-2 border-foreground bg-accent p-1.5">
-            <History className="h-4 w-4 text-accent-foreground" />
-          </div>
+        <CardTitle className="flex items-center gap-2">
+          <History className="h-4 w-4 text-accent" />
           History
           {history.length > 0 ? (
             <Badge className="ml-auto" variant="secondary">
@@ -68,20 +63,15 @@ export function HistoryPanel({
             </Badge>
           ) : null}
         </CardTitle>
-        <CardDescription className="text-xs leading-relaxed sm:text-sm">
-          Recently generated passwords for quick access.
-        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4 sm:space-y-6">
+      <CardContent className="space-y-4">
         {history.length === 0 ? (
-          <div className="px-4 py-8 text-center text-muted-foreground sm:px-6 sm:py-10">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center border-2 border-foreground bg-secondary p-3 sm:h-16 sm:w-16 sm:p-4">
-              <Shield className="h-6 w-6 opacity-40 sm:h-7 sm:w-7" />
+          <div className="flex flex-col items-center px-4 py-10 text-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
+              <Shield className="h-5 w-5 text-muted-foreground/50" />
             </div>
-            <p className="mb-2 text-xs font-bold tracking-wider uppercase sm:text-sm">
-              No history yet
-            </p>
-            <p className="text-xs leading-relaxed text-muted-foreground sm:text-sm">
+            <p className="text-sm font-medium text-foreground">No history yet</p>
+            <p className="mt-1 text-xs text-muted-foreground">
               Generated passwords will appear here
             </p>
           </div>
@@ -89,45 +79,43 @@ export function HistoryPanel({
           <>
             <div className="flex items-center justify-end">
               <Button
-                className="text-xs hover:border-destructive hover:bg-destructive/10 hover:text-destructive"
+                className="text-xs text-muted-foreground hover:text-destructive"
                 onClick={onClearHistory}
                 size="sm"
-                variant="outline"
+                variant="ghost"
               >
                 <Trash2 className="mr-1.5 h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Clear All</span>
-                <span className="sm:hidden">Clear</span>
+                Clear All
               </Button>
             </div>
             <ScrollArea className="h-80 sm:h-96">
-              <div className="space-y-2">
+              <div className="space-y-2 pr-2">
                 {history.map((entry) => (
                   <div
-                    className="group flex flex-col gap-2 border-2 border-foreground p-3 transition-colors hover:bg-secondary sm:p-4"
+                    className="flex flex-col gap-2 rounded-lg border border-border bg-muted/20 p-3 transition-colors hover:bg-muted/40"
                     key={entry.id}
                   >
-                    {/* Top row: type info + actions */}
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex min-w-0 flex-1 items-center gap-1.5">
-                        <div className="border border-foreground p-1">
+                        <div className="flex h-5 w-5 items-center justify-center rounded-md bg-muted text-muted-foreground">
                           {getTypeIcon(entry.type)}
                         </div>
-                        <Badge className="text-[10px] sm:text-xs" variant="outline">
-                          {entry.type.toString().charAt(0).toUpperCase() + entry.type.slice(1)}
+                        <Badge className="text-[10px]" variant="secondary">
+                          {entry.type.charAt(0).toUpperCase() + entry.type.slice(1)}
                         </Badge>
                         <span
-                          className={`text-[10px] font-bold uppercase sm:text-xs ${getStrengthTextColor(entry.strength.label)}`}
+                          className={`text-[10px] font-semibold sm:text-xs ${getStrengthTextColor(entry.strength.label)}`}
                         >
                           {entry.strength.label}
                         </span>
                       </div>
                       <div className="flex shrink-0 items-center gap-1">
                         <Button
-                          className="h-7 w-7 p-0 sm:h-8 sm:w-8"
+                          className="h-7 w-7 p-0"
                           onClick={() => togglePasswordVisibility(entry.id)}
                           size="sm"
-                          title={showPasswords[entry.id] ? "Hide password" : "Show password"}
-                          variant="outline"
+                          title={showPasswords[entry.id] ? "Hide" : "Show"}
+                          variant="ghost"
                         >
                           {showPasswords[entry.id] ? (
                             <EyeOff className="h-3.5 w-3.5" />
@@ -136,28 +124,27 @@ export function HistoryPanel({
                           )}
                         </Button>
                         <Button
-                          className="h-7 w-7 p-0 sm:h-8 sm:w-8"
+                          className="h-7 w-7 p-0"
                           onClick={() => onCopyToClipboard(entry.password)}
                           size="sm"
-                          title="Copy to clipboard"
-                          variant="outline"
+                          title="Copy"
+                          variant="ghost"
                         >
                           <Copy className="h-3.5 w-3.5" />
                         </Button>
                         <Button
-                          className="h-7 w-7 p-0 text-destructive hover:border-destructive hover:bg-destructive/10 hover:text-destructive sm:h-8 sm:w-8"
+                          className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive"
                           onClick={() => onDeleteHistoryEntry(entry.id)}
                           size="sm"
-                          title="Delete entry"
-                          variant="outline"
+                          title="Delete"
+                          variant="ghost"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
                     </div>
-                    {/* Password display */}
                     <Input
-                      className="bg-secondary font-mono text-xs"
+                      className="bg-background/60 font-mono text-xs"
                       readOnly
                       value={
                         showPasswords[entry.id]
@@ -165,8 +152,7 @@ export function HistoryPanel({
                           : "•".repeat(Math.min(entry.password.length, 20))
                       }
                     />
-                    {/* Timestamp */}
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground sm:text-xs">
+                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                       <Clock className="h-3 w-3" />
                       {new Intl.DateTimeFormat("en-US", {
                         month: "short",

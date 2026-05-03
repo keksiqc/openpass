@@ -2,7 +2,7 @@ import { BookOpen, ChevronDown, Copy, Eye, EyeOff, RefreshCw } from "lucide-reac
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,7 +50,6 @@ export function PassphraseGenerator({
     });
   };
 
-  // Derive strength and entropy once
   const outputInfo = useMemo(() => {
     const strength = calculatePassphraseStrength(settings);
 
@@ -72,107 +71,92 @@ export function PassphraseGenerator({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-3">
-          <div className="border-2 border-foreground bg-accent p-1.5">
-            <BookOpen className="h-4 w-4 text-accent-foreground" />
-          </div>
+        <CardTitle className="flex items-center gap-2">
+          <BookOpen className="h-4 w-4 text-accent" />
           Passphrase Generator
         </CardTitle>
-        <CardDescription className="text-xs leading-relaxed sm:text-sm">
-          Memorable passphrases from random words. Easy to type, hard to crack.
-        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-5 sm:space-y-8">
-        <div className="space-y-5 sm:space-y-6">
-          {/* Word Count */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label className="text-sm font-bold tracking-wider uppercase">Word Count</Label>
-              <Badge variant="outline">{settings.wordCount} words</Badge>
-            </div>
-            <Slider
-              className="w-full"
-              max={8}
-              min={2}
+      <CardContent className="space-y-5 sm:space-y-6">
+        {/* Word Count */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label className="text-sm font-medium">Word Count</Label>
+            <Badge variant="secondary">{settings.wordCount} words</Badge>
+          </div>
+          <Slider
+            className="w-full"
+            max={8}
+            min={2}
+            onValueChange={(value) => onSettingsChange({ ...settings, wordCount: value[0] })}
+            step={1}
+            value={[settings.wordCount]}
+          />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>2</span>
+            <span>8</span>
+          </div>
+        </div>
+
+        {/* Separator and Case */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label className="text-sm font-medium" htmlFor="separator">
+              Separator
+            </Label>
+            <Select
+              onValueChange={(value) => onSettingsChange({ ...settings, separator: value })}
+              value={settings.separator}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="-">Hyphen (-)</SelectItem>
+                <SelectItem value="_">Underscore (_)</SelectItem>
+                <SelectItem value=" ">Space ( )</SelectItem>
+                <SelectItem value=".">Period (.)</SelectItem>
+                <SelectItem value="none">None</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-sm font-medium" htmlFor="word-case">
+              Word Case
+            </Label>
+            <Select
               onValueChange={(value) =>
                 onSettingsChange({
                   ...settings,
-                  wordCount: value[0],
+                  wordCase: value as PassphraseSettings["wordCase"],
                 })
               }
-              step={1}
-              value={[settings.wordCount]}
-            />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>2</span>
-              <span>8</span>
-            </div>
+              value={settings.wordCase}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="lowercase">lowercase</SelectItem>
+                <SelectItem value="uppercase">UPPERCASE</SelectItem>
+                <SelectItem value="capitalize">Capitalize</SelectItem>
+                <SelectItem value="mixed">MiXeD cAsE</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+        </div>
 
-          {/* Separator and Case Options */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label className="text-sm font-bold tracking-wider uppercase" htmlFor="separator">
-                Separator
-              </Label>
-              <Select
-                onValueChange={(value) =>
-                  onSettingsChange({
-                    ...settings,
-                    separator: value,
-                  })
-                }
-                value={settings.separator}
-              >
-                <SelectTrigger className="w-full bg-card">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="-">Hyphen (-)</SelectItem>
-                  <SelectItem value="_">Underscore (_)</SelectItem>
-                  <SelectItem value=" ">Space ( )</SelectItem>
-                  <SelectItem value=".">Period (.)</SelectItem>
-                  <SelectItem value="none">None</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-bold tracking-wider uppercase" htmlFor="word-case">
-                Word Case
-              </Label>
-              <Select
-                onValueChange={(value) =>
-                  onSettingsChange({
-                    ...settings,
-                    wordCase: value as PassphraseSettings["wordCase"],
-                  })
-                }
-                value={settings.wordCase}
-              >
-                <SelectTrigger className="w-full bg-card">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="lowercase">lowercase</SelectItem>
-                  <SelectItem value="uppercase">UPPERCASE</SelectItem>
-                  <SelectItem value="capitalize">Capitalize</SelectItem>
-                  <SelectItem value="mixed">MiXeD cAsE</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Additional Options */}
-          <Collapsible>
-            <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
-              <span className="text-sm font-bold tracking-wider uppercase">Additional Options</span>
-              <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="mt-0 space-y-3 border-2 border-t-0 border-foreground bg-secondary/50 p-4">
-              <div className="flex items-center justify-between border-2 border-foreground p-3">
+        {/* Additional Options */}
+        <Collapsible>
+          <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg bg-muted/50 px-4 py-3 text-left text-sm font-medium transition-colors hover:bg-muted">
+            <span>Additional Options</span>
+            <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 [[data-state=open]_&]:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="overflow-hidden">
+            <div className="mt-1 space-y-2 rounded-lg border border-border bg-muted/20 p-4">
+              <div className="flex items-center justify-between rounded-lg border border-border bg-background/60 px-3 py-2.5">
                 <Label className="flex flex-col pr-2" htmlFor="include-numbers">
-                  <span className="text-sm font-bold">Add Numbers</span>
+                  <span className="text-sm font-medium">Add Numbers</span>
                   <span className="text-xs text-muted-foreground">
                     Include digits in the passphrase
                   </span>
@@ -181,17 +165,14 @@ export function PassphraseGenerator({
                   checked={settings.includeNumbers}
                   id="include-numbers"
                   onCheckedChange={(checked) =>
-                    onSettingsChange({
-                      ...settings,
-                      includeNumbers: !!checked,
-                    })
+                    onSettingsChange({ ...settings, includeNumbers: !!checked })
                   }
                 />
               </div>
               {settings.includeNumbers ? (
-                <div className="mt-2 ml-0 flex items-center justify-between border-2 border-foreground p-3">
+                <div className="flex items-center justify-between rounded-lg border border-border bg-background/60 px-3 py-2.5">
                   <Label className="flex flex-col pr-2" htmlFor="insert-numbers-randomly">
-                    <span className="text-sm font-bold">Random placement</span>
+                    <span className="text-sm font-medium">Random placement</span>
                     <span className="text-xs text-muted-foreground">
                       Distribute numbers within the passphrase
                     </span>
@@ -200,98 +181,79 @@ export function PassphraseGenerator({
                     checked={settings.insertNumbersRandomly}
                     id="insert-numbers-randomly"
                     onCheckedChange={(checked) =>
-                      onSettingsChange({
-                        ...settings,
-                        insertNumbersRandomly: !!checked,
-                      })
+                      onSettingsChange({ ...settings, insertNumbersRandomly: !!checked })
                     }
                   />
                 </div>
               ) : null}
-            </CollapsibleContent>
-          </Collapsible>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
 
-          {/* Generate Button */}
-          <Button className="w-full" data-generate-button onClick={handleGenerate} size="lg">
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Generate Passphrase
-          </Button>
+        {/* Generate Button */}
+        <Button className="w-full" data-generate-button onClick={handleGenerate} size="lg">
+          <RefreshCw />
+          Generate Passphrase
+        </Button>
 
-          {/* Generated Passphrase Display */}
-          {generatedPassphrase ? (
-            <div className="shadow-brutal-accent space-y-4 border-2 border-accent bg-accent/5 p-4 sm:p-5">
-              <div className="flex items-center justify-between">
-                <Label className="font-display text-sm font-bold tracking-tight uppercase">
-                  Result
-                </Label>
-                <span
-                  className={`text-xs font-bold tracking-wider uppercase ${getStrengthTextColor(outputInfo.strength.label)}`}
-                >
-                  {outputInfo.strength.label}
-                </span>
+        {/* Result */}
+        {generatedPassphrase ? (
+          <div className="space-y-3 rounded-xl border border-accent/20 bg-accent/5 p-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Result</span>
+              <span
+                className={`text-xs font-semibold ${getStrengthTextColor(outputInfo.strength.label)}`}
+              >
+                {outputInfo.strength.label}
+              </span>
+            </div>
+
+            <div className="h-1 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${getStrengthColor(outputInfo.strength.label)}`}
+                style={{ width: `${outputInfo.strength.score * 10}%` }}
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Input
+                className="flex-1 font-mono text-sm font-medium"
+                readOnly
+                type={showPassword ? "text" : "password"}
+                value={generatedPassphrase}
+              />
+              <Button
+                onClick={() => setShowPassword((prev) => !prev)}
+                size="icon"
+                variant="outline"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+              <Button
+                onClick={() => onCopyToClipboard(generatedPassphrase)}
+                size="icon"
+                variant="outline"
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              {getStrengthDescription(outputInfo.strength.label, "passphrase")}
+            </p>
+
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="rounded-lg bg-background/80 px-3 py-2">
+                <div className="mb-0.5 text-[10px] text-muted-foreground">Entropy</div>
+                <div className="font-mono font-medium">{Math.round(outputInfo.entropy)} bits</div>
               </div>
-
-              {/* Strength Bar */}
-              <div className="h-2 w-full border border-foreground/20 bg-muted">
-                <div
-                  className={`h-full transition-all duration-300 ${getStrengthColor(outputInfo.strength.label)}`}
-                  style={{
-                    width: `${outputInfo.strength.score * 10}%`,
-                  }}
-                />
-              </div>
-
-              {/* Passphrase Display */}
-              <div className="flex items-center gap-2">
-                <div className="relative flex-1">
-                  <Input
-                    className="pr-2 font-mono text-sm font-bold"
-                    readOnly
-                    type={showPassword ? "text" : "password"}
-                    value={generatedPassphrase}
-                  />
-                </div>
-                <Button
-                  className="shrink-0"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  size="icon"
-                  variant="outline"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </Button>
-                <Button
-                  className="shrink-0"
-                  onClick={() => onCopyToClipboard(generatedPassphrase)}
-                  size="icon"
-                  variant="outline"
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </div>
-
-              {/* Stats */}
-              <div className="flex items-center gap-4 border-t border-foreground/10 pt-3">
-                <p className="text-xs text-muted-foreground">
-                  {getStrengthDescription(outputInfo.strength.label, "passphrase")}
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="border border-foreground/20 bg-background p-2">
-                  <div className="text-[10px] tracking-wider text-muted-foreground uppercase">
-                    Entropy
-                  </div>
-                  <div className="font-bold">{Math.round(outputInfo.entropy)} bits</div>
-                </div>
-                <div className="border border-foreground/20 bg-background p-2">
-                  <div className="text-[10px] tracking-wider text-muted-foreground uppercase">
-                    Time to crack
-                  </div>
-                  <div className="font-bold">{outputInfo.timeToCrack}</div>
-                </div>
+              <div className="rounded-lg bg-background/80 px-3 py-2">
+                <div className="mb-0.5 text-[10px] text-muted-foreground">Time to crack</div>
+                <div className="font-mono font-medium">{outputInfo.timeToCrack}</div>
               </div>
             </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );

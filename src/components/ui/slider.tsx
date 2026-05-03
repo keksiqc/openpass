@@ -46,22 +46,22 @@ function Slider({
     >
       <SliderPrimitive.Track
         className={cn(
-          "relative grow overflow-hidden border-2 border-foreground bg-muted data-[orientation=horizontal]:h-3 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-3",
+          "relative grow overflow-hidden rounded-full bg-muted data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5",
         )}
         data-slot="slider-track"
       >
         <SliderPrimitive.Range
           className={cn(
-            "absolute bg-accent data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full",
+            "absolute rounded-full bg-accent data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full",
           )}
           data-slot="slider-range"
         />
       </SliderPrimitive.Track>
-      {_values.map((val) => (
+      {_values.map((_val, index) => (
         <SliderPrimitive.Thumb
-          className="shadow-brutal-sm block size-5 shrink-0 cursor-grab border-2 border-foreground bg-background ring-accent/50 transition-shadow hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden active:cursor-grabbing disabled:pointer-events-none disabled:opacity-50"
+          className="block size-4 shrink-0 cursor-grab rounded-full border border-border bg-background shadow-sm ring-accent/30 transition-shadow hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden active:cursor-grabbing disabled:pointer-events-none disabled:opacity-50"
           data-slot="slider-thumb"
-          key={val}
+          key={index}
         />
       ))}
     </SliderPrimitive.Root>

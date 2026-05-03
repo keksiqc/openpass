@@ -5,25 +5,23 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap font-bold text-sm uppercase tracking-wider outline-none transition-all focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default:
-          "border-2 border-foreground bg-primary text-primary-foreground shadow-brutal-sm hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none",
-        destructive:
-          "border-2 border-destructive bg-destructive text-white shadow-brutal-sm hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80",
+        destructive: "bg-destructive text-white hover:bg-destructive/90 active:bg-destructive/80",
         outline:
-          "border-2 border-foreground bg-background shadow-brutal-sm hover:-translate-y-0.5 hover:bg-accent hover:text-accent-foreground active:translate-y-0.5 active:shadow-none",
+          "border border-input bg-background hover:bg-muted hover:text-foreground active:bg-muted/80",
         secondary:
-          "border-2 border-foreground bg-secondary text-secondary-foreground shadow-brutal-sm hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 active:bg-secondary/60",
+        ghost: "hover:bg-muted hover:text-foreground active:bg-muted/80",
+        link: "text-accent underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-11 px-6 has-[>svg]:px-4",
+        sm: "h-8 gap-1.5 px-3 text-xs has-[>svg]:px-2.5",
+        lg: "h-10 px-6 has-[>svg]:px-4",
         icon: "size-9",
       },
     },

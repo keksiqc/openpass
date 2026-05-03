@@ -53,7 +53,7 @@ export function SettingsDialog({
   const handleSave = () => {
     onSettingsChange(localSettings);
     setIsOpen(false);
-    toast.success("Settings saved successfully!");
+    toast.success("Settings saved");
   };
 
   const handleCancel = () => {
@@ -63,11 +63,8 @@ export function SettingsDialog({
 
   const generateNewKey = () => {
     const newKey = generateKey();
-    setLocalSettings((prev) => ({
-      ...prev,
-      encryptionKey: newKey,
-    }));
-    toast.success("New encryption key generated!");
+    setLocalSettings((prev) => ({ ...prev, encryptionKey: newKey }));
+    toast.success("New encryption key generated");
   };
 
   const handleClearAllData = () => {
@@ -75,7 +72,7 @@ export function SettingsDialog({
       onClearAllData();
       setShowClearDataConfirm(false);
       setIsOpen(false);
-      toast.success("All data cleared successfully!");
+      toast.success("All data cleared");
     } else {
       setShowClearDataConfirm(true);
     }
@@ -86,7 +83,7 @@ export function SettingsDialog({
       onResetToDefaults();
       setShowResetConfirm(false);
       setIsOpen(false);
-      toast.success("All settings reset to defaults!");
+      toast.success("Settings reset to defaults");
     } else {
       setShowResetConfirm(true);
     }
@@ -95,7 +92,7 @@ export function SettingsDialog({
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2" size="icon" variant="outline">
+        <Button size="icon" variant="outline">
           <SettingsIcon className="h-4 w-4" />
           <span className="sr-only">Settings</span>
         </Button>
@@ -103,64 +100,59 @@ export function SettingsDialog({
       <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <div className="border-2 border-foreground bg-accent p-1.5">
-              <SettingsIcon className="h-4 w-4 text-accent-foreground" />
-            </div>
+            <SettingsIcon className="h-4 w-4 text-accent" />
             Application Settings
           </DialogTitle>
           <DialogDescription>Configure privacy and security options for OpenPass</DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2">
           {/* Left Column */}
-          <div className="space-y-4 sm:space-y-6">
-            {/* Privacy Settings */}
-            <Card className="border-2 shadow-none">
+          <div className="space-y-4">
+            {/* Privacy */}
+            <Card className="shadow-none">
               <CardHeader>
-                <CardTitle className="text-sm">Privacy Settings</CardTitle>
-                <CardDescription className="text-sm">
+                <CardTitle className="text-sm">Privacy</CardTitle>
+                <CardDescription className="text-xs">
                   Control what data is stored locally
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm font-bold" htmlFor="historyEnabled">
-                      Enable Password History
+                    <Label className="text-sm font-medium" htmlFor="historyEnabled">
+                      Password History
                     </Label>
-                    <p className="mt-1 max-w-xs text-xs text-muted-foreground">
-                      Store generated passwords in local history for easy access
+                    <p className="mt-0.5 max-w-xs text-xs text-muted-foreground">
+                      Store generated passwords locally for quick access
                     </p>
                   </div>
                   <Switch
                     checked={localSettings.historyEnabled}
                     id="historyEnabled"
                     onCheckedChange={(checked) =>
-                      setLocalSettings((prev) => ({
-                        ...prev,
-                        historyEnabled: checked as boolean,
-                      }))
+                      setLocalSettings((prev) => ({ ...prev, historyEnabled: checked as boolean }))
                     }
                   />
                 </div>
               </CardContent>
             </Card>
 
-            {/* Security Settings */}
-            <Card className="border-2 shadow-none">
+            {/* Security */}
+            <Card className="shadow-none">
               <CardHeader>
-                <CardTitle className="text-sm">Security Settings</CardTitle>
-                <CardDescription className="text-sm">
+                <CardTitle className="text-sm">Security</CardTitle>
+                <CardDescription className="text-xs">
                   Encrypt your locally stored data
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label className="text-sm font-bold" htmlFor="encryptionEnabled">
-                      Enable Local Data Encryption
+                    <Label className="text-sm font-medium" htmlFor="encryptionEnabled">
+                      Local Encryption
                     </Label>
-                    <p className="mt-1 max-w-xs text-xs text-muted-foreground">
+                    <p className="mt-0.5 max-w-xs text-xs text-muted-foreground">
                       Encrypt profiles and history with a custom key
                     </p>
                   </div>
@@ -176,14 +168,14 @@ export function SettingsDialog({
                   />
                 </div>
                 {localSettings.encryptionEnabled && (
-                  <div className="space-y-3 pl-2">
-                    <Label className="text-sm font-bold" htmlFor="encryptionKey">
+                  <div className="space-y-2.5">
+                    <Label className="text-sm font-medium" htmlFor="encryptionKey">
                       Encryption Key
                     </Label>
                     <div className="flex gap-2">
                       <div className="relative flex-1">
                         <Input
-                          className="pr-10"
+                          className="pr-10 font-mono text-sm"
                           id="encryptionKey"
                           onChange={(e) =>
                             setLocalSettings((prev) => ({
@@ -191,7 +183,7 @@ export function SettingsDialog({
                               encryptionKey: e.target.value,
                             }))
                           }
-                          placeholder="Enter encryption key..."
+                          placeholder="Enter encryption key…"
                           type={showEncryptionKey ? "text" : "password"}
                           value={localSettings.encryptionKey}
                         />
@@ -210,18 +202,18 @@ export function SettingsDialog({
                         </Button>
                       </div>
                       <Button
-                        className="gap-2"
+                        className="gap-1.5"
                         onClick={generateNewKey}
                         size="sm"
                         type="button"
                         variant="outline"
                       >
-                        <RefreshCw className="h-4 w-4" />
+                        <RefreshCw className="h-3.5 w-3.5" />
                         Generate
                       </Button>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Keep this key safe! You'll need it to decrypt your data.
+                      Keep this key safe — you'll need it to decrypt your data.
                     </p>
                   </div>
                 )}
@@ -230,19 +222,19 @@ export function SettingsDialog({
           </div>
 
           {/* Right Column */}
-          <div className="space-y-4 sm:space-y-6">
+          <div className="space-y-4">
             {/* Data Management */}
-            <Card className="border-2 shadow-none">
+            <Card className="shadow-none">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-sm">
+                <CardTitle className="flex items-center gap-1.5 text-sm">
                   <Download className="h-4 w-4" />
                   Data Management
                 </CardTitle>
-                <CardDescription className="text-sm">
-                  Export and import your profiles and history
+                <CardDescription className="text-xs">
+                  Export and import profiles and history
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-2.5">
                 <Button className="w-full gap-2" onClick={onExportData} variant="outline">
                   <Download className="h-4 w-4" />
                   Export All Data
@@ -263,55 +255,50 @@ export function SettingsDialog({
             </Card>
 
             {/* Danger Zone */}
-            <Card className="border-2 border-destructive/50 shadow-none">
+            <Card className="border-destructive/30 shadow-none">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-sm text-destructive">
+                <CardTitle className="flex items-center gap-1.5 text-sm text-destructive">
                   <AlertTriangle className="h-4 w-4" />
                   Danger Zone
                 </CardTitle>
-                <CardDescription className="text-sm">
-                  Permanently delete all stored data
+                <CardDescription className="text-xs">
+                  Permanently delete stored data
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <Button
-                    className="gap-2"
-                    onClick={handleClearAllData}
-                    variant={showClearDataConfirm ? "destructive" : "outline"}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    {showClearDataConfirm ? "Confirm: Clear All Data" : "Clear All Data"}
-                  </Button>
-                  {showClearDataConfirm && (
-                    <p className="text-xs text-muted-foreground">
-                      Click again to permanently delete all profiles, history, and settings.
-                    </p>
-                  )}
-                </div>
-                <div className="mt-4 space-y-3">
-                  <Button
-                    className="gap-2"
-                    onClick={handleResetToDefaults}
-                    variant={showResetConfirm ? "destructive" : "outline"}
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    {showResetConfirm ? "Confirm: Reset All Settings" : "Reset All Settings"}
-                  </Button>
-                  {showResetConfirm && (
-                    <p className="text-xs text-muted-foreground">
-                      Click again to reset all application settings to their default values. This
-                      will also clear all profiles and history.
-                    </p>
-                  )}
-                </div>
+              <CardContent className="space-y-2.5">
+                <Button
+                  className="gap-2"
+                  onClick={handleClearAllData}
+                  variant={showClearDataConfirm ? "destructive" : "outline"}
+                >
+                  <Trash2 className="h-4 w-4" />
+                  {showClearDataConfirm ? "Confirm: Clear All Data" : "Clear All Data"}
+                </Button>
+                {showClearDataConfirm && (
+                  <p className="text-xs text-muted-foreground">
+                    Click again to permanently delete all profiles, history, and settings.
+                  </p>
+                )}
+                <Button
+                  className="gap-2"
+                  onClick={handleResetToDefaults}
+                  variant={showResetConfirm ? "destructive" : "outline"}
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  {showResetConfirm ? "Confirm: Reset Settings" : "Reset All Settings"}
+                </Button>
+                {showResetConfirm && (
+                  <p className="text-xs text-muted-foreground">
+                    Click again to reset all settings. This will clear profiles and history too.
+                  </p>
+                )}
               </CardContent>
             </Card>
           </div>
         </div>
 
-        {/* Dialog Actions */}
-        <div className="flex justify-end gap-2 border-t-2 border-foreground/20 pt-3 sm:gap-3 sm:pt-4">
+        {/* Actions */}
+        <div className="flex justify-end gap-2 border-t border-border pt-4">
           <Button onClick={handleCancel} variant="outline">
             Cancel
           </Button>
