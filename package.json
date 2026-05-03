@@ -7,6 +7,8 @@
     "dev": "vp dev",
     "build": "tsc -b && vp build",
     "preview": "vp preview",
+    "check": "vp check",
+    "check:fix": "vp check --fix",
     "up": "taze major -I",
     "prepare": "vp config"
   },
