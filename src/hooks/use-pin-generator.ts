@@ -7,12 +7,9 @@ export const usePinGenerator = () => {
   const [pin, setPin] = useState("");
 
   const generatePin = useCallback(
-    (
-      settings: PinSettings,
-      onSuccess: (pin: string, historyEntry: PasswordHistory) => void
-    ) => {
+    (settings: PinSettings, onSuccess: (pin: string, historyEntry: PasswordHistory) => void) => {
       const newPin = Array.from({ length: settings.length }, () =>
-        getSecureRandom(10).toString()
+        getSecureRandom(10).toString(),
       ).join("");
       setPin(newPin);
 
@@ -27,7 +24,7 @@ export const usePinGenerator = () => {
       onSuccess(newPin, historyEntry);
       toast.success("Secure PIN generated!");
     },
-    []
+    [],
   );
 
   return { pin, generatePin };

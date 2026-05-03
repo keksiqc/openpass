@@ -5,10 +5,7 @@ import { getSecureRandom } from "../utils/crypto";
 import { calculateStrength } from "../utils/password-strength";
 import { COMMON_WORDS } from "../utils/words";
 
-function applyWordCase(
-  word: string,
-  wordCase: PassphraseSettings["wordCase"]
-): string {
+function applyWordCase(word: string, wordCase: PassphraseSettings["wordCase"]): string {
   switch (wordCase) {
     case "uppercase":
       return word.toUpperCase();
@@ -21,10 +18,7 @@ function applyWordCase(
   }
 }
 
-function generateWords(
-  settings: PassphraseSettings,
-  wordSource: string[]
-): string[] {
+function generateWords(settings: PassphraseSettings, wordSource: string[]): string[] {
   const words: string[] = [];
   for (let i = 0; i < settings.wordCount; i++) {
     const word = wordSource[getSecureRandom(wordSource.length)];
@@ -69,7 +63,7 @@ export const usePassphraseGenerator = () => {
   const generatePassphrase = useCallback(
     (
       settings: PassphraseSettings,
-      onSuccess: (passphrase: string, historyEntry: PasswordHistory) => void
+      onSuccess: (passphrase: string, historyEntry: PasswordHistory) => void,
     ) => {
       try {
         const wordSource =
@@ -105,13 +99,13 @@ export const usePassphraseGenerator = () => {
         onSuccess(passphrase, historyEntry);
 
         toast.success(
-          `${strength.label} passphrase generated! (${Math.round(entropy)} bits entropy)`
+          `${strength.label} passphrase generated! (${Math.round(entropy)} bits entropy)`,
         );
       } catch {
         toast.error("Failed to generate passphrase");
       }
     },
-    []
+    [],
   );
 
   return {

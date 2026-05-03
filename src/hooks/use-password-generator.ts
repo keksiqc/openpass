@@ -3,10 +3,7 @@ import { toast } from "sonner";
 import { CHARACTER_SETS, GENERATION_LIMITS } from "../constants/generator";
 import type { PasswordHistory, PasswordSettings } from "../types";
 import { getSecureRandom } from "../utils/crypto";
-import {
-  calculateEntropy,
-  calculateStrength,
-} from "../utils/password-strength";
+import { calculateEntropy, calculateStrength } from "../utils/password-strength";
 
 const UPPERCASE_REGEX = /[A-Z]/;
 const LOWERCASE_REGEX = /[a-z]/;
@@ -40,7 +37,7 @@ function buildCharacterSet(settings: PasswordSettings): string {
   if (settings.excludeAmbiguous) {
     const ambiguousRegex = new RegExp(
       `[${CHARACTER_SETS.AMBIGUOUS.replace(ESCAPE_REGEX, "\\$&")}]`,
-      "g"
+      "g",
     );
     charset = charset.replace(ambiguousRegex, "");
   }
@@ -61,10 +58,7 @@ function buildSymbolCharset(settings: PasswordSettings): string {
   return raw.replace(ESCAPE_REGEX, "\\$&");
 }
 
-function meetsMinimumCounts(
-  password: string,
-  settings: PasswordSettings
-): boolean {
+function meetsMinimumCounts(password: string, settings: PasswordSettings): boolean {
   if (settings.minNumbers) {
     const digitCount = (password.match(/\d/g) || []).length;
     if (digitCount < (settings.minNumbers || 0)) {
@@ -75,7 +69,7 @@ function meetsMinimumCounts(
     const symbolCharset = buildSymbolCharset(settings);
     const symbolRegex = new RegExp(
       `[${settings.includeSymbols ? "!@#$%^&*()_+-=[]{}|;:,.<>?" : ""}${settings.customCharacters?.replace(ESCAPE_REGEX, "\\$&") || ""}]`,
-      "g"
+      "g",
     );
     const symbolCount = (password.match(symbolRegex) || []).length;
     if (symbolCount < (settings.minSymbols || 0) && symbolCharset.length > 0) {
@@ -85,10 +79,7 @@ function meetsMinimumCounts(
   return true;
 }
 
-function meetsCharacterTypeRequirements(
-  password: string,
-  settings: PasswordSettings
-): boolean {
+function meetsCharacterTypeRequirements(password: string, settings: PasswordSettings): boolean {
   if (settings.includeUppercase && !UPPERCASE_REGEX.test(password)) {
     return false;
   }
@@ -115,7 +106,7 @@ export const usePasswordGenerator = () => {
   const generatePassword = useCallback(
     (
       settings: PasswordSettings,
-      onSuccess: (password: string, historyEntry: PasswordHistory) => void
+      onSuccess: (password: string, historyEntry: PasswordHistory) => void,
     ) => {
       try {
         const charset = buildCharacterSet(settings);
@@ -127,8 +118,7 @@ export const usePasswordGenerator = () => {
         let password = "";
         const maxAttempts = GENERATION_LIMITS.MAX_ATTEMPTS;
         let meetsCriteria = false;
-        const maxRetryForEnforcement =
-          GENERATION_LIMITS.MAX_ENFORCEMENT_RETRIES;
+        const maxRetryForEnforcement = GENERATION_LIMITS.MAX_ENFORCEMENT_RETRIES;
         let enforcementRetries = 0;
 
         do {
@@ -136,10 +126,7 @@ export const usePasswordGenerator = () => {
           do {
             password = generateRandomString(settings.length, charset);
             generationAttempts++;
-          } while (
-            generationAttempts < maxAttempts &&
-            !meetsMinimumCounts(password, settings)
-          );
+          } while (generationAttempts < maxAttempts && !meetsMinimumCounts(password, settings));
 
           if (settings.requireEachCharacterType) {
             meetsCriteria = meetsCharacterTypeRequirements(password, settings);
@@ -156,7 +143,7 @@ export const usePasswordGenerator = () => {
         if (settings.requireEachCharacterType && !meetsCriteria) {
           toast.warning(
             "Could not enforce all character types. Try increasing length or reducing restrictions.",
-            { duration: 5000 }
+            { duration: 5000 },
           );
         }
 
@@ -174,13 +161,13 @@ export const usePasswordGenerator = () => {
         onSuccess(password, historyEntry);
 
         toast.success(
-          `${strength.label} password generated! (${Math.round(entropy)} bits entropy)`
+          `${strength.label} password generated! (${Math.round(entropy)} bits entropy)`,
         );
       } catch {
         toast.error("Failed to generate password");
       }
     },
-    []
+    [],
   );
 
   return {

@@ -1,27 +1,8 @@
-import {
-  ChevronDown,
-  Code,
-  Copy,
-  Eye,
-  EyeOff,
-  RefreshCw,
-  Settings,
-  Type,
-} from "lucide-react";
+import { ChevronDown, Code, Copy, Eye, EyeOff, RefreshCw, Settings, Type } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -33,16 +14,8 @@ import {
 } from "@/components/ui/select";
 import { READABLE_PRESETS } from "../../constants/generator";
 import { useFormatGenerator } from "../../hooks/use-format-generator";
-import type {
-  FormatMode,
-  FormatSettings,
-  PasswordHistory,
-  ReadableStrength,
-} from "../../types";
-import {
-  calculateEntropy,
-  estimateTimeToCrack,
-} from "../../utils/password-strength";
+import type { FormatMode, FormatSettings, PasswordHistory, ReadableStrength } from "../../types";
+import { calculateEntropy, estimateTimeToCrack } from "../../utils/password-strength";
 import {
   createStrengthObject,
   getStrengthColor,
@@ -79,13 +52,12 @@ export function FormatGenerator({
 }: FormatGeneratorProps) {
   const [generatedFormat, setGeneratedFormat] = useState("");
   const [showPassword, setShowPassword] = useState(true);
-  const { generateFormatPassword, getCharacterSetFromFormat } =
-    useFormatGenerator();
+  const { generateFormatPassword, getCharacterSetFromFormat } = useFormatGenerator();
 
   const activePattern =
     settings.mode === "readable"
-      ? (READABLE_PRESETS.find((p) => p.strength === settings.readableStrength)
-          ?.pattern ?? settings.format)
+      ? (READABLE_PRESETS.find((p) => p.strength === settings.readableStrength)?.pattern ??
+        settings.format)
       : settings.format;
 
   const handleGenerate = () => {
@@ -98,9 +70,7 @@ export function FormatGenerator({
 
   const handleModeChange = (mode: FormatMode) => {
     if (mode === "readable") {
-      const preset = READABLE_PRESETS.find(
-        (p) => p.strength === settings.readableStrength
-      );
+      const preset = READABLE_PRESETS.find((p) => p.strength === settings.readableStrength);
       onSettingsChange({
         ...settings,
         mode,
@@ -151,9 +121,7 @@ export function FormatGenerator({
         <div className="space-y-5 sm:space-y-6">
           {/* Mode Toggle */}
           <div className="space-y-3">
-            <Label className="font-bold text-sm uppercase tracking-wider">
-              Mode
-            </Label>
+            <Label className="font-bold text-sm uppercase tracking-wider">Mode</Label>
             <div className="grid grid-cols-2 gap-0 border-2 border-foreground">
               <button
                 className={`flex items-center justify-center gap-2 border-foreground border-r p-3 font-bold text-sm uppercase tracking-wider transition-colors ${
@@ -185,13 +153,10 @@ export function FormatGenerator({
           {/* Readable Presets */}
           {settings.mode === "readable" ? (
             <div className="space-y-3">
-              <Label className="font-bold text-sm uppercase tracking-wider">
-                Strength Level
-              </Label>
+              <Label className="font-bold text-sm uppercase tracking-wider">Strength Level</Label>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 {READABLE_PRESETS.map((preset) => {
-                  const isActive =
-                    settings.readableStrength === preset.strength;
+                  const isActive = settings.readableStrength === preset.strength;
                   return (
                     <button
                       className={`border-2 p-2.5 text-left transition-all sm:p-3 ${
@@ -226,10 +191,7 @@ export function FormatGenerator({
             <>
               {/* Custom Format Pattern Input */}
               <div className="space-y-3">
-                <Label
-                  className="font-bold text-sm uppercase tracking-wider"
-                  htmlFor="format"
-                >
+                <Label className="font-bold text-sm uppercase tracking-wider" htmlFor="format">
                   Format Pattern
                 </Label>
                 <Input
@@ -246,8 +208,8 @@ export function FormatGenerator({
                 />
                 <div className="space-y-1 text-muted-foreground text-xs">
                   <p>
-                    <strong>Format:</strong> Nu (uppercase), Nl (lowercase), Nd
-                    (digits), N{"{chars}"} (custom)
+                    <strong>Format:</strong> Nu (uppercase), Nl (lowercase), Nd (digits), N
+                    {"{chars}"} (custom)
                   </p>
                   <p>
                     <strong>Example:</strong>{" "}
@@ -296,9 +258,7 @@ export function FormatGenerator({
               {/* Format Guide */}
               <Collapsible>
                 <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
-                  <span className="font-bold text-sm uppercase tracking-wider">
-                    Format Guide
-                  </span>
+                  <span className="font-bold text-sm uppercase tracking-wider">Format Guide</span>
                   <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
@@ -307,17 +267,13 @@ export function FormatGenerator({
                       <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
                         2u
                       </code>
-                      <span className="text-muted-foreground">
-                        2 uppercase letters
-                      </span>
+                      <span className="text-muted-foreground">2 uppercase letters</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
                         4l
                       </code>
-                      <span className="text-muted-foreground">
-                        4 lowercase letters
-                      </span>
+                      <span className="text-muted-foreground">4 lowercase letters</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
@@ -329,9 +285,7 @@ export function FormatGenerator({
                       <code className="border-2 border-foreground bg-background px-2 py-1 font-mono text-xs">
                         2{"{#$%}"}
                       </code>
-                      <span className="text-muted-foreground">
-                        2 from custom set
-                      </span>
+                      <span className="text-muted-foreground">2 from custom set</span>
                     </div>
                   </div>
                   <div className="mt-4 border-2 border-foreground bg-background p-3">
@@ -340,16 +294,14 @@ export function FormatGenerator({
                     </div>
                     <div className="space-y-1 text-xs">
                       <div>
-                        <code className="font-mono">4u4l4d</code> → Strong
-                        alphanumeric (12 chars)
+                        <code className="font-mono">4u4l4d</code> → Strong alphanumeric (12 chars)
                       </div>
                       <div>
-                        <code className="font-mono">2u6l2d2{"{!@#}"}</code> →
-                        Complex mixed (12 chars)
+                        <code className="font-mono">2u6l2d2{"{!@#}"}</code> → Complex mixed (12
+                        chars)
                       </div>
                       <div>
-                        <code className="font-mono">8l4d</code> → Simple
-                        memorable (12 chars)
+                        <code className="font-mono">8l4d</code> → Simple memorable (12 chars)
                       </div>
                     </div>
                   </div>
@@ -359,15 +311,9 @@ export function FormatGenerator({
           )}
 
           {/* Generate Button */}
-          <Button
-            className="w-full"
-            data-generate-button
-            onClick={handleGenerate}
-            size="lg"
-          >
+          <Button className="w-full" data-generate-button onClick={handleGenerate} size="lg">
             <RefreshCw className="mr-2 h-4 w-4" />
-            Generate {settings.mode === "readable" ? "Readable" : "Format"}{" "}
-            Password
+            Generate {settings.mode === "readable" ? "Readable" : "Format"} Password
           </Button>
 
           {/* Generated Format Password Display */}
@@ -410,11 +356,7 @@ export function FormatGenerator({
                   size="icon"
                   variant="outline"
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
                 <Button
                   className="shrink-0"
@@ -437,9 +379,7 @@ export function FormatGenerator({
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
                     Entropy
                   </div>
-                  <div className="font-bold">
-                    {Math.round(outputStrength.entropy)} bits
-                  </div>
+                  <div className="font-bold">{Math.round(outputStrength.entropy)} bits</div>
                 </div>
                 <div className="border border-foreground/20 bg-background p-2">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider">

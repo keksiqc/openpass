@@ -1,7 +1,4 @@
-import {
-  PASSPHRASE_CONSTRAINTS,
-  STRENGTH_THRESHOLDS,
-} from "../constants/generator";
+import { PASSPHRASE_CONSTRAINTS, STRENGTH_THRESHOLDS } from "../constants/generator";
 import type { PasswordStrength } from "../types";
 
 /**
@@ -9,7 +6,7 @@ import type { PasswordStrength } from "../types";
  */
 export function getStrengthDescription(
   strengthLabel: string,
-  type: "password" | "passphrase" | "format" = "password"
+  type: "password" | "passphrase" | "format" = "password",
 ): string {
   const descriptions = {
     password: {
@@ -35,11 +32,7 @@ export function getStrengthDescription(
     },
   };
 
-  return (
-    descriptions[type][
-      strengthLabel as keyof (typeof descriptions)[typeof type]
-    ] || ""
-  );
+  return descriptions[type][strengthLabel as keyof (typeof descriptions)[typeof type]] || "";
 }
 
 /**

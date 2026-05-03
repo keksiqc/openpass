@@ -7,7 +7,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       className={cn(
         "flex flex-col gap-4 border-2 border-foreground bg-card py-4 text-card-foreground shadow-brutal sm:gap-6 sm:py-6",
-        className
+        className,
       )}
       data-slot="card"
       {...props}
@@ -20,7 +20,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       className={cn(
         "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] sm:px-6 [.border-b]:pb-6",
-        className
+        className,
       )}
       data-slot="card-header"
       {...props}
@@ -33,7 +33,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       className={cn(
         "font-display font-extrabold text-lg uppercase leading-none tracking-tight sm:text-xl",
-        className
+        className,
       )}
       data-slot="card-title"
       {...props}
@@ -54,10 +54,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
 function CardAction({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn(
-        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
-        className
-      )}
+      className={cn("col-start-2 row-span-2 row-start-1 self-start justify-self-end", className)}
       data-slot="card-action"
       {...props}
     />
@@ -65,34 +62,17 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      className={cn("px-4 sm:px-6", className)}
-      data-slot="card-content"
-      {...props}
-    />
-  );
+  return <div className={cn("px-4 sm:px-6", className)} data-slot="card-content" {...props} />;
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn(
-        "flex items-center px-4 sm:px-6 [.border-t]:pt-6",
-        className
-      )}
+      className={cn("flex items-center px-4 sm:px-6 [.border-t]:pt-6", className)}
       data-slot="card-footer"
       {...props}
     />
   );
 }
 
-export {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
-};
+export { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent };

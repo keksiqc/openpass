@@ -16,13 +16,7 @@ import {
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,9 +76,7 @@ export function ProfileManager({
   onCancelEdit,
 }: ProfileManagerProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState<ProfileType | "all">(
-    "all"
-  );
+  const [selectedFilter, setSelectedFilter] = useState<ProfileType | "all">("all");
 
   const getTypeIcon = (type: ProfileType) => {
     switch (type) {
@@ -103,11 +95,8 @@ export function ProfileManager({
 
   const filteredProfiles = profiles
     .filter((profile) => {
-      const matchesSearch = profile.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      const matchesFilter =
-        selectedFilter === "all" || profile.type === selectedFilter;
+      const matchesSearch = profile.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesFilter = selectedFilter === "all" || profile.type === selectedFilter;
       return matchesSearch && matchesFilter;
     })
     .sort((a, b) => {
@@ -169,11 +158,7 @@ export function ProfileManager({
               {editingProfileId ? "Update" : "Save Current Settings"}
             </Button>
             {editingProfileId ? (
-              <Button
-                className="h-10 gap-2 text-xs"
-                onClick={onCancelEdit}
-                variant="outline"
-              >
+              <Button className="h-10 gap-2 text-xs" onClick={onCancelEdit} variant="outline">
                 Cancel
               </Button>
             ) : null}
@@ -186,9 +171,7 @@ export function ProfileManager({
             <div className="flex items-center justify-between">
               <Badge variant="secondary">{profiles.length} saved</Badge>
               <Select
-                onValueChange={(value: ProfileType | "all") =>
-                  setSelectedFilter(value)
-                }
+                onValueChange={(value: ProfileType | "all") => setSelectedFilter(value)}
                 value={selectedFilter}
               >
                 <SelectTrigger className="w-[120px]">
@@ -243,9 +226,7 @@ export function ProfileManager({
                             onClick={() => onToggleFavorite(profile.id)}
                             size="sm"
                             title={
-                              profile.isFavorite
-                                ? "Remove from favorites"
-                                : "Add to favorites"
+                              profile.isFavorite ? "Remove from favorites" : "Add to favorites"
                             }
                             variant="ghost"
                           >
@@ -259,31 +240,19 @@ export function ProfileManager({
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button
-                                className="h-7 w-7 p-0"
-                                size="sm"
-                                variant="ghost"
-                              >
+                              <Button className="h-7 w-7 p-0" size="sm" variant="ghost">
                                 <MoreVertical className="h-3.5 w-3.5" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={() => onLoadProfile(profile)}
-                              >
+                              <DropdownMenuItem onClick={() => onLoadProfile(profile)}>
                                 Load Profile
                               </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => onEditProfile(profile)}
-                              >
+                              <DropdownMenuItem onClick={() => onEditProfile(profile)}>
                                 Edit Profile
                               </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => onToggleFavorite(profile.id)}
-                              >
-                                {profile.isFavorite
-                                  ? "Remove from Favorites"
-                                  : "Add to Favorites"}
+                              <DropdownMenuItem onClick={() => onToggleFavorite(profile.id)}>
+                                {profile.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
@@ -304,9 +273,7 @@ export function ProfileManager({
                             title={`Created ${profile.createdAt.toLocaleDateString()}`}
                           >
                             <Plus className="h-2.5 w-2.5" />
-                            <span>
-                              {profile.createdAt.toLocaleDateString()}
-                            </span>
+                            <span>{profile.createdAt.toLocaleDateString()}</span>
                           </div>
                           {profile.lastUsed ? (
                             <div
@@ -314,9 +281,7 @@ export function ProfileManager({
                               title={`Last used ${profile.lastUsed.toLocaleDateString()}`}
                             >
                               <Clock className="h-2.5 w-2.5" />
-                              <span>
-                                {profile.lastUsed.toLocaleDateString()}
-                              </span>
+                              <span>{profile.lastUsed.toLocaleDateString()}</span>
                             </div>
                           ) : null}
                         </div>
@@ -359,10 +324,8 @@ export function ProfileManager({
               Save your current settings as a profile for quick access later
             </p>
             <div className="mx-auto max-w-md border border-foreground/30 bg-secondary/50 p-3 text-[10px] sm:text-xs">
-              <strong className="font-bold uppercase tracking-wider">
-                Tip:
-              </strong>{" "}
-              Profiles let you switch between configurations instantly
+              <strong className="font-bold uppercase tracking-wider">Tip:</strong> Profiles let you
+              switch between configurations instantly
             </div>
           </div>
         )}

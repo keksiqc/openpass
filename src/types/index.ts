@@ -83,11 +83,7 @@ export interface PinProfile extends BaseProfile {
   type: "pin";
 }
 
-export type Profile =
-  | PasswordProfile
-  | PassphraseProfile
-  | FormatProfile
-  | PinProfile;
+export type Profile = PasswordProfile | PassphraseProfile | FormatProfile | PinProfile;
 
 // PinSettings defined above with other base settings types
 

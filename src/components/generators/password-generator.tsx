@@ -2,18 +2,8 @@ import { ChevronDown, Copy, Eye, EyeOff, Key, RefreshCw } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -35,10 +25,7 @@ interface PasswordGeneratorProps {
   isGenerating: boolean;
   onCopyToClipboard: (text: string) => void;
   onGeneratingChange: (generating: boolean) => void;
-  onPasswordGenerated: (
-    password: string,
-    historyEntry: PasswordHistory
-  ) => void;
+  onPasswordGenerated: (password: string, historyEntry: PasswordHistory) => void;
   onSettingsChange: (settings: PasswordSettings) => void;
   settings: PasswordSettings;
 }
@@ -94,9 +81,7 @@ export function PasswordGenerator({
           {/* Password Length */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="font-bold text-sm uppercase tracking-wider">
-                Length
-              </Label>
+              <Label className="font-bold text-sm uppercase tracking-wider">Length</Label>
               <Badge variant="outline">{settings.length} chars</Badge>
             </div>
             <Slider
@@ -120,18 +105,12 @@ export function PasswordGenerator({
 
           {/* Character Types */}
           <div className="space-y-3">
-            <Label className="font-bold text-sm uppercase tracking-wider">
-              Character Types
-            </Label>
+            <Label className="font-bold text-sm uppercase tracking-wider">Character Types</Label>
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
               <div className="flex items-center justify-between border-2 border-foreground p-2.5 sm:p-3">
                 <Label className="flex flex-col pr-2" htmlFor="uppercase">
-                  <span className="font-bold text-xs sm:text-sm">
-                    Uppercase
-                  </span>
-                  <span className="font-mono text-muted-foreground text-xs">
-                    A-Z
-                  </span>
+                  <span className="font-bold text-xs sm:text-sm">Uppercase</span>
+                  <span className="font-mono text-muted-foreground text-xs">A-Z</span>
                 </Label>
                 <Switch
                   checked={settings.includeUppercase}
@@ -147,12 +126,8 @@ export function PasswordGenerator({
 
               <div className="flex items-center justify-between border-2 border-foreground p-2.5 sm:p-3">
                 <Label className="flex flex-col pr-2" htmlFor="lowercase">
-                  <span className="font-bold text-xs sm:text-sm">
-                    Lowercase
-                  </span>
-                  <span className="font-mono text-muted-foreground text-xs">
-                    a-z
-                  </span>
+                  <span className="font-bold text-xs sm:text-sm">Lowercase</span>
+                  <span className="font-mono text-muted-foreground text-xs">a-z</span>
                 </Label>
                 <Switch
                   checked={settings.includeLowercase}
@@ -169,9 +144,7 @@ export function PasswordGenerator({
               <div className="flex items-center justify-between border-2 border-foreground p-2.5 sm:p-3">
                 <Label className="flex flex-col pr-2" htmlFor="numbers">
                   <span className="font-bold text-xs sm:text-sm">Numbers</span>
-                  <span className="font-mono text-muted-foreground text-xs">
-                    0-9
-                  </span>
+                  <span className="font-mono text-muted-foreground text-xs">0-9</span>
                 </Label>
                 <Switch
                   checked={settings.includeNumbers}
@@ -188,9 +161,7 @@ export function PasswordGenerator({
               <div className="flex items-center justify-between border-2 border-foreground p-2.5 sm:p-3">
                 <Label className="flex flex-col pr-2" htmlFor="symbols">
                   <span className="font-bold text-xs sm:text-sm">Symbols</span>
-                  <span className="font-mono text-muted-foreground text-xs">
-                    !@#$%
-                  </span>
+                  <span className="font-mono text-muted-foreground text-xs">!@#$%</span>
                 </Label>
                 <Switch
                   checked={settings.includeSymbols}
@@ -209,9 +180,7 @@ export function PasswordGenerator({
           {/* Advanced Options */}
           <Collapsible>
             <CollapsibleTrigger className="flex w-full items-center justify-between border-2 border-foreground bg-secondary p-3 text-left transition-colors hover:bg-accent hover:text-accent-foreground">
-              <span className="font-bold text-sm uppercase tracking-wider">
-                Advanced Options
-              </span>
+              <span className="font-bold text-sm uppercase tracking-wider">Advanced Options</span>
               <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-0 space-y-3 border-2 border-foreground border-t-0 bg-secondary/50 p-4">
@@ -248,10 +217,7 @@ export function PasswordGenerator({
                       })
                     }
                   />
-                  <Label
-                    className="cursor-pointer text-xs"
-                    htmlFor="exclude-similar"
-                  >
+                  <Label className="cursor-pointer text-xs" htmlFor="exclude-similar">
                     Exclude similar (0,O,1,l,I)
                   </Label>
                 </div>
@@ -267,10 +233,7 @@ export function PasswordGenerator({
                       })
                     }
                   />
-                  <Label
-                    className="cursor-pointer text-xs"
-                    htmlFor="exclude-ambiguous"
-                  >
+                  <Label className="cursor-pointer text-xs" htmlFor="exclude-ambiguous">
                     Exclude ambiguous symbols
                   </Label>
                 </div>
@@ -287,10 +250,7 @@ export function PasswordGenerator({
                     })
                   }
                 />
-                <Label
-                  className="cursor-pointer text-xs"
-                  htmlFor="require-each-type"
-                >
+                <Label className="cursor-pointer text-xs" htmlFor="require-each-type">
                   Enforce each selected character type
                 </Label>
               </div>
@@ -306,9 +266,7 @@ export function PasswordGenerator({
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label className="text-xs">Min Numbers</Label>
-                        <Badge variant="outline">
-                          {settings.minNumbers || 1}
-                        </Badge>
+                        <Badge variant="outline">{settings.minNumbers || 1}</Badge>
                       </div>
                       <Slider
                         className="w-full"
@@ -330,9 +288,7 @@ export function PasswordGenerator({
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label className="text-xs">Min Symbols</Label>
-                        <Badge variant="outline">
-                          {settings.minSymbols || 1}
-                        </Badge>
+                        <Badge variant="outline">{settings.minSymbols || 1}</Badge>
                       </div>
                       <Slider
                         className="w-full"
@@ -417,11 +373,7 @@ export function PasswordGenerator({
                   size="icon"
                   variant="outline"
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
                 <Button
                   className="shrink-0"
@@ -444,9 +396,7 @@ export function PasswordGenerator({
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
                     Entropy
                   </div>
-                  <div className="font-bold">
-                    {Math.round(outputStrength.entropy)} bits
-                  </div>
+                  <div className="font-bold">{Math.round(outputStrength.entropy)} bits</div>
                 </div>
                 <div className="border border-foreground/20 bg-background p-2">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider">

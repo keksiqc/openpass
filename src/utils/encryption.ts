@@ -31,7 +31,7 @@ export function decrypt(encryptedText: string, key: string): string {
     const encryptedBytes = new Uint8Array(
       atob(encryptedText)
         .split("")
-        .map((char) => char.charCodeAt(0))
+        .map((char) => char.charCodeAt(0)),
     );
     const decrypted = new Uint8Array(encryptedBytes.length);
 
@@ -48,8 +48,7 @@ export function decrypt(encryptedText: string, key: string): string {
 
 // Generate a random encryption key
 export function generateKey(): string {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
   let result = "";
   for (let i = 0; i < 32; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));

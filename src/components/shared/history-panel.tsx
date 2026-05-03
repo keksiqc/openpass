@@ -13,13 +13,7 @@ import {
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { PasswordHistory } from "../../types";
@@ -38,9 +32,7 @@ export function HistoryPanel({
   onClearHistory,
   onDeleteHistoryEntry,
 }: HistoryPanelProps) {
-  const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
 
   const togglePasswordVisibility = (entryId: string) => {
     setShowPasswords((prev) => ({
@@ -120,12 +112,8 @@ export function HistoryPanel({
                         <div className="border border-foreground p-1">
                           {getTypeIcon(entry.type)}
                         </div>
-                        <Badge
-                          className="text-[10px] sm:text-xs"
-                          variant="outline"
-                        >
-                          {entry.type.toString().charAt(0).toUpperCase() +
-                            entry.type.slice(1)}
+                        <Badge className="text-[10px] sm:text-xs" variant="outline">
+                          {entry.type.toString().charAt(0).toUpperCase() + entry.type.slice(1)}
                         </Badge>
                         <span
                           className={`font-bold text-[10px] uppercase sm:text-xs ${getStrengthTextColor(entry.strength.label)}`}
@@ -138,11 +126,7 @@ export function HistoryPanel({
                           className="h-7 w-7 p-0 sm:h-8 sm:w-8"
                           onClick={() => togglePasswordVisibility(entry.id)}
                           size="sm"
-                          title={
-                            showPasswords[entry.id]
-                              ? "Hide password"
-                              : "Show password"
-                          }
+                          title={showPasswords[entry.id] ? "Hide password" : "Show password"}
                           variant="outline"
                         >
                           {showPasswords[entry.id] ? (
@@ -192,7 +176,7 @@ export function HistoryPanel({
                       }).format(
                         entry.createdAt instanceof Date
                           ? entry.createdAt
-                          : new Date(entry.createdAt)
+                          : new Date(entry.createdAt),
                       )}
                     </div>
                   </div>

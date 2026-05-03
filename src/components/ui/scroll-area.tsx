@@ -35,11 +35,9 @@ function ScrollBar({
     <ScrollAreaPrimitive.ScrollAreaScrollbar
       className={cn(
         "flex touch-none select-none p-px transition-colors",
-        orientation === "vertical" &&
-          "h-full w-2.5 border-l-2 border-l-foreground/10",
-        orientation === "horizontal" &&
-          "h-2.5 flex-col border-t-2 border-t-foreground/10",
-        className
+        orientation === "vertical" && "h-full w-2.5 border-l-2 border-l-foreground/10",
+        orientation === "horizontal" && "h-2.5 flex-col border-t-2 border-t-foreground/10",
+        className,
       )}
       data-slot="scroll-area-scrollbar"
       orientation={orientation}

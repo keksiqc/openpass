@@ -12,10 +12,7 @@ const CHARSETS: Record<string, string> = {
   d: "0123456789",
 };
 
-function parseNumber(
-  format: string,
-  startIndex: number
-): { numStr: string; nextIndex: number } {
+function parseNumber(format: string, startIndex: number): { numStr: string; nextIndex: number } {
   let numStr = "";
   let i = startIndex;
   while (i < format.length && DIGIT_REGEX.test(format[i])) {
@@ -27,7 +24,7 @@ function parseNumber(
 
 function parseCustomCharset(
   format: string,
-  startIndex: number
+  startIndex: number,
 ): { charset: string; nextIndex: number } {
   let i = startIndex + 1; // skip '{'
   let customSet = "";
@@ -41,7 +38,7 @@ function parseCustomCharset(
 function resolveCharset(
   type: string,
   format: string,
-  index: number
+  index: number,
 ): { charset: string; nextIndex: number } {
   if (type === "{") {
     return parseCustomCharset(format, index);
@@ -61,7 +58,7 @@ function generateRandomChars(charset: string, count: number): string {
 
 function processFormatSegment(
   format: string,
-  startIndex: number
+  startIndex: number,
 ): { chars: string; nextIndex: number } {
   const parsed = parseNumber(format, startIndex);
   let i = parsed.nextIndex;
@@ -123,13 +120,13 @@ function collectCharsetFromFormat(format: string): string {
 export const useFormatGenerator = () => {
   const getCharacterSetFromFormat = useCallback(
     (format: string): string => collectCharsetFromFormat(format),
-    []
+    [],
   );
 
   const generateFormatPassword = useCallback(
     (
       settings: FormatSettings,
-      onSuccess: (password: string, historyEntry: PasswordHistory) => void
+      onSuccess: (password: string, historyEntry: PasswordHistory) => void,
     ) => {
       try {
         const result = buildPasswordFromFormat(settings.format);
@@ -147,11 +144,11 @@ export const useFormatGenerator = () => {
         toast.success(`${strength.label} format password generated!`);
       } catch {
         toast.error(
-          "Invalid format. Use: Nu (uppercase), Nl (lowercase), Nd (digits), N{chars} (custom)"
+          "Invalid format. Use: Nu (uppercase), Nl (lowercase), Nd (digits), N{chars} (custom)",
         );
       }
     },
-    []
+    [],
   );
 
   return {

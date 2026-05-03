@@ -2,13 +2,7 @@ import { Copy, Eye, EyeOff, Hash, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -53,10 +47,7 @@ export function PinGenerator({
       <CardContent className="space-y-5 sm:space-y-6">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label
-              className="font-bold text-sm uppercase tracking-wider"
-              htmlFor="pin-length"
-            >
+            <Label className="font-bold text-sm uppercase tracking-wider" htmlFor="pin-length">
               PIN Length
             </Label>
             <Badge variant="outline">{settings.length} digits</Badge>
@@ -66,9 +57,7 @@ export function PinGenerator({
             id="pin-length"
             max={12}
             min={4}
-            onValueChange={(value) =>
-              onSettingsChange({ ...settings, length: value[0] })
-            }
+            onValueChange={(value) => onSettingsChange({ ...settings, length: value[0] })}
             value={[settings.length]}
           />
           <div className="flex justify-between text-muted-foreground text-xs">
@@ -77,12 +66,7 @@ export function PinGenerator({
           </div>
         </div>
 
-        <Button
-          className="w-full"
-          data-generate-button
-          onClick={handleGenerate}
-          size="lg"
-        >
+        <Button className="w-full" data-generate-button onClick={handleGenerate} size="lg">
           <RefreshCw className="mr-2 h-4 w-4" />
           Generate PIN
         </Button>
@@ -105,11 +89,7 @@ export function PinGenerator({
                 size="icon"
                 variant="outline"
               >
-                {showPin ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showPin ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </Button>
               <Button
                 className="shrink-0"
@@ -124,9 +104,7 @@ export function PinGenerator({
               <div className="text-[10px] text-muted-foreground uppercase tracking-wider">
                 Possible combinations
               </div>
-              <div className="font-bold">
-                {(10 ** settings.length).toLocaleString()}
-              </div>
+              <div className="font-bold">{(10 ** settings.length).toLocaleString()}</div>
             </div>
           </div>
         ) : null}

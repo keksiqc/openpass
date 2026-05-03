@@ -109,8 +109,7 @@ export const calculateEntropy = (password: string, charset: string): number => {
 
 // Time to crack estimation
 export const estimateTimeToCrack = (entropy: number): string => {
-  const secondsToCrack =
-    2 ** (entropy - 1) / GENERATION_LIMITS.GUESSES_PER_SECOND;
+  const secondsToCrack = 2 ** (entropy - 1) / GENERATION_LIMITS.GUESSES_PER_SECOND;
 
   if (secondsToCrack < 60) {
     return "Instantly";

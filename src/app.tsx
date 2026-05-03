@@ -38,19 +38,16 @@ import type {
 
 export default function App() {
   // Settings states with enhanced defaults
-  const [passwordSettings, setPasswordSettings] = useState<PasswordSettings>(
-    DEFAULT_PASSWORD_SETTINGS
+  const [passwordSettings, setPasswordSettings] =
+    useState<PasswordSettings>(DEFAULT_PASSWORD_SETTINGS);
+
+  const [passphraseSettings, setPassphraseSettings] = useState<PassphraseSettings>(
+    DEFAULT_PASSPHRASE_SETTINGS,
   );
 
-  const [passphraseSettings, setPassphraseSettings] =
-    useState<PassphraseSettings>(DEFAULT_PASSPHRASE_SETTINGS);
+  const [formatSettings, setFormatSettings] = useState<FormatSettings>(DEFAULT_FORMAT_SETTINGS);
 
-  const [formatSettings, setFormatSettings] = useState<FormatSettings>(
-    DEFAULT_FORMAT_SETTINGS
-  );
-
-  const [pinSettings, setPinSettings] =
-    useState<PinSettings>(DEFAULT_PIN_SETTINGS);
+  const [pinSettings, setPinSettings] = useState<PinSettings>(DEFAULT_PIN_SETTINGS);
 
   // UI states
   const [isGenerating, setIsGenerating] = useState(false);
@@ -79,7 +76,7 @@ export default function App() {
       if ((event.ctrlKey || event.metaKey) && event.key === "g") {
         event.preventDefault();
         const generateButton = document.querySelector(
-          "[data-generate-button]"
+          "[data-generate-button]",
         ) as HTMLButtonElement;
         if (generateButton) {
           generateButton.click();
@@ -171,7 +168,7 @@ export default function App() {
             type: activeTab,
             settings: getCurrentSettings(),
           } as Profile)
-        : p
+        : p,
     );
   };
 
@@ -182,20 +179,13 @@ export default function App() {
       return;
     }
 
-    if (
-      profiles.some(
-        (p) => p.name.toLowerCase() === profileName.trim().toLowerCase()
-      )
-    ) {
+    if (profiles.some((p) => p.name.toLowerCase() === profileName.trim().toLowerCase())) {
       toast.error("A profile with this name already exists");
       return;
     }
 
     if (editingProfileId) {
-      const updatedProfiles = updateExistingProfile(
-        editingProfileId,
-        profileName
-      );
+      const updatedProfiles = updateExistingProfile(editingProfileId, profileName);
       saveProfilesToStorage(updatedProfiles);
       setEditingProfileId(null);
       toast.success(`Profile "${profileName.trim()}" updated successfully!`);
@@ -231,9 +221,7 @@ export default function App() {
     }
 
     const updatedProfile = { ...profileToLoad, lastUsed: new Date() };
-    const newProfiles = profiles.map((p) =>
-      p.id === profileToLoad.id ? updatedProfile : p
-    );
+    const newProfiles = profiles.map((p) => (p.id === profileToLoad.id ? updatedProfile : p));
     saveProfilesToStorage(newProfiles);
 
     toast.success(`Profile "${profileToLoad.name}" loaded successfully!`);
@@ -272,7 +260,7 @@ export default function App() {
   // Toggle favorite profile
   const toggleFavorite = (profileId: string) => {
     const newProfiles = profiles.map((p) =>
-      p.id === profileId ? { ...p, isFavorite: !p.isFavorite } : p
+      p.id === profileId ? { ...p, isFavorite: !p.isFavorite } : p,
     );
     saveProfilesToStorage(newProfiles);
   };
@@ -367,22 +355,18 @@ export default function App() {
       try {
         const data = JSON.parse(e.target?.result as string);
         if (data.profiles) {
-          const parsedProfiles = data.profiles.map(
-            (p: Record<string, unknown>) => ({
-              ...p,
-              createdAt: new Date(p.createdAt as string),
-              lastUsed: p.lastUsed ? new Date(p.lastUsed as string) : undefined,
-            })
-          );
+          const parsedProfiles = data.profiles.map((p: Record<string, unknown>) => ({
+            ...p,
+            createdAt: new Date(p.createdAt as string),
+            lastUsed: p.lastUsed ? new Date(p.lastUsed as string) : undefined,
+          }));
           saveProfilesToStorage([...profiles, ...parsedProfiles]);
         }
         if (data.passwordHistory) {
-          const parsedHistory = data.passwordHistory.map(
-            (h: Record<string, unknown>) => ({
-              ...h,
-              createdAt: new Date(h.createdAt as string),
-            })
-          );
+          const parsedHistory = data.passwordHistory.map((h: Record<string, unknown>) => ({
+            ...h,
+            createdAt: new Date(h.createdAt as string),
+          }));
           saveHistoryToStorage([...passwordHistory, ...parsedHistory]);
         }
         toast.success("Data imported successfully!");
@@ -412,9 +396,7 @@ export default function App() {
           <div className="space-y-6 sm:space-y-8 lg:col-span-2">
             <Tabs
               className="w-full"
-              onValueChange={(value: string) =>
-                setActiveTab(value as ProfileType)
-              }
+              onValueChange={(value: string) => setActiveTab(value as ProfileType)}
               value={activeTab}
             >
               <TabsList className="mb-5 flex h-12 w-full sm:mb-6 sm:h-14">
@@ -519,8 +501,7 @@ export default function App() {
             <div className="flex items-center gap-3">
               <Shield className="h-4 w-4 text-accent" />
               <p className="text-center text-muted-foreground text-xs sm:text-left">
-                Everything runs locally in your browser. No data leaves your
-                device.
+                Everything runs locally in your browser. No data leaves your device.
               </p>
             </div>
             <div className="flex items-center gap-4 text-muted-foreground text-xs">
