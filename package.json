@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vp dev",
     "build": "tsc -b && vp build",
-    "preview": "vp preview",
     "check": "vp check",
     "check:fix": "vp check --fix",
-    "up": "taze major -lI",
-    "prepare": "vp config"
+    "dev": "vp dev",
+    "prepare": "vp config",
+    "preview": "vp preview",
+    "up": "taze major -lI"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.4",
